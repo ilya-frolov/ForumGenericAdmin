@@ -1,0 +1,52 @@
+<!-- Edit Template -->
+<ng-template #editTemplate>
+  <div class="d-flex flex-column gap-2">
+    <label [for]="id">
+      {{ label }}
+      <span *ngIf="metadata?.required" class="text-danger">*</span>
+    </label>
+    <div class="d-flex justify-content-center">
+      <p-knob 
+        [id]="id"
+        [(ngModel)]="value"
+        [min]="metadata?.min || 0"
+        [max]="metadata?.max || 100"
+        [step]="metadata?.step || 1"
+        [valueTemplate]="metadata?.['valueTemplate'] || '{value}'"
+        [size]="metadata?.['size'] || 150"
+        [disabled]="metadata?.readOnly || false"
+        (onChange)="onValueChange($event)">
+      </p-knob>
+    </div>
+    <div *ngIf="metadata?.tooltip" class="text-muted small text-center">
+      {{ metadata.tooltip }}
+    </div>
+  </div>
+</ng-template>
+
+<!-- List Template -->
+<ng-template #listTemplate>
+  <div class="field-display">
+    <!-- <div class="fw-medium">{{ label }}</div> -->
+    <div class="d-flex justify-content-start">
+      <p-knob 
+        [ngModel]="value" 
+        [min]="metadata?.min || 0"
+        [max]="metadata?.max || 100"
+        [valueTemplate]="metadata?.['valueTemplate'] || '{value}'" 
+        [size]="100">
+      </p-knob>
+    </div>
+  </div>
+</ng-template> 
+
+<ng-template #viewTemplate>
+  <div class="d-flex align-items-center">
+    <span class="me-2">{{ label }}:</span>
+    <span class="field-display d-inline-flex align-items-center">
+      <span>{{ value || '-' }}</span>
+    </span>
+  </div>
+</ng-template>
+
+

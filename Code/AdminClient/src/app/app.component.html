@@ -1,0 +1,4 @@
+<app-loader *ngIf="isLoading"></app-loader>
+<ng-container *ngIf="!isLoading">
+  <router-outlet></router-outlet>
+</ng-container>

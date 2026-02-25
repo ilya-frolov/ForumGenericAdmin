@@ -1,0 +1,17 @@
+@keyframes p-overlay-mask-enter-animation {
+  0% {
+    background-color: transparent;
+  }
+  100% {
+    background-color: rgba(0, 0, 0, 0.4);
+  }
+}
+
+@keyframes p-overlay-mask-leave-animation {
+  0% {
+    background-color: rgba(0, 0, 0, 0.4);
+  }
+  100% {
+    background-color: transparent;
+  }
+}

@@ -1,0 +1,18 @@
+// Form styling
+
+// RTL input fields
+[type=tel], [type=url], [type=email], [type=number] {
+  direction: ltr !important;
+}
+
+//////////////////////////////////////////
+// Datepicker
+//////////////////////////////////////////
+.p-datepicker-time-picker {
+  flex-direction: row #{"/*!rtl:row-reverse*/"};
+  display: flex;
+}
+
+.p-datepicker-weekday-cell {
+  text-align: center;
+}

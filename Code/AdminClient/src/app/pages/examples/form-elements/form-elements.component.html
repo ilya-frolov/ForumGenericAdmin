@@ -1,0 +1,321 @@
+<div class="container mx-auto mt-4">
+  <div class="row">
+    <div class="col-12">
+      <admin-breadcrumb></admin-breadcrumb>
+      <h1 class="mb-3">Comprehensive Form Example</h1>
+      <p class="text-muted mb-4">This form demonstrates various PrimeNG components organized into logical sections.</p>
+    </div>
+  </div>
+
+  <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+    <!-- Personal Information Section -->
+    <p-panel header="Personal Information" styleClass="mb-4">
+      <div class="row g-3">
+        <div class="col-md-6 d-flex flex-column gap-2">
+          <label for="firstName">First Name</label>
+          <input id="firstName" type="text" pInputText formControlName="firstName" placeholder="Enter first name">
+        </div>
+        <div class="col-md-6 d-flex flex-column gap-2">
+          <label for="lastName">Last Name</label>
+          <input id="lastName" type="text" pInputText formControlName="lastName" placeholder="Enter last name">
+        </div>
+        <div class="col-md-6 d-flex flex-column gap-2">
+          <label for="email">Email</label>
+          <input id="email" type="email" pInputText formControlName="email" placeholder="Enter email address">
+        </div>
+        <div class="col-md-6 d-flex flex-column gap-2">
+          <label for="phone">Phone Number</label>
+          <p-inputNumber id="phone" formControlName="phone" placeholder="Enter phone number" styleClass="w-100"></p-inputNumber>
+        </div>
+        <div class="col-md-6 d-flex flex-column gap-2">
+          <label for="birthdate">Date of Birth</label>
+          <p-calendar id="birthdate" formControlName="birthdate" styleClass="w-100"></p-calendar>
+        </div>
+        <div class="col-md-6 d-flex flex-column gap-2">
+          <label for="gender">Gender</label>
+          <p-dropdown id="gender" [options]="genderOptions" formControlName="gender" optionLabel="name" optionValue="value" placeholder="Select gender" styleClass="w-100"></p-dropdown>
+        </div>
+      </div>
+    </p-panel>
+
+    <!-- Address Section -->
+    <p-panel header="Address Information" styleClass="mb-4">
+      <div class="row g-3">
+        <div class="col-md-12 d-flex flex-column gap-2">
+          <label for="address">Street Address</label>
+          <input id="address" type="text" pInputText formControlName="address" placeholder="Enter street address">
+        </div>
+        <div class="col-md-6 d-flex flex-column gap-2">
+          <label for="city">City</label>
+          <input id="city" type="text" pInputText formControlName="city" placeholder="Enter city">
+        </div>
+        <div class="col-md-4 d-flex flex-column gap-2">
+          <label for="state">State/Province</label>
+          <p-dropdown id="state" [options]="stateOptions" formControlName="state" optionLabel="name" optionValue="value" placeholder="Select state" styleClass="w-100"></p-dropdown>
+        </div>
+        <div class="col-md-2 d-flex flex-column gap-2">
+          <label for="zipCode">Zip Code</label>
+          <input id="zipCode" type="text" pInputText formControlName="zipCode" placeholder="Enter zip code">
+        </div>
+        <div class="col-md-12 d-flex flex-column gap-2">
+          <label for="country">Country</label>
+          <p-dropdown id="country" [options]="countryOptions" formControlName="country" optionLabel="name" optionValue="value" placeholder="Select country" styleClass="w-100"></p-dropdown>
+        </div>
+      </div>
+    </p-panel>
+
+    <!-- Preferences Section -->
+    <p-panel header="Preferences" styleClass="mb-4">
+      <div class="row g-3">
+        <div class="col-md-12">
+          <h5 class="mb-3">Communication Preferences</h5>
+          <div class="d-flex flex-column gap-3">
+            <div class="field-checkbox">
+              <p-checkbox name="email_pref" value="email" formControlName="email_pref" inputId="email_pref"></p-checkbox>
+              <label for="email_pref" class="ms-2">Email notifications</label>
+            </div>
+            <div class="field-checkbox">
+              <p-checkbox name="sms_pref" value="sms" formControlName="sms_pref" inputId="sms_pref"></p-checkbox>
+              <label for="sms_pref" class="ms-2">SMS notifications</label>
+            </div>
+            <div class="field-checkbox">
+              <p-checkbox name="phone_pref" value="phone" formControlName="phone_pref" inputId="phone_pref"></p-checkbox>
+              <label for="phone_pref" class="ms-2">Phone calls</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12">
+          <p-divider></p-divider>
+        </div>
+
+        <div class="col-md-12">
+          <h5 class="mb-3">Account Settings</h5>
+          <div class="d-flex flex-column gap-3">
+            <div class="field-checkbox d-flex align-items-center">
+              <label for="newsletter" class="me-2">Subscribe to newsletter</label>
+              <p-inputSwitch formControlName="newsletter" inputId="newsletter" styleClass="position-relative"></p-inputSwitch>
+            </div>
+            <div class="field-checkbox d-flex align-items-center">
+              <label for="twoFactor" class="me-2">Enable two-factor authentication</label>
+              <p-inputSwitch formControlName="twoFactor" inputId="twoFactor" styleClass="position-relative"></p-inputSwitch>
+            </div>
+            <div class="field-checkbox d-flex align-items-center">
+              <label for="darkMode" class="me-2">Use dark mode</label>
+              <p-inputSwitch formControlName="darkMode" inputId="darkMode" styleClass="position-relative"></p-inputSwitch>
+            </div>
+          </div>
+        </div>
+      </div>
+    </p-panel>
+
+    <!-- Interests Section -->
+    <p-panel header="Interests & Hobbies" styleClass="mb-4">
+      <div class="row g-3">
+        <div class="col-md-6">
+          <h5 class="mb-3">Primary Interest</h5>
+          <div class="d-flex flex-column gap-3">
+            <div class="field-radiobutton">
+              <p-radioButton name="primaryInterest" value="technology" formControlName="primaryInterest" inputId="tech"></p-radioButton>
+              <label for="tech" class="ms-2">Technology</label>
+            </div>
+            <div class="field-radiobutton">
+              <p-radioButton name="primaryInterest" value="sports" formControlName="primaryInterest" inputId="sports"></p-radioButton>
+              <label for="sports" class="ms-2">Sports</label>
+            </div>
+            <div class="field-radiobutton">
+              <p-radioButton name="primaryInterest" value="arts" formControlName="primaryInterest" inputId="arts"></p-radioButton>
+              <label for="arts" class="ms-2">Arts & Culture</label>
+            </div>
+            <div class="field-radiobutton">
+              <p-radioButton name="primaryInterest" value="science" formControlName="primaryInterest" inputId="science"></p-radioButton>
+              <label for="science" class="ms-2">Science</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <h5 class="mb-3">Hobbies</h5>
+          <div class="d-flex flex-column gap-3">
+            <div class="field-checkbox">
+              <p-checkbox name="reading" value="reading" formControlName="reading" inputId="reading"></p-checkbox>
+              <label for="reading" class="ms-2">Reading</label>
+            </div>
+            <div class="field-checkbox">
+              <p-checkbox name="traveling" value="traveling" formControlName="traveling" inputId="traveling"></p-checkbox>
+              <label for="traveling" class="ms-2">Traveling</label>
+            </div>
+            <div class="field-checkbox">
+              <p-checkbox name="cooking" value="cooking" formControlName="cooking" inputId="cooking"></p-checkbox>
+              <label for="cooking" class="ms-2">Cooking</label>
+            </div>
+            <div class="field-checkbox">
+              <p-checkbox name="gaming" value="gaming" formControlName="gaming" inputId="gaming"></p-checkbox>
+              <label for="gaming" class="ms-2">Gaming</label>
+            </div>
+            <div class="field-checkbox">
+              <p-checkbox name="photography" value="photography" formControlName="photography" inputId="photography"></p-checkbox>
+              <label for="photography" class="ms-2">Photography</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </p-panel>
+
+    <!-- Additional Information Section -->
+    <p-panel header="Additional Information" styleClass="mb-4">
+      <div class="row g-3">
+        <div class="col-md-12 d-flex flex-column gap-2">
+          <label for="comments">Comments or Special Requests</label>
+          <textarea id="comments" pTextarea  formControlName="comments" rows="5" placeholder="Enter any additional information"></textarea>
+        </div>
+        <div class="col-md-12 d-flex flex-column gap-2">
+          <div class="field-checkbox">
+            <p-checkbox name="termsAccepted" formControlName="termsAccepted" inputId="termsAccepted"></p-checkbox>
+            <label for="termsAccepted" class="ms-2">I agree to the <a href="#">terms and conditions</a></label>
+          </div>
+        </div>
+      </div>
+    </p-panel>
+
+    <!-- Advanced PrimeNG Components Section -->
+    <p-panel header="Advanced PrimeNG Components" styleClass="mb-4">
+      <div class="row g-3">
+        <!-- Color & Visual Components -->
+        <div class="col-12">
+          <h5 class="mb-3">Color & Visual Components</h5>
+          <div class="row g-3">
+            <div class="col-md-4 d-flex flex-column gap-2">
+              <label for="favoriteColor">Favorite Color</label>
+              <p-colorPicker id="favoriteColor" formControlName="favoriteColor" styleClass="w-100"></p-colorPicker>
+            </div>
+            <div class="col-md-4 d-flex flex-column gap-2">
+              <label for="themeColor">Theme Color</label>
+              <p-colorPicker id="themeColor" formControlName="themeColor" format="rgb" styleClass="w-100"></p-colorPicker>
+            </div>
+            <div class="col-md-4 d-flex flex-column gap-2">
+              <label for="brightness">Brightness: {{formGroup.get('brightness')?.value || 50}}%</label>
+              <p-slider id="brightness" formControlName="brightness" [min]="0" [max]="100" styleClass="w-100"></p-slider>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12">
+          <p-divider></p-divider>
+        </div>
+
+        <!-- Selection Components -->
+        <div class="col-12">
+          <h5 class="mb-3">Selection Components</h5>
+          <div class="row g-3">
+            <div class="col-md-6 d-flex flex-column gap-2">
+              <label for="multiSelect">Favorite Fruits</label>
+              <p-multiSelect id="multiSelect" [options]="fruitOptions" formControlName="favoriteFruits" 
+                optionLabel="name" optionValue="value" placeholder="Select fruits" 
+                styleClass="w-100" [filter]="true"></p-multiSelect>
+            </div>
+            <div class="col-md-6 d-flex flex-column gap-2">
+              <label for="listbox">Programming Languages</label>
+              <p-listbox id="listbox" [options]="languageOptions" formControlName="programmingLanguages" 
+                [multiple]="true" optionLabel="name" optionValue="value" 
+                [filter]="true" [checkbox]="true" styleClass="w-100"></p-listbox>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12">
+          <p-divider></p-divider>
+        </div>
+
+        <!-- Date & Time Components -->
+        <div class="col-12">
+          <h5 class="mb-3">Date & Time Components</h5>
+          <div class="row g-3">
+            <div class="col-md-4 d-flex flex-column gap-2">
+              <label for="appointmentTime">Appointment Time</label>
+              <p-calendar id="appointmentTime" formControlName="appointmentTime" [showTime]="true" [showSeconds]="true" styleClass="w-100"></p-calendar>
+            </div>
+            <div class="col-md-4 d-flex flex-column gap-2">
+              <label for="dateRange">Vacation Date Range</label>
+              <p-calendar id="dateRange" formControlName="dateRange" selectionMode="range" [readonlyInput]="true" styleClass="w-100"></p-calendar>
+            </div>
+            <div class="col-md-4 d-flex flex-column gap-2">
+              <label for="workHours">Work Hours</label>
+              <p-calendar id="workHours" formControlName="workHours" [timeOnly]="true" styleClass="w-100"></p-calendar>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12">
+          <p-divider></p-divider>
+        </div>
+
+        <!-- URL Preview Component -->
+        <div class="col-12">
+          <h5 class="mb-3">URL Preview Component</h5>
+          <div class="row g-3">
+            <div class="col-12">
+              <p-iconfield styleClass="mb-3">
+                <p-inputicon styleClass="pi pi-link" />
+                <input type="text" pInputText formControlName="urlInput" placeholder="Enter URL" class="w-100">
+              </p-iconfield>
+              <!-- Preview image -->
+              <p-image
+                *ngIf="formGroup.get('urlInput')?.value && isImageUrl(formGroup.get('urlInput')?.value)"
+                [src]="formGroup.get('urlInput')?.value" 
+                [alt]="formGroup.get('urlInput')?.value"
+                preview="true" 
+                [imageStyle]="{'max-height': '200px'}"
+                class="w-100">
+                <ng-template pTemplate="indicator">
+                  <i class="pi pi-check"></i>
+                </ng-template>
+              </p-image>
+              <!-- open url -->
+              <a *ngIf="formGroup.get('urlInput')?.value && !isImageUrl(formGroup.get('urlInput')?.value)" 
+                [href]="formGroup.get('urlInput')?.value" 
+                target="_blank"
+                class="p-button p-button-outlined p-button-info text-decoration-none d-block mt-2">
+                <i class="pi pi-external-link me-2"></i>Open URL
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12">
+          <p-divider></p-divider>
+        </div>
+
+        <!-- Rating & Feedback Components -->
+        <div class="col-12">
+          <h5 class="mb-3">Rating & Feedback</h5>
+          <div class="row g-3">
+            <div class="col-md-6 d-flex flex-column gap-2">
+              <label for="rating">Rate Your Experience</label>
+              <p-rating id="rating" formControlName="rating"></p-rating>
+            </div>
+            <div class="col-md-6 d-flex flex-column gap-2">
+              <label for="satisfaction">Satisfaction Level</label>
+              <p-knob id="satisfaction" formControlName="satisfaction" [min]="0" [max]="100" [step]="5" valueTemplate="{value}%" [readonly]="false"></p-knob>
+            </div>
+          </div>
+        </div>
+      </div>
+    </p-panel>
+
+    <!-- Form Actions -->
+    <div class="row mt-4 mb-5">
+      <div class="col-12 d-flex justify-content-end gap-2">
+        <!-- reset -->
+        <button pButton pRipple type="button" label="Reset" icon="pi pi-refresh" class="p-button-outlined p-button-secondary me-auto" (click)="resetForm()"></button>
+        <!-- cancel -->
+        <button pButton pRipple type="button" label="Cancel" icon="pi pi-times" class="p-button-outlined p-button-danger"></button>
+        <!-- save -->
+        <button pButton pRipple class="p-button-outlined" type="submit" label="Save" icon="pi pi-save" [disabled]="!formGroup.valid"></button>
+        <!-- save & next -->
+        <button pButton pRipple type="button" label="Save & Next" icon="pi pi-arrow-right" 
+          class="p-button-success" [disabled]="!formGroup.valid"></button>
+      </div>
+    </div>
+  </form>
+</div> 

@@ -1,0 +1,80 @@
+<div class="container-fluid px-0" @formAnimation>
+  <ng-container *ngIf="nodeStructure && formGroup">
+    <!-- Tabs Header -->
+    <!-- TODO: -->
+    <p-tabView *ngIf="hasTabs" [(activeIndex)]="activeTabIndex" @tabsAnimation> 
+      <p-tabPanel *ngFor="let tab of tabs; let i = index" [header]="tab.name">
+        <!-- Tab content rendered in the form content section -->
+      </p-tabPanel>
+    </p-tabView>
+
+    <!-- Form Content -->
+    <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+      <!-- Success or error messages -->
+      <div *ngIf="submitSuccess" class="alert alert-success mb-3">
+        <i class="pi pi-check-circle me-2"></i>
+        Form submitted successfully!
+      </div>
+      
+      <div *ngIf="submitError" class="alert alert-danger mb-3">
+        <i class="pi pi-exclamation-circle me-2"></i>
+        {{ submitError }}
+      </div>
+      
+      <div class="d-flex flex-column gap-3 mt-3">
+        <!-- Main form content -->
+        <ng-container *ngIf="nodeStructure.children">
+          <!-- Render all tab content but show only active tab -->
+          <ng-container *ngIf="hasTabs && tabs.length > 0">
+            <ng-container *ngFor="let tab of tabs; let tabIndex = index">
+              <div [style.display]="tabIndex === activeTabIndex ? 'block' : 'none'">
+                <ng-container *ngFor="let node of tab.children">
+                  <app-dynamic-node 
+                    [node]="node" 
+                    [formGroup]="formGroup"
+                    [formMode]="formMode"
+                    [inputOptions]="formStructure.inputOptions"
+                    (fieldInitialized)="onFieldInitialized($event)">
+                  </app-dynamic-node>
+                </ng-container>
+              </div>
+            </ng-container>
+          </ng-container>
+          
+          <!-- Render all non-tab content (or all content if no tabs) -->
+          <ng-container *ngFor="let node of hasTabs ? nonTabContent : nodeStructure.children">
+            <app-dynamic-node 
+              [node]="node"
+              [formGroup]="formGroup" 
+              [formMode]="formMode"
+              [inputOptions]="formStructure.inputOptions"
+              (fieldInitialized)="onFieldInitialized($event)">
+            </app-dynamic-node>
+          </ng-container>
+        </ng-container>
+      </div>
+
+      <div class="d-flex justify-content-end gap-2 mt-4 pt-3 border-top" @buttonsAnimation>
+        <p-button 
+          *ngIf="isShowCancelButton"
+          type="button" 
+          styleClass="p-button-outlined" 
+          label="Cancel" 
+          icon="pi pi-times" 
+          (onClick)="onCancel()">
+        </p-button>
+        <p-button 
+          type="submit" 
+          styleClass="p-button-primary" 
+          [label]="isSubmitting ? 'Submitting...' : 'Submit'" 
+          [icon]="isSubmitting ? 'pi pi-spin pi-spinner' : 'pi pi-check'"
+          [loading]="isSubmitting"
+          [disabled]="formGroup.invalid || formMode === 'view'  || formMode === 'list'|| isSubmitting">
+        </p-button>
+      </div>
+    </form>
+  </ng-container>
+
+  <!-- Upload Progress Dialog -->
+  <app-upload-progress-dialog></app-upload-progress-dialog>
+</div> 

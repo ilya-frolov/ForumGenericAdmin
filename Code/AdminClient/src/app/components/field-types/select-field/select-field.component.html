@@ -1,0 +1,93 @@
+<!-- Edit Template -->
+<ng-template #editTemplate>
+  <div class="d-flex flex-column gap-2">
+    <label [for]="id">
+      {{ label }}
+      <span *ngIf="metadata?.required" class="text-danger">*</span>
+    </label>
+    
+    <!-- Single Select -->
+    <div *ngIf="!metadata?.multiSelect">
+      <p-dropdown
+        [id]="id"
+        [(ngModel)]="value"
+        [options]="metadata?.options || []"
+        optionLabel="display"
+        optionValue="value"
+        [placeholder]="metadata?.placeholder || 'Select an option'"
+        [disabled]="metadata?.readOnly"
+        [required]="metadata?.required"
+        [filter]="metadata?.searchEnabled"
+        [filterPlaceholder]="metadata?.searchPlaceholder || 'Search'"
+        (onChange)="onValueChange($event.value)"
+        styleClass="w-100"
+      ></p-dropdown>
+    </div>
+    
+    <!-- Multi Select -->
+    <div *ngIf="metadata?.multiSelect">
+      <p-multiSelect
+        [id]="id"
+        [(ngModel)]="value"
+        [options]="metadata?.options || []"
+        optionLabel="display"
+        optionValue="value"
+        [placeholder]="metadata?.placeholder || 'Select options'"
+        [disabled]="metadata?.readOnly"
+        [filter]="metadata?.searchEnabled"
+        [maxSelectedLabels]="3"
+        [selectedItemsLabel]="'{0} items selected'"
+        [selectionLimit]="metadata?.['maxSelectedItems']"
+        (onChange)="onValueChange($event.value)"
+        styleClass="w-100"
+      ></p-multiSelect>
+    </div>
+    
+    <div *ngIf="metadata?.tooltip" class="text-muted small">
+      {{ metadata.tooltip }}
+    </div>
+  </div>
+</ng-template>
+
+<!-- List Template -->
+<ng-template #listTemplate>
+  <div class="field-display">
+    <!-- <div class="fw-medium">{{ label }}</div> -->
+    <div>
+      <ng-container *ngIf="!metadata?.multiSelect; else multiValueDisplay">
+        {{ getDisplayLabel(value) || '-' }}
+      </ng-container>
+      <ng-template #multiValueDisplay>
+        <ng-container *ngIf="value && value.length > 0; else noValue">
+          <ul class="list-unstyled p-0 m-0">
+            <li *ngFor="let val of value">{{ getDisplayLabel(val) }}</li>
+          </ul>
+        </ng-container>
+        <ng-template #noValue>-</ng-template>
+      </ng-template>
+    </div>
+  </div>
+</ng-template> 
+
+<ng-template #viewTemplate>
+  <div class="d-flex align-items-center">
+    <span class="me-2">{{ label }}:</span>
+    <span class="field-display d-inline-flex align-items-center">
+      <span>
+        <ng-container *ngIf="!metadata?.multiSelect; else multiValueDisplay">
+          {{ getDisplayLabel(value) || '-' }}
+        </ng-container>
+        <ng-template #multiValueDisplay>
+          <ng-container *ngIf="value && value.length > 0; else noValue">
+            <ul class="list-unstyled p-0 m-0">
+              <li *ngFor="let val of value">{{ getDisplayLabel(val) }}</li>
+            </ul>
+          </ng-container>
+          <ng-template #noValue>-</ng-template>
+        </ng-template>
+      </span>
+    </span>
+  </div>
+</ng-template>
+
+

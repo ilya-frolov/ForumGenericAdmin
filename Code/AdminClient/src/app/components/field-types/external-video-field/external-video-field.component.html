@@ -1,0 +1,65 @@
+<div class="external-video-field-container">
+  <ng-template #editTemplate>
+    <div class="d-flex flex-column gap-2">
+      <label [for]="id">
+        {{ label }}
+        <span *ngIf="metadata?.required" class="text-danger">*</span>
+      </label>
+      <div class="d-flex gap-2">
+        <input type="text" 
+               pInputText 
+               [id]="id"
+               [(ngModel)]="videoUrl" 
+               (ngModelChange)="onUrlChange()"
+               [placeholder]="'Enter YouTube URL'"
+               [disabled]="metadata?.readOnly">
+        <p-button *ngIf="videoId" 
+                 icon="pi pi-external-link" 
+                 (onClick)="openVideo()"
+                 [text]="true"
+                 [rounded]="true"
+                 [title]="'Open video in new tab'">
+        </p-button>
+      </div>
+      <div *ngIf="metadata?.tooltip" class="text-muted small">
+        {{ metadata.tooltip }}
+      </div>
+      <div *ngIf="videoId" class="video-preview mt-2">
+        <iframe width="100%" 
+                height="315" 
+                [src]="'https://www.youtube.com/embed/' + videoId" 
+                frameborder="0" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                allowfullscreen>
+        </iframe>
+      </div>
+    </div>
+  </ng-template>
+
+  <ng-template #listTemplate>
+    <div class="field-display">
+      <!-- <div class="fw-medium">{{ label }}</div> -->
+      <div *ngIf="videoId" class="video-preview mt-2">
+        <iframe width="100%" 
+                height="315" 
+                [src]="'https://www.youtube.com/embed/' + videoId" 
+                frameborder="0" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                allowfullscreen>
+        </iframe>
+      </div>
+      <div *ngIf="!videoId" class="text-muted">-</div>
+    </div>
+  </ng-template>
+</div> 
+
+<ng-template #viewTemplate>
+  <div class="d-flex align-items-center">
+    <span class="me-2">{{ label }}:</span>
+    <span class="field-display d-inline-flex align-items-center">
+      <span>{{ videoId || '-' }}</span>
+    </span>
+  </div>
+</ng-template>
+
+

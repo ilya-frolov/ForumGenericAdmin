@@ -1,0 +1,19 @@
+//////////////////////////////////////////
+// Convert px to vw in ratio to
+// $vw-context taken from the
+// design screen width
+//////////////////////////////////////////
+
+@use "sass:math";
+// Mobile
+
+@function get-vw-mobile($target) {
+  $vw-context: (375 * 0.01) * 1px;
+  @return math.div($target, $vw-context) * 1vw;
+}
+
+// Desktop
+@function get-vw-desktop($target) {
+  $vw-context: (1920 * 0.01) * 1px;
+  @return math.div($target, $vw-context) * 1vw;
+}

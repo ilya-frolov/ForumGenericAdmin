@@ -1,0 +1,45 @@
+<div class="container-fluid mx-auto mt-4">
+  <div class="row">
+    <div class="col-12">
+      <admin-breadcrumb></admin-breadcrumb>
+      <h1 class="mb-3">{{listDef?.title}}</h1>
+      <p class="text-muted mb-4" *ngIf="listDef">{{listDef?.title}}</p>
+      <p class="text-muted mb-4" *ngIf="!listDef || loading">Loading table definition...</p>
+    </div>
+  </div>
+
+  <!-- Toast and Confirmation Dialog -->
+  <p-toast></p-toast>
+  <p-confirmDialog appendTo="body"></p-confirmDialog>
+
+  <app-loader *ngIf="loading"></app-loader>
+  <ng-container *ngIf="!loading">
+    <!-- Use the dynamic table component -->
+    <admin-dynamic-table
+      [listDef]="listDef"
+      [loadDataFunc]="lazyLoadData.bind(this)"
+      [editItemFunc]="listDef.allowEdit ? editItem.bind(this) : null"
+      [newItemFunc]="listDef.allowAdd ? newItem.bind(this) : null"
+      [deleteItemFunc]="listDef.allowDelete ? deleteItem.bind(this) : null"
+      [archiveItemFunc]="archiveItem.bind(this)"
+      [saveReorderFunc]="saveReordering.bind(this)"
+      [deleteAllFunc]="listDef.allowDeleteAllRecords ? deleteAllItems.bind(this) : null"
+      [allowedExportFormats]="listDef.allowedExportFormats ?? 0"
+      [exportDataFunc]="exportData.bind(this)"
+      [importTemplateFunc]="listDef.allowExcelImport ? downloadImportTemplate.bind(this) : null"
+      [importDataFunc]="listDef.allowExcelImport ? openImportDialog.bind(this) : null"
+      [totalRecordsFetched]="totalRecordsFetched"
+      [totalRowCount]="totalRowCount"
+      [showArchived]="tableRequest.showArchive"
+      [showDeleted]="tableRequest.showDeleted"
+      [pageSize]="tableRequest.filters?.pageSize || 10"
+      (rowView)="viewItem($event)">
+    </admin-dynamic-table>
+  </ng-container>
+  
+  <!-- Dynamic Form Dialog -->
+  <app-dynamic-form-dialog></app-dynamic-form-dialog>
+
+  <!-- Import Dialog Component -->
+  <admin-import-dialog #importDialog [segment]="segment" [refId]="refId" (importComplete)="onImportComplete($event)"></admin-import-dialog>
+</div>

@@ -1,0 +1,55 @@
+---
+description: "Core framework constraints, priorities, and output format requirements"
+alwaysApply: true
+---
+
+# Core Framework Rules
+
+**Reference:** See `Readme/dino-admin.md` for complete framework documentation.
+
+## Critical Non-Negotiables
+
+### Database
+- **MSSQL ONLY** - All database scripts must be for Microsoft SQL Server
+- Always provide TWO scripts: ALTER (for existing DB) + CREATE TABLE (for DbCreation.sql)
+
+### Naming Conventions (CRITICAL)
+- Entity: `Item` → Admin Model: `AdminItemModel` → Controller: `AdminItemsController`
+- ID property type MUST match between Admin Model and Entity
+
+### Required Components (3-Component Pattern)
+Every entity requires:
+1. **Entity Class** (DB Model): `ProjectName.BL/Data/` or `ProjectName.BL/Models/`
+2. **Admin Model**: `ProjectName.Api/Areas/Admin/Models/` (inherits `BaseAdminModel`)
+3. **Admin Controller**: `ProjectName.Api/Areas/Admin/Controllers/` (inherits `DinoAdminBaseEntityController<TModel, TEntity, TId>`)
+
+### Submodules
+- **NEVER modify code in Submodules/** folder
+- Reference submodule code for examples, but don't edit
+
+### File Organization
+- Controllers/Models at root level (no subfolders except Demo/Basics)
+- Demo folders: DELETE when starting new project
+- Basics folders: KEEP (required admin user/role models)
+
+## Output Format Requirements
+
+- **Only show changed snippets**, not full files
+- **Provide both ALTER and CREATE TABLE scripts** when updating DB
+- **Ask clarifying questions** before implementing (import/export, soft delete, etc.)
+- When updating existing tables: CREATE TABLE script should only show NEW properties with placement indication
+
+## Default Properties for New Models
+
+When creating new admin model, ask if defaults are wanted:
+- ✅ `IsDeleted` (soft delete) - BIT NOT NULL DEFAULT 0
+- ✅ `SortIndex` (INT NOT NULL DEFAULT 0) - SUPER IMPORTANT for sorting
+- ✅ `CreateDate`, `UpdateDate`, `UpdateBy`
+- ❌ `Archived` - DO NOT include by default
+
+## When Creating New Entity - Always Ask
+
+- "Do you need import functionality? (Excel/CSV)"
+- "Do you need export functionality? (Excel/CSV/PDF)"
+- "Do you want soft delete or hard delete?"
+

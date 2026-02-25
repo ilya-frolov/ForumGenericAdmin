@@ -1,0 +1,44 @@
+<!-- Edit Template -->
+<ng-template #editTemplate>
+  <div class="d-flex flex-column gap-2">
+    <label>
+      {{ label }}
+      <span *ngIf="metadata?.required" class="text-danger">*</span>
+    </label>
+    <div class="d-flex flex-column gap-3">
+      <div *ngFor="let option of metadata?.options" class="field-radiobutton">
+        <p-radioButton 
+          [name]="id"
+          [value]="option.value"
+          [disabled]="metadata.readOnly || false"
+          [(ngModel)]="value"
+          [inputId]="id + '_' + option.value"
+          (onClick)="onValueChange(option.value)">
+        </p-radioButton>
+        <label [for]="id + '_' + option.value" class="ms-2">{{ option.display }}</label>
+      </div>
+    </div>
+    <div *ngIf="metadata?.tooltip" class="text-muted small">
+      {{ metadata.tooltip }}
+    </div>
+  </div>
+</ng-template>
+
+<!-- List Template -->
+<ng-template #listTemplate>
+  <div class="field-display">
+    <!-- <div class="fw-medium">{{ label }}</div> -->
+    <div>{{ getDisplayLabel(value) || '-' }}</div>
+  </div>
+</ng-template> 
+
+<ng-template #viewTemplate>
+  <div class="d-flex align-items-center">
+    <span class="me-2">{{ label }}:</span>
+    <span class="field-display d-inline-flex align-items-center">
+      <span>{{ getDisplayLabel(value) || '-' }}</span>
+    </span>
+  </div>
+</ng-template>
+
+  

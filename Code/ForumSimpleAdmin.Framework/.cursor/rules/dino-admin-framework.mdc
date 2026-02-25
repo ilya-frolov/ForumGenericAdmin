@@ -1,0 +1,114 @@
+---
+description: "Admin framework patterns, field types, controllers, and CRUD generation"
+globs:
+  - "**/Admin/**"
+  - "**/Areas/Admin/**"
+---
+
+# Admin Framework Patterns
+
+**Reference:** See `Readme/dino-admin.md` for complete framework documentation.
+
+## Project Overview
+
+Generic administration panel framework built on .NET Core 9+. The admin panel automatically generates CRUD interfaces (list pages, create/edit pages) based on model definitions and controllers, requiring NO client-side code.
+
+**Key Features:**
+- Zero client-side code required - Admin interfaces auto-generated from C# models/controllers
+- Smart attributes system for field configuration, visibility, containers, tabs
+- Pre-built integrations: Cache (Redis optional), Hangfire, Azure Blob Storage, EF Core helpers
+- Role-based access with DinoAdmin master role
+- OTP authentication
+- Import/Export (Excel, CSV, PDF)
+
+## Architecture
+
+**Backend:** .NET Core 9+ API with Entity Framework Core
+**Frontend:** Auto-generated admin UI (no client-side code required)
+**Database:** Microsoft SQL Server (MSSQL) - Always MSSQL
+
+**Core Submodules:**
+- `Dino.CoreMvc.Admin` - Main MVC admin framework (controllers, models, attributes)
+- `Dino.Core.AdminBL` - Business logic layer (BaseBL, BLFactory, cache management)
+- `Dino.Common.Hangfire` - Hangfire integration
+- `Dino.Common.AzureExtensions` - Azure Blob Storage integration
+- `Dino.Common.EfCoreHelpers` - EF Core pagination helpers
+
+## Technology Stack
+
+- **Backend:** .NET Core 9+
+- **Database:** Microsoft SQL Server (MSSQL)
+- **ORM:** Entity Framework Core
+- **Caching:** In-memory (Redis optional, usually not used)
+- **Background Jobs:** Hangfire (optional)
+- **Storage:** File system or Azure Blob Storage (optional)
+
+## Project Structure
+
+**Path Structure:**
+- Admin Models: `ProjectName.Api/Areas/Admin/Models/` (root level, no subfolders except Demo/Basics)
+- Admin Controllers: `ProjectName.Api/Areas/Admin/Controllers/` (root level, no subfolders except Demo/Basics)
+- BL Models: `ProjectName.BL/Models/` (root level, no subfolders except Demo/Basics)
+
+## Admin Controllers
+
+**Base Controller Pattern:**
+```csharp
+public class AdminItemsController : DinoAdminBaseEntityController<AdminItemModel, Item, int>
+{
+    public AdminItemsController() : base("item") { }
+
+    protected override async Task<AdminSegment> CreateAdminSegment() { /* ... */ }
+    protected override async Task<ListDef> CreateListDef(string refId = null) { /* ... */ }
+}
+```
+
+**Key Overrides:**
+- `CreateAdminSegment()` - Define menu item, icon, priority and headers
+- `CreateListDef()` - Configure list view (columns, actions, filters)
+- `GetFilteredData()` - Customize base query to show only SOME data (partial listing)
+
+## Import/Export Configuration
+
+When creating new entity, configure in `CreateListDef()`:
+```csharp
+AllowExcelImport = true,
+AllowedExportFormats = ExportFormat.Excel | ExportFormat.Csv | ExportFormat.Pdf,
+ExportFilename = "Items"  // Optional
+```
+
+## Development Guidelines
+
+### When Creating New Entity
+1. Create Entity class (DB model) and add it to the MainDbContext including the modelBuilder parts
+2. Create Admin Model (inherits `BaseAdminModel`)
+3. Create Admin Controller (inherits `DinoAdminBaseEntityController`)
+4. Configure `CreateListDef()` with import/export flags if needed
+5. Provide ALTER + CREATE TABLE scripts
+
+### Common Tasks
+
+**Adding Custom Endpoints:**
+- Add methods to controller
+- Reference in `ListDef.SelfActions` or `ListDef.Actions`
+
+**Adding Settings:**
+- Extend `SystemSettingsBase` or `DinoMasterSettingsBase`
+- Use `[AdminPermission(RoleType.DinoAdmin)]` to hide from regular admins
+
+## Configuration
+
+### appsettings.json Structure
+- `ConnectionStrings.MainDbContext` - Database connection
+- `Hangfire` - Hangfire configuration (if enabled)
+- `AdminConfig` - Admin panel settings (OTP, UI languages)
+- `ApiConfig` - API settings (CORS, uploads, base URLs)
+- `BlConfig` - Business logic config (cache, storage, emails)
+
+**CRITICAL:** `ApiConfig` and `BlConfig` must ALWAYS be in sync with appsettings.json
+
+### Program.cs Setup
+- Register DbContext, Admin Services, Cache Manager, AutoMapper
+- Configure Hangfire (if enabled), CORS, authentication
+- Initialize cache, file uploads, settings on startup
+

@@ -1,0 +1,63 @@
+<!-- Edit Template -->
+<ng-template #editTemplate>
+  <div class="d-flex flex-column gap-2">
+    <label [for]="id">
+      {{ label }}
+      <span *ngIf="metadata?.required" class="text-danger">*</span>
+    </label>
+    <p-inputNumber
+      [id]="id"
+      [(ngModel)]="value"
+      [placeholder]="metadata?.placeholder || ''"
+      [required]="metadata?.required"
+      [disabled]="metadata?.readOnly"
+      [minFractionDigits]="getDecimalPlaces()"
+      [maxFractionDigits]="getDecimalPlaces()"
+      [showButtons]="metadata?.showButtons"
+      [step]="metadata?.step || 1"
+      [useGrouping]="metadata?.showThousandsComma"
+      (onInput)="onValueChange($any($event.value))"
+      styleClass="w-100"
+    ></p-inputNumber>
+    <div *ngIf="metadata?.tooltip" class="text-muted small">
+      {{ metadata.tooltip }}
+    </div>
+  </div>
+</ng-template>
+
+<!-- List Template -->
+<ng-template #listTemplate>
+  <div class="field-display">
+    <!-- <div class="fw-medium">{{ label }}</div> -->
+    <div>
+      {{ 
+        value != null ? 
+          (metadata?.isDecimal ? 
+            (value | number : '1.0-' + getDecimalPlaces())
+            : (value | number : '1.0-0')
+          ) 
+          : '-' 
+      }}
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #viewTemplate>
+  <div class="d-flex align-items-center">
+    <span class="me-2">{{ label }}:</span>
+    <span class="field-display d-inline-flex align-items-center">
+      <span>
+        {{ 
+          value != null ? 
+            (metadata?.isDecimal ? 
+              (value | number : '1.0-' + getDecimalPlaces())
+              : (value | number : '1.0-0')
+            ) 
+            : '-' 
+        }}
+      </span>
+    </span>
+  </div>
+</ng-template>
+
+

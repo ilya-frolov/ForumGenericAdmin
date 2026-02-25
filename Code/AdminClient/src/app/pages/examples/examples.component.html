@@ -1,0 +1,89 @@
+<div class="container mx-auto mt-4">
+  <admin-breadcrumb></admin-breadcrumb>
+  <div class="text-center mb-5">
+    <h1>Component Examples</h1>
+    <p class="text-600">Explore various PrimeNG components organized by category.</p>
+  </div>
+
+  <div class="row g-3">
+    <!-- Form Elements Panel -->
+    <div class="col-12 col-md-3">
+      <p-panel header="Form Elements">
+        <ng-template pTemplate="content">
+          <p class="text-600 mb-4">Explore various form components including inputs, dropdowns, checkboxes, radio
+            buttons, and more.</p>
+          <button pButton pRipple type="button" label="View Form Elements" icon="pi pi-list"
+            (click)="navigateTo('/examples/form-elements')" class="w-full"></button>
+        </ng-template>
+      </p-panel>
+    </div>
+
+    <!-- Dynamic Form Panel -->
+    <div class="col-12 col-md-3">
+      <p-panel header="Dynamic Form">
+        <ng-template pTemplate="content">
+          <p class="text-600 mb-4">Explore the dynamic form renderer which builds complex forms from JSON structure.</p>
+          <button pButton pRipple type="button" label="View Dynamic Form" icon="pi pi-cog"
+            (click)="navigateTo('/examples/dynamic-form')" class="w-full"></button>
+        </ng-template>
+      </p-panel>
+    </div>
+
+    <!-- Tables Panel -->
+    <div class="col-12 col-md-3">
+      <p-panel header="Tables">
+        <ng-template pTemplate="content">
+          <p class="text-600 mb-4">Explore various table components with features like pagination, sorting, filtering,
+            and responsive layouts.</p>
+          <button pButton pRipple type="button" label="View Tables" icon="pi pi-table"
+            (click)="navigateTo('/examples/table')" class="w-full"></button>
+        </ng-template>
+      </p-panel>
+    </div>
+
+    <!-- Modals Panel -->
+    <div class="col-12 col-md-3">
+      <p-panel header="Modals & Dialogs">
+        <ng-template pTemplate="content">
+          <p class="text-600 mb-4">Explore various modal and dialog components including confirmation dialogs, form
+            dialogs, and sidebars.</p>
+          <button pButton pRipple type="button" label="View Modals" icon="pi pi-window-maximize"
+            (click)="navigateTo('/examples/modals')" class="w-full"></button>
+        </ng-template>
+      </p-panel>
+    </div>
+
+    <!-- Repeater Panel -->
+    <div class="col-12 col-md-3">
+      <p-panel header="Repeaters">
+        <ng-template pTemplate="content">
+          <p class="text-600 mb-4">Explore repeater components for dynamically adding and removing form sections.</p>
+          <button pButton pRipple type="button" label="View Repeaters" icon="pi pi-clone"
+            (click)="navigateTo('/examples/repeaters')" class="w-full"></button>
+        </ng-template>
+      </p-panel>
+    </div>
+
+    <!-- Tabs Panel -->
+    <div class="col-12 col-md-3">
+      <p-panel header="Tabs">
+        <ng-template pTemplate="content">
+          <p class="text-600 mb-4">Explore tab components for organizing content into multiple views.</p>
+          <button pButton pRipple type="button" label="View Tabs" icon="pi pi-bars"
+            (click)="navigateTo('/examples/tabs')" class="w-full"></button>
+        </ng-template>
+      </p-panel>
+    </div>
+
+    <!-- Upload Files Panel -->
+    <div class="col-12 col-md-3">
+      <p-panel header="Upload Files">
+        <ng-template pTemplate="content">
+          <p class="text-600 mb-4">Explore file upload components with various configurations.</p>
+          <button pButton pRipple type="button" label="View Upload Files" icon="pi pi-upload"
+            (click)="navigateTo('/examples/upload-files')" class="w-full"></button>
+        </ng-template>
+      </p-panel>
+    </div>
+  </div>
+</div>

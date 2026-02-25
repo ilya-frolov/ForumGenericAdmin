@@ -1,0 +1,269 @@
+<div class="container mx-auto mt-4">
+  <div class="row">
+    <div class="col-12">
+      <admin-breadcrumb></admin-breadcrumb>
+      <h1 class="mb-3">Comprehensive Form Example</h1>
+      <p class="text-muted mb-4">This form demonstrates various PrimeNG components organized into logical sections.</p>
+    </div>
+  </div>
+
+  <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+
+    <!-- Repeater Section with Accordion -->
+    <p-panel header="Task List Repeater" styleClass="mb-4">
+      <div class="row g-3">
+        <div class="col-12 mb-3">
+          <div class="d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">Tasks</h5>
+            <button pButton type="button" label="Add Task" icon="pi pi-plus" (click)="addRepeaterItem()"></button>
+          </div>
+        </div>
+
+        <div class="col-12">
+          <div formArrayName="repeaterItems">
+            <p-accordion [activeIndex]="activeAccordionIndex" (activeIndexChange)="onAccordionTabChange($event)">
+              <p-accordionTab *ngFor="let item of repeaterItems.controls; let i = index" [formGroupName]="i">
+                <ng-template pTemplate="header">
+                  <div class="d-flex justify-content-between align-items-center w-100">
+                    <div class="d-flex align-items-center">
+                      <span class="me-2">Task #{{i + 1}}:</span>
+                      <span [ngClass]="{'text-decoration-line-through': item.get('isCompleted')?.value}">
+                        {{item.get('title')?.value || 'New Task'}}
+                      </span>
+                      <span *ngIf="item.get('priority')?.value" class="ms-2">
+                        <p-badge [value]="item.get('priority')?.value" 
+                          [severity]="getPrioritySeverity(item.get('priority')?.value)"
+                          [styleClass]="'text-capitalize'">
+                        </p-badge>
+                      </span>
+                      <span *ngIf="item.get('isCompleted')?.value" class="ms-2">
+                        <p-badge value="Completed" severity="success"></p-badge>
+                      </span>
+                      <span *ngIf="isRepeaterItemEditing(i)" class="ms-2">
+                        <p-badge value="Editing" severity="warn"></p-badge>
+                      </span>
+                    </div>
+                    <!-- Edit button in read-only mode, Delete button in edit mode -->
+                    <div>
+                      <button *ngIf="!isRepeaterItemEditing(i)" pButton type="button" icon="pi pi-pencil" 
+                        class="p-button-primary" 
+                        (click)="toggleRepeaterEditMode(i); $event.stopPropagation()"></button>
+                      <button *ngIf="isRepeaterItemEditing(i)" pButton type="button" icon="pi pi-trash" 
+                        class="p-button-danger" 
+                        (click)="removeRepeaterItem(i); $event.stopPropagation()"></button>
+                    </div>
+                  </div>
+                </ng-template>
+                <p-blockUI [target]="accordionRepeaterBlock" [blocked]="isRepeaterItemBlocked(i)" />
+                <p-panel #accordionRepeaterBlock styleClass="mt-6">
+                  <div class="row g-3">
+                    <div class="col-md-6">
+                      <div class="d-flex flex-column gap-2">
+                        <label [for]="'title_' + i">Task Title</label>
+                        <input [id]="'title_' + i" type="text" pInputText formControlName="title" 
+                          placeholder="Enter task title" />
+                        <small [id]="'title_help_' + i">Enter a clear and concise title for this task.</small>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="d-flex flex-column gap-2">
+                        <label [for]="'priority_' + i">Priority</label>
+                        <p-dropdown [id]="'priority_' + i" [options]="priorityOptions" 
+                          formControlName="priority" optionLabel="name" optionValue="value" 
+                          placeholder="Select priority" styleClass="w-100"></p-dropdown>
+                        <small [id]="'priority_help_' + i">Select the importance level of this task.</small>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="d-flex flex-column gap-2">
+                        <label [for]="'dueDate_' + i">Due Date</label>
+                        <p-calendar [id]="'dueDate_' + i" formControlName="dueDate" appendTo="body" styleClass="w-100"></p-calendar>
+                        <small [id]="'dueDate_help_' + i">Select the deadline for completing this task.</small>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="d-flex flex-column gap-2">
+                        <label [for]="'isCompleted_' + i">Status</label>
+                        <div class="d-flex align-items-center">
+                          <p-checkbox [id]="'isCompleted_' + i" formControlName="isCompleted" [binary]="true"></p-checkbox>
+                          <label [for]="'isCompleted_' + i" class="ms-2">Mark as completed</label>
+                        </div>
+                        <small [id]="'isCompleted_help_' + i">Check this box if the task has been completed.</small>
+                      </div>
+                    </div>
+                    <div class="col-md-12">
+                      <div class="d-flex flex-column gap-2">
+                        <label [for]="'description_' + i">Description</label>
+                        <textarea [id]="'description_' + i" pTextarea formControlName="description" 
+                          rows="3" placeholder="Enter task description"></textarea>
+                        <small [id]="'description_help_' + i">Provide detailed information about what needs to be done.</small>
+                      </div>
+                    </div>
+                    <!-- Only show action buttons in edit mode -->
+                    <div *ngIf="isRepeaterItemEditing(i)" class="col-md-12 d-flex justify-content-end gap-2 mt-3">
+                      <!-- cancel -->
+                      <button pButton type="button" label="Cancel" icon="pi pi-times" 
+                        class="p-button-outlined p-button-secondary" (click)="cancelRepeaterItemEdit(i)"></button>
+                      <!-- save -->
+                      <button pButton type="button" label="Save" icon="pi pi-save" 
+                        class="p-button-outlined p-button-success" (click)="saveRepeaterItem(i)"></button>
+                      <!-- save & next -->
+                      <button pButton type="button" label="Save & Next" icon="pi pi-arrow-right" 
+                        class="p-button-success" (click)="saveAndNextRepeaterItem(i)"></button>
+                    </div>
+                  </div>
+                </p-panel>
+              </p-accordionTab>
+            </p-accordion>
+            
+            <div *ngIf="repeaterItems.length === 0" class="alert alert-info mt-3">
+              No tasks added yet. Click the "Add Task" button to create a new task.
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 d-flex justify-content-end">
+          <button pButton type="button" label="Add Task" icon="pi pi-plus" (click)="addRepeaterItem()"></button>
+        </div>
+      </div>
+    </p-panel>
+
+    <!-- Panel-based Repeater Section -->
+    <p-panel header="Task List Repeater (Panel Version)" styleClass="mb-4">
+      <div class="row g-3">
+        <div class="col-12 mb-3">
+          <div class="d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">Tasks</h5>
+            <button pButton type="button" label="Add Task" icon="pi pi-plus" (click)="addPanelRepeaterItem()"></button>
+          </div>
+        </div>
+
+        <div class="col-12">
+          <div formArrayName="panelRepeaterItems">
+            <div *ngFor="let item of panelRepeaterItems.controls; let i = index" [formGroupName]="i" class="mb-3">
+              <p-panel [toggleable]="true" [iconPos]="'end'" [collapsed]="!isPanelExpanded(i)" (onToggle)="togglePanelExpansion(i)">
+                <!-- repeater item header -->
+                <ng-template pTemplate="header" styleClass="flex-row-reverse">
+                  <div class="d-flex justify-content-between align-items-center w-100">
+                    <div class="d-flex align-items-center">
+                      <span class="me-2">Task #{{i + 1}}:</span>
+                      <span [ngClass]="{'text-decoration-line-through': item.get('isCompleted')?.value}">
+                        {{item.get('title')?.value || 'New Task'}}
+                      </span>
+                      <span *ngIf="item.get('priority')?.value" class="ms-2">
+                        <p-badge [value]="item.get('priority')?.value" 
+                          [severity]="getPrioritySeverity(item.get('priority')?.value)"
+                          [styleClass]="'text-capitalize'">
+                        </p-badge>
+                      </span>
+                      <span *ngIf="item.get('isCompleted')?.value" class="ms-2">
+                        <p-badge value="Completed" severity="success"></p-badge>
+                      </span>
+                      <span *ngIf="isPanelRepeaterItemEditing(i)" class="ms-2">
+                        <p-badge value="Editing" severity="warn"></p-badge>
+                      </span>
+                    </div>
+                    <!-- Edit button in read-only mode, Delete button in edit mode -->
+                    <div class="me-2">
+                      <button *ngIf="!isPanelRepeaterItemEditing(i)" pButton rounded text type="button" icon="pi pi-pencil" 
+                        class="p-button-primary" 
+                        (click)="togglePanelRepeaterEditMode(i); $event.stopPropagation()"></button>
+                      <button *ngIf="isPanelRepeaterItemEditing(i)" pButton rounded text type="button" icon="pi pi-trash" 
+                        class="p-button-danger" 
+                        (click)="removePanelRepeaterItem(i); $event.stopPropagation()"></button>
+                    </div>
+                  </div>
+                </ng-template>
+                <!-- repeater item content -->
+                <p-blockUI [target]="panelRepeaterBlock" [blocked]="isPanelRepeaterItemBlocked(i)" />
+                <p-panel #panelRepeaterBlock styleClass="mt-6">
+                  <div class="row g-3">
+                    <div class="col-md-6">
+                      <div class="d-flex flex-column gap-2">
+                        <label [for]="'panel_title_' + i">Task Title</label>
+                        <input [id]="'panel_title_' + i" type="text" pInputText formControlName="title" 
+                          placeholder="Enter task title" />
+                        <small [id]="'panel_title_help_' + i">Enter a clear and concise title for this task.</small>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="d-flex flex-column gap-2">
+                        <label [for]="'panel_priority_' + i">Priority</label>
+                        <p-dropdown [id]="'panel_priority_' + i" [options]="priorityOptions" 
+                          formControlName="priority" optionLabel="name" optionValue="value"  
+                          placeholder="Select priority" styleClass="w-100"></p-dropdown>
+                        <small [id]="'panel_priority_help_' + i">Select the importance level of this task.</small>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="d-flex flex-column gap-2">
+                        <label [for]="'panel_dueDate_' + i">Due Date</label>
+                        <p-calendar [id]="'panel_dueDate_' + i" formControlName="dueDate" appendTo="body" styleClass="w-100"></p-calendar>
+                        <small [id]="'panel_dueDate_help_' + i">Select the deadline for completing this task.</small>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="d-flex flex-column gap-2">
+                        <label [for]="'panel_isCompleted_' + i">Status</label>
+                        <div class="d-flex align-items-center">
+                          <p-checkbox [id]="'panel_isCompleted_' + i" formControlName="isCompleted" [binary]="true"></p-checkbox>
+                          <label [for]="'panel_isCompleted_' + i" class="ms-2">Mark as completed</label>
+                        </div>
+                        <small [id]="'panel_isCompleted_help_' + i">Check this box if the task has been completed.</small>
+                      </div>
+                    </div>
+                    <div class="col-md-12">
+                      <div class="d-flex flex-column gap-2">
+                        <label [for]="'panel_description_' + i">Description</label>
+                        <textarea pTextarea [id]="'panel_description_' + i" formControlName="description" 
+                          rows="3" placeholder="Enter task description"></textarea>
+                        <small [id]="'panel_description_help_' + i">Provide detailed information about what needs to be done.</small>
+                      </div>
+                    </div>
+                    <!-- Only show action buttons in edit mode -->
+                    <div *ngIf="isPanelRepeaterItemEditing(i)" class="col-md-12 d-flex justify-content-end gap-2 mt-3">
+                      <!-- cancel -->
+                      <button pButton type="button" label="Cancel" icon="pi pi-times" 
+                        class="p-button-outlined p-button-secondary" (click)="cancelPanelRepeaterItemEdit(i)"></button>
+                      <!-- save -->
+                      <button pButton type="button" label="Save" icon="pi pi-save" 
+                        class="p-button-outlined p-button-success" (click)="savePanelRepeaterItem(i)"></button>
+                      <!-- save & next -->
+                      <button pButton type="button" label="Save & Next" icon="pi pi-arrow-right" 
+                        class="p-button-success" (click)="saveAndNextPanelRepeaterItem(i)"></button>
+                    </div>
+                  </div>
+                </p-panel>
+              </p-panel>
+            </div>
+            
+            <div *ngIf="panelRepeaterItems.length === 0" class="alert alert-info mt-3">
+              No tasks added yet. Click the "Add Task" button to create a new task.
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 d-flex justify-content-end">
+          <button pButton type="button" label="Add Task" icon="pi pi-plus" (click)="addPanelRepeaterItem()"></button>
+        </div>
+      </div>
+    </p-panel>
+
+    <!-- Form Actions -->
+    <div class="row mt-4 mb-5">
+      <div class="col-12 d-flex justify-content-end gap-2">
+        <div class="col-12 d-flex justify-content-end gap-2">
+          <!-- reset -->
+          <button pButton type="button" label="Reset" icon="pi pi-refresh" class="p-button-outlined p-button-secondary me-auto" (click)="resetForm()"></button>
+          <!-- cancel -->
+          <button pButton type="button" label="Cancel" icon="pi pi-times" class="p-button-outlined p-button-danger"></button>
+          <!-- save -->
+          <button pButton class="p-button-outlined" type="submit" label="Save" icon="pi pi-save" [disabled]="!formGroup.valid"></button>
+          <!-- save & next -->
+          <button pButton type="button" label="Save & Next" icon="pi pi-arrow-right" 
+            class="p-button-success" [disabled]="!formGroup.valid"></button>
+        </div>
+      </div>
+    </div>
+  </form>
+</div> 

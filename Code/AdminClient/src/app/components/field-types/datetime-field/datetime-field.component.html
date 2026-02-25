@@ -1,0 +1,47 @@
+<ng-template #editTemplate>
+  <div class="d-flex flex-column gap-2">
+    <label [for]="id">
+      {{ label }}
+      <span *ngIf="metadata?.required" class="text-danger">*</span>
+    </label>
+    <p-datepicker
+      appendTo="body"
+      [id]="id"
+      [(ngModel)]="value"
+      [disabled]="metadata.readOnly || false"
+      [showTime]="metadata.showTime || false"
+      [timeOnly]="metadata.timeOnly || false"
+      [dateFormat]="metadata.dateFormat || 'dd/mm/yy'"
+      [minDate]="metadata.minDate"
+      [maxDate]="metadata.maxDate"
+      (onSelect)="onValueChange($event)"
+      (onClear)="onValueChange(null)"
+      [showButtonBar]="true"
+      [required]="metadata.required"
+      [showIcon]="true"
+      [iconDisplay]="'input'"
+      inputId="icondisplay">
+    </p-datepicker>
+    <div *ngIf="metadata?.tooltip" class="text-muted small">
+      {{ metadata.tooltip }}
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #listTemplate>
+  <div class="field-display">
+    <!-- <div class="fw-medium">{{ label }}</div> -->
+    <div>{{ displayValue || '-' }}</div>
+  </div>
+</ng-template>
+
+<ng-template #viewTemplate>
+  <div class="d-flex align-items-center">
+    <span class="me-2">{{ label }}:</span>
+    <span class="field-display d-inline-flex align-items-center">
+      <span>{{ displayValue || '-' }}</span>
+    </span>
+  </div>
+</ng-template>
+
+

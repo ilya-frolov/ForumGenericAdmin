@@ -1,0 +1,27 @@
+[submodule "Submodules/Dino.Common"]
+	path = Submodules/Dino.Common
+	url = https://bitbucket.org/devdinoapp/dino.common.git
+[submodule "Submodules/Dino.Infra.Reflection"]
+	path = Submodules/Dino.Infra.Reflection
+	url = https://bitbucket.org/devdinoapp/dino.infra.reflection.git
+[submodule "Submodules/Dino.CoreMvc.Common"]
+	path = Submodules/Dino.CoreMvc.Common
+	url = https://bitbucket.org/devdinoapp/dino.coremvc.common.git
+[submodule "Submodules/Dino.Common.EfCoreHelpers"]
+	path = Submodules/Dino.Common.EfCoreHelpers
+	url = https://bitbucket.org/devdinoapp/dino.common.efcorehelpers.git
+[submodule "Submodules/Dino.CoreMvc.Admin"]
+	path = Submodules/Dino.CoreMvc.Admin
+	url = https://bitbucket.org/devdinoapp/dino.coremvc.admin.git
+[submodule "Submodules/Dino.Infra"]
+	path = Submodules/Dino.Infra
+	url = https://bitbucket.org/devdinoapp/dino.infra.git
+[submodule "Submodules/Dino.Common.AzureExtensions"]
+	path = Submodules/Dino.Common.AzureExtensions
+	url = https://bitbucket.org/devdinoapp/dino.common.azureextensions.git
+[submodule "Submodules/Dino.Core.AdminBL"]
+	path = Submodules/Dino.Core.AdminBL
+	url = https://bitbucket.org/devdinoapp/dino.core.adminbl.git
+[submodule "Submodules/Dino.Common.Hangfire"]
+	path = Submodules/Dino.Common.Hangfire
+	url = https://bitbucket.org/devdinoapp/dino.common.hangfire.git

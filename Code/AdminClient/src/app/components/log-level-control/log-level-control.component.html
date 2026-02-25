@@ -1,0 +1,8 @@
+<div class="log-level-control">
+    <label for="logLevel">Log Level:</label>
+    <select id="logLevel" [(ngModel)]="selectedLevel" (change)="changeLogLevel()">
+      <option *ngFor="let level of logLevels" [value]="level.value">
+        {{ level.name }}
+      </option>
+    </select>
+  </div>

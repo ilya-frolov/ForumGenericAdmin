@@ -1,0 +1,60 @@
+---
+description: "MSSQL database script patterns, structure, and conventions"
+globs:
+  - "**/*.sql"
+---
+
+# MSSQL Database Scripts
+
+**Reference:** See `Readme/dino-admin.md` for complete framework documentation.
+
+## Database Constraints
+
+- **MSSQL ONLY** - All database scripts must be for Microsoft SQL Server
+- Always provide TWO scripts: ALTER (for existing DB) + CREATE TABLE (for DbCreation.sql)
+
+## Script Structure Rules
+
+1. **CREATE TABLE first** - ID always first, special properties at the end
+2. **Constraints after properties** - PK first, then FK, then uniques
+3. **NULL/NOT NULL and DEFAULT** - On each property definition
+4. **Indexes after table creation** - Use proper naming: `IX_TableName_ColumnName`
+5. **Manual inserts** - Always with `SET IDENTITY_INSERT ON` before and `OFF` after
+
+## Naming Conventions
+
+- Constraints: `PK_TableName`, `FK_TableName_ReferencedTable`, `UQ_TableName_Column`
+- Indexes: `IX_TableName_ColumnName`
+
+## Property Types
+
+- **Enums**: Always `SMALLINT` with comment:
+  ```sql
+  RoleType SMALLINT NOT NULL,  -- 0 = DinoAdmin, 1 = RegularAdmin, 2 = Custom
+  ```
+- **JSON data**: Always `NVARCHAR(MAX)`
+
+## Special Properties
+
+When adding special properties, ensure they match framework requirements:
+- `Archived` - BIT NOT NULL DEFAULT 0
+- `IsDeleted` - BIT NOT NULL DEFAULT 0
+- `Active` - BIT NOT NULL DEFAULT 1
+- `CreateDate` - DATETIME NOT NULL DEFAULT GETDATE()
+- `UpdateDate` - DATETIME NOT NULL DEFAULT GETDATE()
+- `UpdateBy` - INT NOT NULL DEFAULT 1
+- `SortIndex` - INT NOT NULL DEFAULT 0 (SUPER IMPORTANT for sorting)
+- `LastLoginDate` - DATETIME NULL
+- `LastIpAddress` - VARCHAR(50) NULL
+
+## When Updating Existing Tables
+
+- Provide ONLY the new properties in the CREATE TABLE script
+- Indicate WHERE to place them (e.g., "Add after Name property" or "Add before constraints")
+- Example:
+  ```sql
+  -- Add these properties to Items table (after Name property, before constraints):
+      IsDeleted               BIT             NOT NULL DEFAULT 0,
+      SortIndex               INT             NOT NULL DEFAULT 0,
+  ```
+

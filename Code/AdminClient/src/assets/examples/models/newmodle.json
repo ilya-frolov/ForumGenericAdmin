@@ -1,0 +1,80 @@
+{
+  "Id": 8,
+  "OrderIndex": 1,
+  "Name": "Coffee Maker",
+  "CategoryId": 4,
+  "Description": "Programmable coffee machine",
+  "DescriptionMultiLanguage": {
+    "En": "Programmable coffee machine",
+    "He": "מכונת קפה מתוכנתת",
+    "Es": "Cafetera programable"
+  },
+  "Sku": "HOME-001",
+  "Price": 89.99,
+  "Weight": 3.2,
+  "IsHighlighted": true,
+  "AvailableFrom": "2023-03-15T00:00:00",
+  "AvailableTo": "2025-04-07T19:52:05.8633333",
+  "ImagePath": "/images/items/coffee_maker.jpg",
+  "DocumentPath": "/images/items/coffee_maker.jpg",
+  "Tags": ["kitchen", "appliance", "coffee"],
+  "Properties": [
+    {
+      "Key": "asd",
+      "Value": "asd22",
+      "Tags": [
+        {
+          "TagName": "aaaa",
+          "Price": 11111
+        }
+      ]
+    },
+    {
+      "Key": "bbbbb",
+      "Value": "cccccc",
+      "Tags": null
+    },
+    {
+      "Key": null,
+      "Value": null,
+      "Tags": null
+    }
+  ],
+  "SubItems": [
+    {
+      "Name": "Coffee Filter Pack",
+      "Description": "Replacement filters for coffee maker"
+    },
+    {
+      "Name": "Coffee Bean Selection",
+      "Description": "Premium coffee beans pack"
+    }
+  ],
+  "IsActive": true,
+  "IsArchived": false,
+  "IsDeleted": false,
+  "SubmitDate": "2025-04-07T19:52:05.8633333",
+  "LastUpdatedDate": "2025-04-07T19:52:05.8633333",
+  "UpdatedById": null,
+  "SKU": "",
+  "SingleSubJsonProperty": {
+    "Key": "ddddd",
+    "Value": "eeeee",
+    "Tags": [
+      {
+        "TagName": "fffff",
+        "Price": 22222
+      }
+    ]
+  },
+  "ItemsExtraData": {
+    "Id": 0,
+    "Name": "hhhhhhh",
+    "Data": [
+      {
+        "TagName": "iiiiiii",
+        "Price": 333333
+      }
+    ]
+  }
+}

@@ -1,0 +1,322 @@
+<div class="container-fluid login-container">
+  <div class="row vh-100">
+    <!-- login form -->
+    <div class="col-12 col-md-6 d-flex align-items-center justify-content-center">
+      <div class="card shadow-lg border-0" style="width: 90%; max-width: 450px;">
+        <div class="card-body p-4 p-md-5">
+          <div class="text-center mb-4">
+            <img src="assets/images/dino-logo-d-letter.svg" alt="Company Logo" class="mb-3" style="height: 60px;">
+            <h2 class="fw-bold">{{ 'LOGIN_PAGE.PageTitle' | translate }}</h2>
+            <p class="text-muted">{{ 'LOGIN_PAGE.PageDescription' | translate }}</p>
+          </div>
+          
+          <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+            <!-- email -->
+            <div class="mb-3">
+              <p-floatlabel variant="in">
+                <p-iconfield>
+                  <p-inputicon styleClass="pi pi-user" />
+                  <input 
+                    id="username" 
+                    type="email" 
+                    pInputText 
+                    class="w-100" 
+                    formControlName="username" 
+                    [ngClass]="{ 'ng-invalid ng-dirty': submitted && f['username'].errors }"
+                    autocomplete="off">
+                </p-iconfield>
+                <label for="username">{{ 'LOGIN_PAGE.Email' | translate }}</label>
+              </p-floatlabel>
+              <p-message *ngIf="submitted && f['username'].errors" severity="error" variant="simple" size="small" class="mt-2 d-block">
+                <span *ngIf="f['username'].errors['required']">{{ 'LOGIN_PAGE.EmailRequired' | translate }}</span>
+                <span *ngIf="f['username'].errors['email']">{{ 'LOGIN_PAGE.InvalidEmail' | translate }}</span>
+              </p-message>
+            </div>
+
+            <!-- password -->
+            <div class="mb-3">
+              <p-floatlabel variant="in">
+                <p-iconfield>
+                  <p-inputicon styleClass="pi pi-lock" />
+                <input 
+                  id="password" 
+                  type="password" 
+                  pInputText 
+                  class="w-100" 
+                  formControlName="password" 
+                  [ngClass]="{ 'ng-invalid ng-dirty': submitted && f['password'].errors }"
+                  autocomplete="off">
+                </p-iconfield>
+                <label for="password">{{ 'LOGIN_PAGE.Password' | translate }}</label>
+              </p-floatlabel>
+              <p-message *ngIf="submitted && f['password'].errors" severity="error" variant="simple" size="small" class="mt-2 d-block">
+                <span *ngIf="f['password'].errors['required']">{{ 'LOGIN_PAGE.PasswordRequired' | translate }}</span>
+                <span *ngIf="f['password'].errors['minlength']">{{ 'LOGIN_PAGE.PasswordMinLength' | translate }}</span>
+              </p-message>
+            </div>
+
+            <!-- remember me -->
+            <div class="mb-4">
+              <p-checkbox 
+                formControlName="rememberMe" 
+                [binary]="true" 
+                inputId="rememberMe">
+              </p-checkbox>
+              <label for="rememberMe" class="ms-2">{{ 'LOGIN_PAGE.RememberMe' | translate }}</label>
+            </div>
+
+            <!-- sign in button -->
+            <p-button 
+              type="submit" 
+              [loading]="loading"
+              class="w-100"
+              severity="primary"
+              raised="true"
+              size="large"
+              styleClass="w-100" 
+              label="{{ 'LOGIN_PAGE.SignIn' | translate }}">
+            </p-button>
+            
+            <div class="text-center mt-4">
+              <!-- <p class="mb-3">Don't have an account? <a href="javascript:void(0)" class="text-decoration-none fw-bold" [routerLink]="['/signup']">Sign Up</a></p> -->
+              <p class="mb-0"><a href="javascript:void(0)" class="text-decoration-none fw-bold" (click)="forgotPassword()">{{ 'LOGIN_PAGE.ForgotPassword' | translate }}</a></p>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    
+    <!-- background image or color - hidden on small screens -->
+    <div class="col-md-6 d-none d-md-flex bg-secondary align-items-center justify-content-center">
+      <div class="text-center text-white">
+        <img src="assets/images/dino-logo-d-letter.svg" alt="Login Illustration" class="img-fluid mt-4" style="max-width: 80%;">
+        <h1 class="display-4 fw-bold">{{ 'LOGIN_PAGE.WelcomeBack' | translate }}</h1>
+        <p class="lead">{{ 'LOGIN_PAGE.LogInToAccessYourAdminDashboard' | translate }}</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Forgot Password Dialog -->
+<p-dialog 
+  [(visible)]="showForgotPasswordDialog" 
+  [modal]="true" 
+  [draggable]="false" 
+  [resizable]="false"
+  [closeOnEscape]="true"
+  header="{{ 'LOGIN_PAGE.ForgotPassword' | translate }}"
+  [style]="{width: '90%', maxWidth: '450px'}"
+  (onHide)="closeForgotPasswordDialog()">
+  <div class="p-2">
+    <p class="text-muted">{{ 'LOGIN_PAGE.EnterYourEmailAddressAndWeWillSendYouATimePasswordToResetYourPassword' | translate }}</p>
+    <form [formGroup]="forgotPasswordForm" (ngSubmit)="submitForgotPasswordForm()">
+      <div class="mb-3">
+        <p-floatlabel variant="in">
+          <p-iconfield>
+            <p-inputicon styleClass="pi pi-envelope" />
+            <input 
+              id="email" 
+              type="email" 
+              pInputText 
+              class="w-100" 
+              formControlName="email"
+              autocomplete="off">
+          </p-iconfield>
+          <label for="email">{{ 'LOGIN_PAGE.Email' | translate }}</label>
+        </p-floatlabel>
+        <p-message *ngIf="fpf['email'].touched && fpf['email'].errors" severity="error" variant="simple" size="small" class="mt-2 d-block">
+          <span *ngIf="fpf['email'].errors['required']">{{ 'LOGIN_PAGE.EmailRequired' | translate }}</span>
+          <span *ngIf="fpf['email'].errors['email']">{{ 'LOGIN_PAGE.InvalidEmail' | translate }}</span>
+        </p-message>
+      </div>
+      <div class="d-flex justify-content-between mt-4">
+        <p-button 
+          type="button" 
+          styleClass="p-button-outlined p-button-secondary" 
+          label="{{ 'LOGIN_PAGE.Cancel' | translate }}"
+          (onClick)="closeForgotPasswordDialog()">
+        </p-button>
+        <p-button 
+          type="submit" 
+          [loading]="loading"
+          [disabled]="forgotPasswordForm.invalid"
+          label="{{ 'LOGIN_PAGE.SendOTP' | translate }}">
+        </p-button>
+      </div>
+    </form>
+  </div>
+</p-dialog>
+
+<!-- OTP Verification Dialog -->
+<p-dialog 
+  [(visible)]="showOtpVerificationDialog" 
+  [modal]="true" 
+  [draggable]="false" 
+  [resizable]="false"
+  [closeOnEscape]="true"
+  header="{{ 'LOGIN_PAGE.VerifyOTP' | translate }}"
+  [style]="{width: '90%', maxWidth: '450px'}"
+  (onHide)="closeOtpVerificationDialog()">
+  <div class="p-2">
+    <p class="text-muted">{{ 'LOGIN_PAGE.EnterThe6DigitOTPSentToYourEmailAddress' | translate }}.</p>
+    <form [formGroup]="otpVerificationForm" (ngSubmit)="submitOtpVerificationForm()">
+      <div class="mb-3">
+        <p-floatlabel variant="in">
+          <p-iconfield>
+            <p-inputicon styleClass="pi pi-key" />
+            <input 
+              id="otp" 
+              type="text" 
+              pInputText 
+              class="w-100" 
+              formControlName="otp"
+              maxlength="6"
+              autocomplete="off">
+          </p-iconfield>
+          <label for="otp">{{ 'LOGIN_PAGE.OneTimePassword' | translate }}</label>
+        </p-floatlabel>
+        <p-message *ngIf="ovf['otp'].touched && ovf['otp'].errors" severity="error" variant="simple" size="small" class="mt-2 d-block">
+          <span *ngIf="ovf['otp'].errors['required']">{{ 'LOGIN_PAGE.OTPRequired' | translate }}</span>
+          <span *ngIf="ovf['otp'].errors['pattern']">{{ 'LOGIN_PAGE.OTPMustBe6Digits' | translate }}</span>
+        </p-message>
+      </div>
+      <div class="d-flex justify-content-between mt-4">
+        <p-button 
+          type="button" 
+          styleClass="p-button-outlined p-button-secondary" 
+          label="{{ 'SHARED.Cancel' | translate }}"
+          (onClick)="closeOtpVerificationDialog()">
+        </p-button>
+        <p-button 
+          type="submit" 
+          [loading]="loading"
+          [disabled]="otpVerificationForm.invalid"
+          label="{{ 'LOGIN_PAGE.Verify' | translate }}">
+        </p-button>
+      </div>
+    </form>
+  </div>
+</p-dialog>
+
+<!-- Reset Password Dialog -->
+<p-dialog 
+  [(visible)]="showResetPasswordDialog" 
+  [modal]="true" 
+  [draggable]="false" 
+  [resizable]="false"
+  [closeOnEscape]="true"
+  header="{{ 'LOGIN_PAGE.ResetPassword' | translate }}"
+  [style]="{width: '90%', maxWidth: '450px'}"
+  (onHide)="closeResetPasswordDialog()">
+  <div class="p-2">
+    <p class="text-muted">{{ 'LOGIN_PAGE.EnterYourNewPasswordBelow' | translate }}.</p>
+    <form [formGroup]="resetPasswordForm" (ngSubmit)="submitResetPasswordForm()">
+      <div class="mb-3">
+        <p-floatlabel variant="in">
+          <p-iconfield>
+            <p-inputicon styleClass="pi pi-lock" />
+            <input 
+              id="newPassword" 
+              type="password" 
+              pInputText 
+              class="w-100" 
+              formControlName="newPassword"
+              autocomplete="new-password">
+          </p-iconfield>
+          <label for="newPassword">{{ 'LOGIN_PAGE.NewPassword' | translate }}</label>
+        </p-floatlabel>
+        <p-message *ngIf="rpf['newPassword'].touched && rpf['newPassword'].errors" severity="error" variant="simple" size="small" class="mt-2 d-block">
+          <span *ngIf="rpf['newPassword'].errors['required']">{{ 'LOGIN_PAGE.PasswordRequired' | translate }}</span>
+          <span *ngIf="rpf['newPassword'].errors['minlength']">{{ 'LOGIN_PAGE.PasswordMinLength' | translate }}</span>
+        </p-message>
+      </div>
+      <div class="mb-3">
+        <p-floatlabel variant="in">
+          <p-iconfield>
+            <p-inputicon styleClass="pi pi-lock" />
+            <input 
+              id="confirmPassword" 
+              type="password" 
+              pInputText 
+              class="w-100" 
+              formControlName="confirmPassword"
+              autocomplete="new-password">
+          </p-iconfield>
+          <label for="confirmPassword">{{ 'LOGIN_PAGE.ConfirmPassword' | translate }}</label>
+        </p-floatlabel>
+        <p-message *ngIf="rpf['confirmPassword'].touched && rpf['confirmPassword'].errors" severity="error" variant="simple" size="small" class="mt-2 d-block">
+          <span *ngIf="rpf['confirmPassword'].errors['required']">{{ 'LOGIN_PAGE.ConfirmPasswordRequired' | translate }}</span>
+          <span *ngIf="rpf['confirmPassword'].errors['passwordMismatch']">{{ 'LOGIN_PAGE.PasswordsDoNotMatch' | translate }}</span>
+        </p-message>
+      </div>
+      <div class="d-flex justify-content-between mt-4">
+        <p-button 
+          type="button" 
+          styleClass="p-button-outlined p-button-secondary" 
+          label="{{ 'LOGIN_PAGE.Cancel' | translate }}"
+          (onClick)="closeResetPasswordDialog()">
+        </p-button>
+        <p-button 
+          type="submit" 
+          [loading]="loading"
+          [disabled]="resetPasswordForm.invalid"
+          label="{{ 'LOGIN_PAGE.ResetPassword' | translate }}">
+        </p-button>
+      </div>
+    </form>
+  </div>
+</p-dialog>
+
+<!-- Toast for notifications -->
+<p-toast></p-toast>
+
+<!-- Login OTP Verification Dialog -->
+<p-dialog 
+  [(visible)]="showLoginOtpDialog" 
+  [modal]="true" 
+  [draggable]="false" 
+  [resizable]="false"
+  [closeOnEscape]="true"
+  header="{{ 'LOGIN_PAGE.VerifyLogin' | translate }}"
+  [style]="{width: '90%', maxWidth: '450px'}"
+  (onHide)="closeLoginOtpDialog()">
+  <div class="p-2">
+    <p class="text-muted">{{ 'LOGIN_PAGE.EnterThe6DigitVerificationCodeSentToYourEmailAddressToCompleteLogin' | translate }}.</p>
+    <form [formGroup]="loginOtpForm" (ngSubmit)="submitLoginOtpForm()">
+      <div class="mb-3">
+        <p-floatlabel variant="in">
+          <p-iconfield>
+            <p-inputicon styleClass="pi pi-key" />
+            <input 
+              id="loginOtp" 
+              type="text" 
+              pInputText 
+              class="w-100" 
+              formControlName="otp"
+              maxlength="6"
+              autocomplete="off">
+          </p-iconfield>
+          <label for="loginOtp">{{ 'LOGIN_PAGE.VerificationCode' | translate }}</label>
+        </p-floatlabel>
+        <p-message *ngIf="lof['otp'].touched && lof['otp'].errors" severity="error" variant="simple" size="small" class="mt-2 d-block">
+          <span *ngIf="lof['otp'].errors['required']">{{ 'LOGIN_PAGE.VerificationCodeRequired' | translate }}</span>
+          <span *ngIf="lof['otp'].errors['pattern']">{{ 'LOGIN_PAGE.VerificationCodeMustBe6Digits' | translate }}</span>
+        </p-message>
+      </div>
+      <div class="d-flex justify-content-between mt-4">
+        <p-button 
+          type="button" 
+          styleClass="p-button-outlined p-button-secondary" 
+          label="{{ 'SHARED.Cancel' | translate }}"
+          (onClick)="closeLoginOtpDialog()">
+        </p-button>
+        <p-button 
+          type="submit" 
+          [loading]="loading"
+          [disabled]="loginOtpForm.invalid"
+          label="{{ 'LOGIN_PAGE.Verify' | translate }}">
+        </p-button>
+      </div>
+    </form>
+  </div>
+</p-dialog> 

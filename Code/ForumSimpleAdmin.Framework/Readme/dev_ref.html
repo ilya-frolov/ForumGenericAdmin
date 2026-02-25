@@ -1,0 +1,2489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dino Generic Admin - Complete Documentation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f5f5f5;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        nav {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 20px;
+            z-index: 100;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        nav a {
+            color: #667eea;
+            text-decoration: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+
+        nav a:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        section {
+            background: white;
+            margin: 30px 0;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            color: #667eea;
+            font-size: 2em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        h3 {
+            color: #764ba2;
+            font-size: 1.5em;
+            margin: 25px 0 15px 0;
+        }
+
+        h4 {
+            color: #555;
+            font-size: 1.2em;
+            margin: 20px 0 10px 0;
+        }
+
+        code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            color: #e83e8c;
+        }
+
+        pre {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 15px 0;
+        }
+
+        pre code {
+            background: none;
+            color: inherit;
+            padding: 0;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .feature-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .feature-card h4 {
+            color: #667eea;
+            margin-top: 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background: #667eea;
+            color: white;
+        }
+
+        tr:hover {
+            background: #f5f5f5;
+        }
+
+        .warning {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+
+        .info {
+            background: #d1ecf1;
+            border-left: 4px solid #0dcaf0;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+
+        .success {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.85em;
+            font-weight: bold;
+        }
+
+        .badge-required {
+            background: #dc3545;
+            color: white;
+        }
+
+        .badge-optional {
+            background: #6c757d;
+            color: white;
+        }
+
+        .badge-recommended {
+            background: #28a745;
+            color: white;
+        }
+
+        ul, ol {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+
+        li {
+            margin: 8px 0;
+        }
+
+        .code-example {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .toc {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .toc ul {
+            list-style: none;
+            margin-left: 0;
+        }
+
+        .toc li {
+            margin: 8px 0;
+        }
+
+        .toc a {
+            color: #667eea;
+            text-decoration: none;
+        }
+
+        .toc a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🚀 Dino Generic Admin</h1>
+        <p>Complete Framework Documentation</p>
+        <p style="font-size: 0.9em; margin-top: 10px;">Auto-Generated Admin Panel Framework for .NET Core</p>
+    </header>
+
+    <div class="container">
+        <nav>
+            <ul>
+                <li><a href="#overview">Overview</a></li>
+                <li><a href="#getting-started">Getting Started</a></li>
+                <li><a href="#architecture">Architecture</a></li>
+                <li><a href="#models">Admin Models</a></li>
+                <li><a href="#controllers">Controllers</a></li>
+                <li><a href="#field-types">Field Types</a></li>
+                <li><a href="#complex-types">Complex Types</a></li>
+                <li><a href="#visual-organization">Visual Organization</a></li>
+                <li><a href="#conditional-visibility">Conditional Visibility</a></li>
+                <li><a href="#other-attributes">Other Attributes</a></li>
+                <li><a href="#permissions">Permissions</a></li>
+                <li><a href="#cache">Cache</a></li>
+                <li><a href="#hangfire">Hangfire</a></li>
+                <li><a href="#multi-language">Multi-Language</a></li>
+                <li><a href="#settings">Settings</a></li>
+                <li><a href="#configuration">Configuration</a></li>
+            </ul>
+        </nav>
+
+        <section id="overview">
+            <h2>📋 Overview</h2>
+            <p>Dino Generic Admin is a powerful framework that automatically generates complete CRUD admin interfaces from C# models and controllers. No client-side code required!</p>
+            
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h4>✨ Zero Client Code</h4>
+                    <p>Admin interfaces are auto-generated from your C# models and controllers. No Angular/React/JavaScript needed!</p>
+                </div>
+                <div class="feature-card">
+                    <h4>🎨 Smart Attributes</h4>
+                    <p>Extensive attribute system for field configuration, visibility, containers, tabs, and complex input types.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>🔐 Role-Based Access</h4>
+                    <p>Built-in admin user and role management with DinoAdmin master role and granular permissions.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>📱 Platform-Specific</h4>
+                    <p>File uploads can be separated by platform (Desktop, Mobile, Tablet, App, Custom platforms).</p>
+                </div>
+                <div class="feature-card">
+                    <h4>🔍 Smart Search</h4>
+                    <p>Advanced filtering with multiple operators and conditions for powerful list views.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>🌐 Multi-Language</h4>
+                    <p>Built-in support for multiple languages with configurable language codes.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="getting-started">
+            <h2>🚀 Getting Started</h2>
+            
+            <h3>Project Structure</h3>
+            <p><strong>IMPORTANT:</strong> Replace <code>DinoGenericAdmin</code> with your project name (e.g., <code>ProjectName</code>)</p>
+            
+            <pre><code>ProjectName/
+├── ProjectName.Api/                    # ASP.NET Core API
+│   ├── Areas/Admin/
+│   │   ├── Controllers/                # Admin controllers (root level)
+│   │   └── Models/                    # Admin models (root level)
+│   ├── ModelsSettings/                 # Settings models
+│   └── Program.cs                      # Startup configuration
+├── ProjectName.BL/                      # Business Logic Layer
+│   ├── Cache/                          # Cache manager
+│   ├── Contracts/                     # BL interfaces
+│   ├── Data/                          # DbContext and entities
+│   └── Models/                        # Cache models
+└── Submodules/                        # Git submodules (DO NOT MODIFY)</code></pre>
+
+            <div class="warning">
+                <strong>⚠️ Demo Folders:</strong> When starting a new project, DELETE the <code>Demo/</code> folders but KEEP the <code>Basics/</code> folders (required for admin user/role management).
+            </div>
+
+            <h3>Adding a New Entity</h3>
+            <p>Each entity requires THREE components with matching naming:</p>
+            <ol>
+                <li><strong>Entity Class</strong> (DB Model) - Pure EF Core entity</li>
+                <li><strong>Admin Model</strong> - Inherits <code>BaseAdminModel</code></li>
+                <li><strong>Admin Controller</strong> - Inherits <code>DinoAdminBaseEntityController</code></li>
+            </ol>
+
+            <div class="code-example">
+                <h4>Example: Item Entity</h4>
+                <p><strong>1. Entity:</strong> <code>Item.cs</code> (in BL/Data or BL/Models)</p>
+                <pre><code>public class Item
+{
+    public int Id { get; set; }
+    public string Name { get; set; }
+}</code></pre>
+
+                <p><strong>2. Admin Model:</strong> <code>AdminItemModel.cs</code> (in Areas/Admin/Models)</p>
+                <pre><code>public class AdminItemModel : BaseAdminModel
+{
+    [AdminFieldCommon("ID", readOnly: true)]
+    [AdminFieldNumber]
+    [VisibilitySettings(showOnCreate: false)]
+    [ListSettings]
+    public int Id { get; set; }
+
+    [AdminFieldCommon("Name", required: true)]
+    [AdminFieldText(maxLength: 100)]
+    [ListSettings]
+    public string Name { get; set; }
+}</code></pre>
+
+                <p><strong>3. Controller:</strong> <code>AdminItemsController.cs</code> (in Areas/Admin/Controllers)</p>
+                <pre><code>public class AdminItemsController : DinoAdminBaseEntityController&lt;AdminItemModel, Item, int&gt;
+{
+    public AdminItemsController() : base("item") { }
+
+    protected override async Task&lt;AdminSegment&gt; CreateAdminSegment()
+    {
+        return new AdminSegment
+        {
+            General = new AdminSegmentGeneral
+            {
+                Name = "Items",
+                Priority = 20
+            },
+            UI = new AdminSegmentUI
+            {
+                Icon = "shopping-cart",
+                IconType = IconType.PrimeIcons,
+                ShowInMenu = true
+            }
+        };
+    }
+
+    protected override async Task&lt;ListDef&gt; CreateListDef(string refId = null)
+    {
+        return new ListDef
+        {
+            Title = "Items List",
+            AllowAdd = true,
+            AllowEdit = true,
+            AllowDelete = true
+        };
+    }
+}</code></pre>
+            </div>
+
+            <div class="info">
+                <strong>💡 Naming Convention:</strong> Entity <code>Item</code> → Admin Model <code>AdminItemModel</code> → Controller <code>AdminItemsController</code> (plural for collections)
+            </div>
+        </section>
+
+        <section id="architecture">
+            <h2>🏗️ Architecture</h2>
+            
+            <h3>Core Submodules</h3>
+            <ul>
+                <li><strong>Dino.CoreMvc.Admin</strong> - Main MVC admin framework
+                    <ul>
+                        <li>Controllers, Models, Attributes</li>
+                        <li>Field type plugins</li>
+                        <li>Location: <code>Submodules/Dino.CoreMvc.Admin/</code></li>
+                    </ul>
+                </li>
+                <li><strong>Dino.Core.AdminBL</strong> - Business logic layer
+                    <ul>
+                        <li>BaseBL, BLFactory</li>
+                        <li>Cache management</li>
+                        <li>Location: <code>Submodules/Dino.Core.AdminBL/</code></li>
+                    </ul>
+                </li>
+                <li><strong>Dino.Common.Hangfire</strong> - Hangfire integration</li>
+                <li><strong>Dino.Common.AzureExtensions</strong> - Azure Blob Storage</li>
+                <li><strong>Dino.Common.EfCoreHelpers</strong> - EF Core helpers</li>
+            </ul>
+
+            <h3>Base Controller Generic Parameters</h3>
+            <pre><code>DinoAdminBaseEntityController&lt;TModel, TEntity, TId&gt;</code></pre>
+            <ul>
+                <li><strong>TModel</strong>: Admin Model type (e.g., <code>AdminItemModel</code>)</li>
+                <li><strong>TEntity</strong>: Database Entity type (e.g., <code>Item</code>)</li>
+                <li><strong>TId</strong>: ID property type (e.g., <code>int</code>, <code>string</code>, <code>Guid</code>)</li>
+            </ul>
+
+            <div class="warning">
+                <strong>⚠️ CRITICAL:</strong> The ID property type MUST match between Admin Model and Entity. If Entity has <code>public int Id</code>, Admin Model must also have <code>public int Id</code>.
+            </div>
+        </section>
+
+        <section id="models">
+            <h2>📝 Admin Models</h2>
+            
+            <h3>Base Requirements</h3>
+            <p>All admin models MUST:</p>
+            <ul>
+                <li>Inherit from <code>BaseAdminModel</code></li>
+                <li>Have <code>[AdminFieldCommon]</code> on every property</li>
+                <li>Have a field type attribute on every property</li>
+            </ul>
+
+            <h3>Admin Property Attributes</h3>
+            <p>Located in: <code>Submodules/Dino.CoreMvc.Admin/Attributes/ColumnTypes.cs</code></p>
+
+            <table>
+                <tr>
+                    <th>Attribute</th>
+                    <th>Purpose</th>
+                    <th>Database Type</th>
+                    <th>Auto-Managed</th>
+                    <th>Usage</th>
+                </tr>
+                <tr>
+                    <td><code>[SaveDate]</code></td>
+                    <td>Marks creation timestamp property</td>
+                    <td><code>DATETIME NOT NULL DEFAULT GETDATE()</code></td>
+                    <td>✅ Yes</td>
+                    <td>Auto-populated when entity is first created</td>
+                </tr>
+                <tr>
+                    <td><code>[LastUpdateDate]</code></td>
+                    <td>Marks last modification timestamp</td>
+                    <td><code>DATETIME NOT NULL DEFAULT GETDATE()</code></td>
+                    <td>✅ Yes</td>
+                    <td>Auto-updated every time entity is saved</td>
+                </tr>
+                <tr>
+                    <td><code>[SortIndex]</code></td>
+                    <td>Marks sort order property</td>
+                    <td><code>INT NOT NULL DEFAULT 0</code></td>
+                    <td>❌ Manual</td>
+                    <td>Enables drag-and-drop reordering in list views</td>
+                </tr>
+                <tr>
+                    <td><code>[UpdatedBy]</code></td>
+                    <td>Marks user ID who last updated</td>
+                    <td><code>INT NOT NULL DEFAULT 1</code></td>
+                    <td>✅ Yes</td>
+                    <td>Auto-populated with current admin user ID</td>
+                </tr>
+                <tr>
+                    <td><code>[ArchiveIndicator]</code></td>
+                    <td>Marks archive flag property</td>
+                    <td><code>BIT NOT NULL DEFAULT 0</code></td>
+                    <td>❌ Manual</td>
+                    <td>Enables archive functionality (hide from normal view)</td>
+                </tr>
+                <tr>
+                    <td><code>[DeletionIndicator]</code></td>
+                    <td>Marks soft delete flag property</td>
+                    <td><code>BIT NOT NULL DEFAULT 0</code></td>
+                    <td>❌ Manual</td>
+                    <td>Enables soft delete functionality</td>
+                </tr>
+                <tr>
+                    <td><code>[ParentReferenceColumn]</code></td>
+                    <td>Marks foreign key to parent entity</td>
+                    <td>Varies (usually INT or GUID)</td>
+                    <td>❌ Manual</td>
+                    <td>Used for hierarchical relationships and filtered lists</td>
+                </tr>
+            </table>
+
+            <div class="warning">
+                <strong>⚠️ Database Schema Requirements:</strong> Properties with these attributes MUST match the exact database column specifications shown above. The framework relies on these naming conventions and data types.
+            </div>
+
+            <h4>Usage Examples</h4>
+            <pre><code>public class AdminItemModel : BaseAdminModel
+{
+    // Auto-managed creation timestamp
+    [AdminFieldCommon("Created Date", readOnly: true)]
+    [AdminFieldDateTime(DateTimePickerType.DateTime)]
+    [VisibilitySettings(showOnCreate: false)]
+    [SaveDate]
+    public DateTime CreateDate { get; set; }
+
+    // Auto-managed update timestamp
+    [AdminFieldCommon("Last Updated", readOnly: true)]
+    [AdminFieldDateTime(DateTimePickerType.DateTime)]
+    [VisibilitySettings(showOnCreate: false)]
+    [LastUpdateDate]
+    public DateTime UpdateDate { get; set; }
+
+    // Auto-managed user tracking
+    [AdminFieldCommon("Updated By", readOnly: true)]
+    [AdminFieldNumber]
+    [VisibilitySettings(showOnCreate: false)]
+    [UpdatedBy]
+    public int UpdateBy { get; set; }
+
+    // Manual sort order (enables drag-and-drop)
+    [AdminFieldCommon("Order", readOnly: true)]
+    [AdminFieldNumber]
+    [SortIndex]
+    [ListSettings]
+    public int SortIndex { get; set; }
+
+    // Archive functionality
+    [AdminFieldCommon("Archived", readOnly: true)]
+    [AdminFieldCheckbox]
+    [VisibilitySettings(showOnCreate: false)]
+    [ArchiveIndicator]
+    public bool Archived { get; set; }
+
+    // Soft delete functionality
+    [AdminFieldCommon("Deleted", readOnly: true)]
+    [AdminFieldCheckbox]
+    [VisibilitySettings(showOnCreate: false)]
+    [DeletionIndicator]
+    public bool IsDeleted { get; set; }
+
+    // Parent relationship for filtered lists
+    [AdminFieldCommon("Category")]
+    [AdminFieldSelect(SelectSourceType.DbType, typeof(Category), "Name", "Id")]
+    [ListSettings]
+    [ParentReferenceColumn]  // Enables /Items/List?refId=5 filtering
+    public int? CategoryId { get; set; }
+}</code></pre>
+
+            <h3>Other Important Attributes</h3>
+            <p>Located in: <code>Submodules/Dino.CoreMvc.Admin/Attributes/General.cs</code></p>
+            
+            <ul>
+                <li><code>[ListSettings]</code> - Include property in list view</li>
+                <li><code>[VisibilitySettings]</code> - Control visibility on create/edit</li>
+            </ul>
+
+            <h3>Skip Mapping Attribute</h3>
+            <p>Located in: <code>Submodules/Dino.CoreMvc.Admin/Attributes/SkipMappingAttribute.cs</code></p>
+            <p>Use <code>[SkipMapping]</code> to control mapping behavior with granular options:</p>
+            <pre><code>// Skip mapping completely (both directions)
+[SkipMapping]
+public string ComputedProperty { get; set; }
+
+// Skip only from database to model
+[SkipMapping(skipFromDb: true)]
+public string ReadOnlyFromDb { get; set; }
+
+// Skip only from model to database
+[SkipMapping(skipToDb: true)]
+public string ComputedProperty { get; set; }
+
+// Skip null values when mapping to database (preserve existing values)
+[SkipMapping(skipNullValues: true)]
+public string? OptionalField { get; set; }
+
+// Skip during import/export operations
+[SkipMapping(skipImport: true, skipExport: true)]
+public string InternalField { get; set; }
+
+// Full control example
+[SkipMapping(
+    skipFromDb: false,      // Map from DB to model
+    skipToDb: true,         // Don't map from model to DB
+    skipNullValues: true,   // Don't overwrite with null
+    skipImport: true,       // Skip during import
+    skipExport: false      // Include in export
+)]
+public string? ConditionalField { get; set; }</code></pre>
+
+            <h4>SkipMapping Parameters</h4>
+            <table>
+                <tr>
+                    <th>Parameter</th>
+                    <th>Default</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td><code>skipFromDb</code></td>
+                    <td>false</td>
+                    <td>Skip mapping from database entity to admin model</td>
+                </tr>
+                <tr>
+                    <td><code>skipToDb</code></td>
+                    <td>false</td>
+                    <td>Skip mapping from admin model to database entity</td>
+                </tr>
+                <tr>
+                    <td><code>skipNullValues</code></td>
+                    <td>false</td>
+                    <td>Skip mapping null values to existing properties (preserves existing DB values)</td>
+                </tr>
+                <tr>
+                    <td><code>skipImport</code></td>
+                    <td>false</td>
+                    <td>Skip the property during import operations</td>
+                </tr>
+                <tr>
+                    <td><code>skipExport</code></td>
+                    <td>false</td>
+                    <td>Skip the property during export operations</td>
+                </tr>
+            </table>
+
+            <h4>Common Use Cases</h4>
+            <ul>
+                <li><strong>Computed/calculated properties:</strong> <code>[SkipMapping(skipToDb: true)]</code> - Read from DB but don't save</li>
+                <li><strong>Read-only properties:</strong> <code>[SkipMapping(skipFromDb: false, skipToDb: true)]</code> - Display but don't update</li>
+                <li><strong>Optional fields that shouldn't overwrite:</strong> <code>[SkipMapping(skipNullValues: true)]</code> - Only update if value provided</li>
+                <li><strong>Internal/system fields:</strong> <code>[SkipMapping(skipImport: true, skipExport: true)]</code> - Hide from import/export</li>
+            </ul>
+
+            <h3>Import & Export Functionality</h3>
+            <p>The admin panel includes built-in import and export functionality for Excel, CSV, and PDF formats.</p>
+
+            <h4>Export Formats</h4>
+            <p>Located in: <code>Submodules/Dino.CoreMvc.Admin/Models/ListData.cs</code> (ExportFormat enum)</p>
+            <ul>
+                <li><code>ExportFormat.Excel</code> - Excel format (.xlsx)</li>
+                <li><code>ExportFormat.Csv</code> - CSV format (.csv)</li>
+                <li><code>ExportFormat.Pdf</code> - PDF format (.pdf)</li>
+                <li><code>ExportFormat.None</code> - Disable export</li>
+            </ul>
+
+            <h4>Import Formats</h4>
+            <ul>
+                <li>Excel files (.xlsx, .xls)</li>
+                <li>CSV files (.csv)</li>
+            </ul>
+
+            <h4>Configuration in ListDef</h4>
+            <pre><code>protected override async Task&lt;ListDef&gt; CreateListDef(string refId = null)
+{
+    return new ListDef
+    {
+        // ... other settings ...
+        
+        // Enable import (Excel/CSV)
+        AllowExcelImport = true,
+        
+        // Enable export formats (Flags enum - can combine multiple)
+        AllowedExportFormats = ExportFormat.Excel | ExportFormat.Csv | ExportFormat.Pdf,
+        
+        // Custom export filename (optional, defaults to controller name)
+        ExportFilename = "Items"
+    };
+}</code></pre>
+
+            <h4>SkipMapping for Import/Export</h4>
+            <p>Use <code>[SkipMapping]</code> attribute to control which properties are included:</p>
+            <pre><code>// Skip property from import/export
+[SkipMapping(skipImport: true, skipExport: true)]
+public string InternalField { get; set; }
+
+// Skip only from import
+[SkipMapping(skipImport: true)]
+public string AutoGeneratedField { get; set; }
+
+// Skip only from export
+[SkipMapping(skipExport: true)]
+public string SensitiveData { get; set; }</code></pre>
+
+            <h4>Import Process</h4>
+            <ol>
+                <li>Admin downloads template using <code>DownloadImportTemplate</code> endpoint</li>
+                <li>Template includes all properties except those marked with <code>[SkipMapping(skipImport: true)]</code></li>
+                <li>Admin fills template with data</li>
+                <li>Admin uploads file via <code>Import</code> endpoint</li>
+                <li>System validates and imports data in batches (default batch size: 1000)</li>
+                <li>Returns import result with success/error counts</li>
+            </ol>
+
+            <h4>Export Process</h4>
+            <ol>
+                <li>Admin selects export format from list view</li>
+                <li>System exports all list data (respects current filters)</li>
+                <li>Properties marked with <code>[SkipMapping(skipExport: true)]</code> are excluded</li>
+                <li>File is downloaded with timestamp in filename</li>
+            </ol>
+
+            <h4>Permissions</h4>
+            <ul>
+                <li>Import requires <code>PermissionType.Import</code> permission</li>
+                <li>Export requires <code>PermissionType.Export</code> permission</li>
+                <li>Both are checked automatically by the base controller</li>
+            </ul>
+
+            <div class="info">
+                <strong>💡 When Creating a New Entity:</strong> Always ask if import/export support is needed:
+                <ul>
+                    <li>"Do you need import functionality? (Excel/CSV)"</li>
+                    <li>"Do you need export functionality? (Excel/CSV/PDF)"</li>
+                    <li>If yes, configure <code>AllowExcelImport</code> and <code>AllowedExportFormats</code> in <code>CreateListDef()</code></li>
+                    <li>Mark internal/system properties with <code>[SkipMapping(skipImport: true, skipExport: true)]</code></li>
+                </ul>
+            </div>
+
+            <h3>Custom Mapping Methods</h3>
+            <p>Located in: <code>Submodules/Dino.CoreMvc.Admin/Models/Admin/BaseAdminModel.cs</code></p>
+            <p>Override these methods on your AdminModel for custom mapping logic:</p>
+            <pre><code>public class AdminItemModel : BaseAdminModel
+{
+    // Called BEFORE mapping FROM database entity TO admin model
+    // Return false to skip automatic mapping (you handle it manually)
+    // Return true to continue with automatic mapping
+    public override bool CustomPreMapFromDbModel(dynamic dbModel, dynamic model, ModelMappingContext context)
+    {
+        // You can cast dbModel to specific type if needed: var entity = (Item)dbModel;
+        // Or use ExpandoObject for dynamic properties (see AdminBaseSettings example)
+        
+        // Example: Skip automatic mapping and handle manually
+        if (someCondition)
+        {
+            model.CustomProperty = dbModel.SomeOtherProperty;
+            return false; // Stop automatic mapping
+        }
+        
+        return true; // Continue with automatic mapping
+    }
+
+    // Called AFTER mapping FROM database entity TO admin model
+    // Use this to modify the model after automatic mapping is complete
+    public override void CustomPostMapFromDbModel(dynamic dbModel, dynamic model, ModelMappingContext context)
+    {
+        // Modify model after automatic mapping
+        model.CustomProperty = dbModel.SomeOtherProperty;
+        model.ComputedValue = CalculateSomething(model);
+    }
+
+    // Called BEFORE mapping FROM admin model TO database entity
+    // Return false to skip automatic mapping (you handle it manually)
+    // Return true to continue with automatic mapping
+    public override bool CustomPreMapToDbModel(dynamic model, dynamic dbModel, ModelMappingContext context)
+    {
+        // You can cast dbModel to specific type if needed: var entity = (Item)dbModel;
+        // Or use ExpandoObject for dynamic properties (see AdminBaseSettings example)
+        
+        // Example: Skip automatic mapping and handle manually
+        if (someCondition)
+        {
+            dbModel.SomeOtherProperty = model.CustomProperty;
+            return false; // Stop automatic mapping
+        }
+        
+        return true; // Continue with automatic mapping
+    }
+
+    // Called AFTER mapping FROM admin model TO database entity
+    // Use this to modify the entity after automatic mapping is complete
+    public override void CustomPostMapToDbModel(dynamic model, dynamic dbModel, ModelMappingContext context)
+    {
+        // Modify entity after automatic mapping
+        dbModel.SomeOtherProperty = model.CustomProperty;
+        dbModel.UpdateDate = DateTime.UtcNow;
+    }
+}</code></pre>
+
+            <div class="info">
+                <strong>💡 Important Notes:</strong>
+                <ul>
+                    <li>All parameters are <code>dynamic</code> - you can cast them to specific types when needed: <code>var entity = (Item)dbModel;</code></li>
+                    <li>For complex scenarios with dynamic properties, use <code>ExpandoObject</code> (see <code>AdminBaseSettings</code> example)</li>
+                    <li><code>ModelMappingContext</code> provides access to current user ID, mapping options, etc.</li>
+                    <li>Returning <code>false</code> from <code>CustomPreMap*</code> methods stops automatic mapping - you must handle everything manually</li>
+                    <li>Returning <code>true</code> from <code>CustomPreMap*</code> methods allows automatic mapping to continue</li>
+                    <li><code>CustomPostMap*</code> methods are always called after automatic mapping (if it occurred)</li>
+                    <li>See <code>Submodules/Dino.CoreMvc.Admin/Models/Admin/AdminBaseSettings.cs</code> for a complex example using <code>ExpandoObject</code> and JSON serialization</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="controllers">
+            <h2>🎮 Controllers</h2>
+            
+            <h3>Required Overrides</h3>
+            <ul>
+                <li><code>CreateAdminSegment()</code> - Define menu item, icon, priority</li>
+                <li><code>CreateListDef()</code> - Configure list view</li>
+            </ul>
+
+            <h3>Optional Overrides</h3>
+            <ul>
+                <li><code>GetVisibilityRules()</code> - Advanced conditional visibility</li>
+                <li><code>GetAdminModelType()</code> - Return model type for form structure</li>
+            </ul>
+
+            <h3>List Actions</h3>
+            <p>Configure actions available from the list view:</p>
+            <pre><code>protected override async Task&lt;ListDef&gt; CreateListDef(string refId = null)
+{
+    return new ListDef
+    {
+        // ... other settings ...
+        
+        // Actions to other lists
+        Actions = new List&lt;ListAction&gt;
+        {
+            new ListAction(
+                ListActionType.List,                    // Navigate to another list
+                "View Categories",
+                (new AdminCategoriesController()).Id,
+                true                                    // Pass entity ID
+            ),
+            new ListAction(
+                ListActionType.Custom,                 // Custom action
+                "Export Data",
+                Id,
+                false,
+                actionName: nameof(ExportAction),
+                requireConfirmation: true
+            )
+        },
+        
+        // Actions on selected items
+        SelfActions = new List&lt;ListAction&gt;
+        {
+            new ListAction(
+                ListActionType.Custom,
+                "Bulk Update",
+                Id,
+                false,
+                actionName: nameof(BulkUpdateAction),
+                passItemSelection: true,                // Pass selected items
+                itemSelectionPropertyName: "ids"
+            )
+        }
+    };
+}</code></pre>
+
+            <h3>List Action Types</h3>
+            <ul>
+                <li><code>ListActionType.List</code> - Navigate to another list</li>
+                <li><code>ListActionType.Custom</code> - Custom controller action</li>
+                <li><code>ListActionType.Edit</code> - Navigate to edit page</li>
+                <li><code>ListActionType.OuterLink</code> - External URL</li>
+            </ul>
+
+            <h3>Custom Action Implementation</h3>
+            <pre><code>[HttpPost]
+public async Task&lt;JsonResult&gt; ExportAction([FromBody] AdminItemModel model)
+{
+    // Custom logic
+    return CreateJsonResponse(true, result, null);
+}
+
+[HttpPost]
+public async Task&lt;JsonResult&gt; BulkUpdateAction([FromBody] BulkUpdateRequest request)
+{
+    // request.ids contains selected item IDs
+    return CreateJsonResponse(true, null, null);
+}</code></pre>
+        </section>
+
+        <section id="field-types">
+            <h2>🎨 Field Types</h2>
+            <p>All field types are located in: <code>Submodules/Dino.CoreMvc.Admin/Attributes/FieldTypes.cs</code></p>
+
+            <h3>Text Fields</h3>
+            <table>
+                <tr>
+                    <th>Attribute</th>
+                    <th>Description</th>
+                    <th>Parameters</th>
+                    <th>Example</th>
+                </tr>
+                <tr>
+                    <td><code>[AdminFieldText]</code></td>
+                    <td>Single-line text input with optional masking and prefixes/suffixes</td>
+                    <td><code>placeholder, maxLength, prefix, suffix, masking</code></td>
+                    <td><code>[AdminFieldText(placeholder: "Enter name", maxLength: 100, prefix: "Mr./Ms.")]</code></td>
+                </tr>
+                <tr>
+                    <td><code>[AdminFieldTextArea]</code></td>
+                    <td>Multi-line text area</td>
+                    <td><code>placeholder, maxLength, prefix, suffix, masking, rows</code></td>
+                    <td><code>[AdminFieldTextArea(placeholder: "Enter description", rows: 5, maxLength: 500)]</code></td>
+                </tr>
+                <tr>
+                    <td><code>[AdminFieldRichText]</code></td>
+                    <td>Rich text editor (Quill or CKEditor)</td>
+                    <td><code>placeholder, maxLength, prefix, suffix, masking, editorType</code></td>
+                    <td><code>[AdminFieldRichText(editorType: RichTextEditorType.Quill, maxLength: 10000)]</code></td>
+                </tr>
+                <tr>
+                    <td><code>[AdminFieldPassword]</code></td>
+                    <td>Password input with strength validation</td>
+                    <td><code>minLength, strengthCheck, showAsterisks</code></td>
+                    <td><code>[AdminFieldPassword(minLength: 8, strengthCheck: PasswordStrengthCheck.High)]</code></td>
+                </tr>
+                <tr>
+                    <td><code>[AdminFieldURL]</code></td>
+                    <td>URL input with validation and display options</td>
+                    <td><code>alternativeDisplayName, placeholder, maxLength, prefix, suffix, masking</code></td>
+                    <td><code>[AdminFieldURL(alternativeDisplayName: "Website Link")]</code></td>
+                </tr>
+            </table>
+
+            <h3>Numeric Fields</h3>
+            <p><code>[AdminFieldNumber]</code> - Number input with formatting and validation</p>
+            <pre><code>[AdminFieldNumber(
+    isDecimal: true,        // Allow decimal values
+    showThousandsComma: true, // Show comma separators (1,000)
+    decimalPlaces: 2,       // Decimal precision (-1 = unlimited)
+    min: 0,                 // Minimum value
+    max: 1000,              // Maximum value
+    step: 0.01              // Increment step
+)]</code></pre>
+
+            <h3>Boolean Fields</h3>
+            <p><code>[AdminFieldCheckbox]</code> - Boolean checkbox with optional list toggle</p>
+            <pre><code>[AdminFieldCheckbox(allowListToggle: true)] // Enables toggle in list view</code></pre>
+
+            <h3>Selection Fields</h3>
+            <p><strong>Single Select:</strong> <code>[AdminFieldSelect]</code></p>
+            <pre><code>// From Database Table
+[AdminFieldSelect(
+    sourceType: SelectSourceType.DbType,
+    optionsSource: typeof(Category),           // Entity type
+    nameFieldOrMethod: nameof(Category.Name),  // Display field
+    valueFieldOrMethod: nameof(Category.Id),   // Value field
+    searchEnabled: true,                       // Enable search
+    viewType: SelectViewType.SearchableDropdown
+)]
+
+// From Enum
+[AdminFieldSelect(
+    sourceType: SelectSourceType.Enum,
+    optionsSource: typeof(ItemStatus),         // Enum type
+    viewType: SelectViewType.RadioButtons
+)]
+
+// From Function/Method
+[AdminFieldSelect(
+    sourceType: SelectSourceType.Function,
+    optionsSource: typeof(MyController),       // Controller type
+    nameFieldOrMethod: nameof(MyController.GetOptions), // Method name
+    valueFieldOrMethod: "Id",                  // Property name in result
+    viewType: SelectViewType.Dropdown
+)]</code></pre>
+
+            <p><strong>Multi-Select:</strong> <code>[AdminFieldMultiSelect]</code></p>
+            <pre><code>// Store as JSON array
+[AdminFieldMultiSelect(
+    sourceType: SelectSourceType.DbType,
+    optionsSource: typeof(Tag),
+    nameFieldOrMethod: nameof(Tag.Name),
+    valueFieldOrMethod: nameof(Tag.Id),
+    storeAsJson: true,                    // Store as JSON in DB
+    viewType: SelectViewType.Tags
+)]
+
+// Store as EF Relationship
+[AdminFieldMultiSelect(
+    sourceType: SelectSourceType.DbType,
+    optionsSource: typeof(Tag),
+    nameFieldOrMethod: nameof(Tag.Name),
+    valueFieldOrMethod: nameof(Tag.Id),
+    storeAsJson: false,                   // Use EF relationship
+    relatedCollectionPropertyName: nameof(Item.Tags), // Collection property
+    relatedEntityIdProperty: nameof(Tag.Id)           // ID property name
+)]</code></pre>
+
+            <h3>Select View Types</h3>
+            <ul>
+                <li><code>SelectViewType.Dropdown</code> - Standard dropdown</li>
+                <li><code>SelectViewType.RadioButtons</code> - Radio button group</li>
+                <li><code>SelectViewType.SearchableDropdown</code> - Dropdown with search</li>
+                <li><code>SelectViewType.Tags</code> - Tag-based selection (multi-select)</li>
+                <li><code>SelectViewType.Checkboxes</code> - Checkbox group</li>
+            </ul>
+
+            <h3>Date/Time Fields</h3>
+            <p><code>[AdminFieldDateTime]</code> - Date and time picker with range support</p>
+            <pre><code>[AdminFieldDateTime(
+    dateType: DateTimePickerType.DateTime,  // Date, Time, or DateTime
+    isRangeSelection: false,                 // Allow date range selection
+    isUtc: true                              // Store as UTC
+)]</code></pre>
+
+            <h3>File Upload Fields</h3>
+            <p><strong>General File Upload:</strong> <code>[AdminFieldFile]</code></p>
+            <pre><code>[AdminFieldFile(
+    allowedExtensions: new[] { "pdf", "doc", "docx" },
+    maxSize: 10,                    // MB
+    multiple: false,                // Allow multiple files
+    dragDrop: true,                 // Enable drag-and-drop
+    platforms: Platforms.Desktop | Platforms.Mobile
+)]</code></pre>
+
+            <p><strong>Picture Upload:</strong> <code>[AdminFieldPicture]</code></p>
+            <pre><code>[AdminFieldPicture(
+    allowedExtensions: new[] { "jpg", "png", "webp" },
+    forceFormat: ForcePictureFormat.WebP,    // Force format conversion
+    maxSize: 2,                              // MB
+    multiple: false,
+    dragDrop: true,
+    platforms: Platforms.Desktop | Platforms.Mobile,
+    forceCrop: true,                         // Require cropping
+    cropRatio: "16:9",                       // Aspect ratio
+    resolutionHint: "1920x1080"              // Recommended resolution
+)]</code></pre>
+
+            <h3>Specialized Fields</h3>
+            <table>
+                <tr>
+                    <th>Attribute</th>
+                    <th>Description</th>
+                    <th>Parameters</th>
+                    <th>Example</th>
+                </tr>
+                <tr>
+                    <td><code>[AdminFieldColorPicker]</code></td>
+                    <td>Color picker with alpha support</td>
+                    <td><code>allowAlpha</code></td>
+                    <td><code>[AdminFieldColorPicker(allowAlpha: true)]</code></td>
+                </tr>
+                <tr>
+                    <td><code>[AdminFieldCoordinatePicker]</code></td>
+                    <td>Map-based coordinate picker</td>
+                    <td><code>mapProvider, defaultLocation, allowSearch</code></td>
+                    <td><code>[AdminFieldCoordinatePicker(mapProvider: CoordinatePickerMapProvider.Google, allowSearch: true)]</code></td>
+                </tr>
+                <tr>
+                    <td><code>[AdminFieldExternalVideo]</code></td>
+                    <td>YouTube/Vimeo video embed</td>
+                    <td><code>sourceType</code></td>
+                    <td><code>[AdminFieldExternalVideo(ExternalVideoSourceType.YouTube)]</code></td>
+                </tr>
+                <tr>
+                    <td><code>[AdminSkipExport]</code></td>
+                    <td>Skip field during export operations</td>
+                    <td>(none)</td>
+                    <td><code>[AdminSkipExport]</code></td>
+                </tr>
+            </table>
+
+            <h3>Platform-Specific Uploads</h3>
+            <p>Platforms enum supports multiple platforms (Flags enum):</p>
+            <table>
+                <tr>
+                    <th>Platform</th>
+                    <th>Value</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td><code>Platforms.Desktop</code></td>
+                    <td>1</td>
+                    <td>Desktop web browsers</td>
+                </tr>
+                <tr>
+                    <td><code>Platforms.Tablet</code></td>
+                    <td>2</td>
+                    <td>Tablet devices</td>
+                </tr>
+                <tr>
+                    <td><code>Platforms.Mobile</code></td>
+                    <td>4</td>
+                    <td>Mobile devices</td>
+                </tr>
+                <tr>
+                    <td><code>Platforms.App</code></td>
+                    <td>8</td>
+                    <td>Mobile applications</td>
+                </tr>
+                <tr>
+                    <td><code>Platforms.Custom1</code></td>
+                    <td>16</td>
+                    <td>Custom platform 1</td>
+                </tr>
+                <tr>
+                    <td><code>Platforms.Custom2</code></td>
+                    <td>32</td>
+                    <td>Custom platform 2</td>
+                </tr>
+                <tr>
+                    <td><code>Platforms.Custom3</code></td>
+                    <td>64</td>
+                    <td>Custom platform 3</td>
+                </tr>
+            </table>
+
+            <h3>Enums in Field Types</h3>
+            <p>Enums can be used with <code>[AdminFieldSelect]</code> for dropdowns:</p>
+            <pre><code>public enum ItemStatus
+{
+    [Description("Available for purchase")]
+    Available = 1,
+    [Description("Temporarily out of stock")]
+    OutOfStock = 2,
+    [Description("No longer available")]
+    Discontinued = 3
+}
+
+[AdminFieldCommon("Status")]
+[AdminFieldSelect(SelectSourceType.Enum, typeof(ItemStatus))]
+public ItemStatus Status { get; set; }</code></pre>
+            <div class="info">
+                <strong>💡 Tip:</strong> Use <code>[Description]</code> attribute on enum values for user-friendly display text. Without <code>[Description]</code>, the enum name is used.
+            </div>
+
+            <h3>Rich Text Editor Types</h3>
+            <ul>
+                <li><code>RichTextEditorType.Quill</code> - Quill.js editor (default)</li>
+                <li><code>RichTextEditorType.CKEditor</code> - CKEditor</li>
+            </ul>
+
+            <h3>Password Strength Levels</h3>
+            <ul>
+                <li><code>PasswordStrengthCheck.None</code> - No validation</li>
+                <li><code>PasswordStrengthCheck.Weak</code> - Basic requirements</li>
+                <li><code>PasswordStrengthCheck.Medium</code> - Moderate requirements</li>
+                <li><code>PasswordStrengthCheck.High</code> - Strong requirements</li>
+                <li><code>PasswordStrengthCheck.VeryHigh</code> - Very strict requirements</li>
+            </ul>
+
+            <h3>Picture Format Options</h3>
+            <ul>
+                <li><code>ForcePictureFormat.JPG</code> - Convert to JPEG</li>
+                <li><code>ForcePictureFormat.PNG</code> - Convert to PNG</li>
+                <li><code>ForcePictureFormat.WebP</code> - Convert to WebP (default)</li>
+                <li><code>ForcePictureFormat.NO_FORCE</code> - Keep original format</li>
+            </ul>
+
+            <h3>Coordinate Picker Map Providers</h3>
+            <ul>
+                <li><code>CoordinatePickerMapProvider.Google</code> - Google Maps</li>
+                <li><code>CoordinatePickerMapProvider.OpenStreetMap</code> - OpenStreetMap</li>
+            </ul>
+
+            <h3>External Video Source Types</h3>
+            <ul>
+                <li><code>ExternalVideoSourceType.YouTube</code> - YouTube videos</li>
+                <li><code>ExternalVideoSourceType.Vimeo</code> - Vimeo videos</li>
+                <li><code>ExternalVideoSourceType.AutoDetect</code> - Auto-detect platform</li>
+            </ul>
+        </section>
+
+        <section id="complex-types">
+            <h2>🔗 Complex Types & Repeaters</h2>
+            <p>Located in: <code>Submodules/Dino.CoreMvc.Admin/Attributes/Complex.cs</code></p>
+
+            <p>Complex types allow you to embed nested objects or collections within your admin models. They can be stored as JSON strings or as separate database entities with foreign key relationships.</p>
+
+            <h3>Single Complex Type</h3>
+            <p>Use <code>[ComplexType]</code> attribute for single nested objects.</p>
+
+            <h4>JSON Storage (Simple)</h4>
+            <pre><code>[AdminFieldCommon("Extra Data")]
+[ComplexType(
+    type: typeof(AdminItemsExtraData),
+    storeAsJson: true,                    // Store as JSON string
+    containerBehavior: ContainerBehavior.Collapsible,
+    defaultCollapsed: false,
+    showTitle: true,
+    titleText: "Additional Information"
+)]
+public AdminItemsExtraData ItemsExtraData { get; set; }
+
+// Complex type class
+public class AdminItemsExtraData : BaseAdminModel
+{
+    [AdminFieldCommon("Internal Notes")]
+    [AdminFieldTextArea(rows: 3)]
+    public string InternalNotes { get; set; }
+
+    [AdminFieldCommon("Priority Level")]
+    [AdminFieldSelect(SelectSourceType.Enum, typeof(PriorityLevel))]
+    public PriorityLevel Priority { get; set; }
+}</code></pre>
+
+            <h4>EF Relationship (Separate Table)</h4>
+            <pre><code>[AdminFieldCommon("Extra Data")]
+[ComplexType(
+    type: typeof(AdminItemsExtraData),
+    storeAsJson: false,                   // Use EF relationship
+    relatedEntity: typeof(ItemsExtraData), // DB entity type
+    containerBehavior: ContainerBehavior.None,
+    deleteOnRemove: true,                 // Delete when parent is deleted
+    cascadeDelete: true                   // Cascade delete child entities
+)]
+public AdminItemsExtraData ItemsExtraData { get; set; }</code></pre>
+
+            <h3>Repeater (List of Complex Types)</h3>
+            <p>Use <code>[Repeater]</code> attribute for collections of nested objects.</p>
+
+            <h4>JSON Storage Array</h4>
+            <pre><code>[AdminFieldCommon("Properties")]
+[Repeater(
+    type: typeof(ItemProperty),
+    storeAsJson: true,                    // Store as JSON array
+    minItems: 0,
+    maxItems: 10,
+    allowReordering: true,                // Enable drag-and-drop
+    containerBehavior: ContainerBehavior.Collapsible,
+    defaultCollapsed: false,
+    showTitle: true,
+    titleText: "Item Properties",
+    disableRepeaterAddItemButton: false,
+    disableRepeaterRemoveItemButton: false,
+    repeaterRemoveConfirmation: true
+)]
+public List&lt;ItemProperty&gt; Properties { get; set; }</code></pre>
+
+            <h4>EF Relationship (Separate Table with Foreign Keys)</h4>
+            <pre><code>[AdminFieldCommon("Sub Items")]
+[Repeater(
+    type: typeof(AdminSubItemModel),
+    storeAsJson: false,                   // Use EF relationship
+    relatedEntity: typeof(SubItem),       // DB entity type
+    minItems: 1,
+    maxItems: 5,
+    allowReordering: true,
+    deleteOnRemove: true,                 // Delete child entities when removed
+    cascadeDelete: true,                  // Cascade delete
+    containerBehavior: ContainerBehavior.Tab,
+    titleText: "Sub Items"
+)]
+public List&lt;AdminSubItemModel&gt; SubItems { get; set; }</code></pre>
+
+            <h3>Container Behavior Options</h3>
+            <table>
+                <tr>
+                    <th>ContainerBehavior</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td><code>ContainerBehavior.None</code></td>
+                    <td>No special container styling</td>
+                </tr>
+                <tr>
+                    <td><code>ContainerBehavior.Collapsible</code></td>
+                    <td>Collapsible section with expand/collapse toggle</td>
+                </tr>
+                <tr>
+                    <td><code>ContainerBehavior.Tab</code></td>
+                    <td>Tab-based organization</td>
+                </tr>
+            </table>
+
+            <h3>Complete Parameter Reference</h3>
+            <table>
+                <tr>
+                    <th>Parameter</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                    <th>ComplexType</th>
+                    <th>Repeater</th>
+                </tr>
+                <tr>
+                    <td><code>type</code></td>
+                    <td><code>Type</code></td>
+                    <td>Admin model type for the nested object</td>
+                    <td>✅</td>
+                    <td>✅</td>
+                </tr>
+                <tr>
+                    <td><code>storeAsJson</code></td>
+                    <td><code>bool</code></td>
+                    <td>Store as JSON (<code>true</code>) or EF relationship (<code>false</code>)</td>
+                    <td>✅</td>
+                    <td>✅</td>
+                </tr>
+                <tr>
+                    <td><code>relatedEntity</code></td>
+                    <td><code>Type</code></td>
+                    <td>Database entity type (required when <code>storeAsJson: false</code>)</td>
+                    <td>✅</td>
+                    <td>✅</td>
+                </tr>
+                <tr>
+                    <td><code>containerBehavior</code></td>
+                    <td><code>ContainerBehavior</code></td>
+                    <td>UI container behavior</td>
+                    <td>✅</td>
+                    <td>✅</td>
+                </tr>
+                <tr>
+                    <td><code>defaultCollapsed</code></td>
+                    <td><code>bool</code></td>
+                    <td>Default collapsed state for collapsible containers</td>
+                    <td>✅</td>
+                    <td>✅</td>
+                </tr>
+                <tr>
+                    <td><code>showTitle</code></td>
+                    <td><code>bool</code></td>
+                    <td>Whether to display a title for the container</td>
+                    <td>✅</td>
+                    <td>✅</td>
+                </tr>
+                <tr>
+                    <td><code>titleText</code></td>
+                    <td><code>string</code></td>
+                    <td>Title text for the container</td>
+                    <td>✅</td>
+                    <td>✅</td>
+                </tr>
+                <tr>
+                    <td><code>deleteOnRemove</code></td>
+                    <td><code>bool</code></td>
+                    <td>Delete related entities when removed</td>
+                    <td>✅</td>
+                    <td>✅</td>
+                </tr>
+                <tr>
+                    <td><code>cascadeDelete</code></td>
+                    <td><code>bool</code></td>
+                    <td>Cascade delete related entities</td>
+                    <td>✅</td>
+                    <td>✅</td>
+                </tr>
+                <tr>
+                    <td><code>minItems</code></td>
+                    <td><code>int</code></td>
+                    <td>Minimum number of items required</td>
+                    <td>❌</td>
+                    <td>✅</td>
+                </tr>
+                <tr>
+                    <td><code>maxItems</code></td>
+                    <td><code>int</code></td>
+                    <td>Maximum number of items allowed</td>
+                    <td>❌</td>
+                    <td>✅</td>
+                </tr>
+                <tr>
+                    <td><code>allowReordering</code></td>
+                    <td><code>bool</code></td>
+                    <td>Enable drag-and-drop reordering</td>
+                    <td>❌</td>
+                    <td>✅</td>
+                </tr>
+                <tr>
+                    <td><code>disableRepeaterAddItemButton</code></td>
+                    <td><code>bool</code></td>
+                    <td>Disable the add item button</td>
+                    <td>❌</td>
+                    <td>✅</td>
+                </tr>
+                <tr>
+                    <td><code>disableRepeaterRemoveItemButton</code></td>
+                    <td><code>bool</code></td>
+                    <td>Disable the remove item button</td>
+                    <td>❌</td>
+                    <td>✅</td>
+                </tr>
+                <tr>
+                    <td><code>repeaterRemoveConfirmation</code></td>
+                    <td><code>bool</code></td>
+                    <td>Require confirmation before removing items</td>
+                    <td>❌</td>
+                    <td>✅</td>
+                </tr>
+            </table>
+
+            <h3>Force Delete Related Attribute</h3>
+            <p>Located in: <code>Submodules/Dino.CoreMvc.Admin/Attributes/ForceDeleteRelatedAttribute.cs</code></p>
+            <p>Use <code>[ForceDeleteRelated]</code> on repeater properties to forcefully delete related entities, even if they have other relationships:</p>
+            <pre><code>[AdminFieldCommon("Related Items")]
+[Repeater(typeof(AdminRelatedItemModel), storeAsJson: false, relatedEntity: typeof(RelatedItem))]
+[ForceDeleteRelated(cascadeDelete: true)]  // Force delete even with other relations
+public List&lt;AdminRelatedItemModel&gt; RelatedItems { get; set; }</code></pre>
+
+            <div class="warning">
+                <strong>⚠️ Database Considerations:</strong>
+                <ul>
+                    <li><strong>JSON Storage:</strong> Stored as NVARCHAR(MAX) in database</li>
+                    <li><strong>EF Relationships:</strong> Creates separate tables with foreign key constraints</li>
+                    <li><strong>Cascade Delete:</strong> Use carefully to avoid orphaned records</li>
+                    <li><strong>Performance:</strong> JSON storage is faster for simple structures, EF relationships for complex queries</li>
+                </ul>
+            </div>
+
+            <div class="info">
+                <strong>💡 Best Practices:</strong>
+                <ul>
+                    <li>Use JSON storage for simple, non-queryable data</li>
+                    <li>Use EF relationships when child data needs to be queried independently</li>
+                    <li>Set appropriate <code>minItems</code>/<code>maxItems</code> to guide users</li>
+                    <li>Use <code>allowReordering: true</code> for sortable lists</li>
+                    <li>Use collapsible containers for complex nested forms</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="visual-organization">
+            <h2>🎨 Visual Organization Attributes</h2>
+            <p>Located in: <code>Submodules/Dino.CoreMvc.Admin/Attributes/Sections.cs</code></p>
+
+            <p>Visual organization attributes help structure your admin forms by grouping related fields into containers, tabs, and collapsible sections.</p>
+
+            <h3>Container Attribute</h3>
+            <p>Use <code>[Container]</code> to group fields into visually distinct sections:</p>
+            <pre><code>[Container("Basic Information", "Core product details", width: FieldWidth.Half)]
+// Fields in this container
+[AdminFieldCommon("Name", required: true)]
+[AdminFieldText(maxLength: 100)]
+public string Name { get; set; }
+
+[AdminFieldCommon("Description")]
+[AdminFieldTextArea(rows: 3)]
+public string Description { get; set; }
+
+[EndContainer]
+
+[Container("Pricing", "Price and discount information", displayMode: ContainerDisplayMode.Collapsible, defaultCollapsed: true)]
+// Pricing fields
+[AdminFieldCommon("Price")]
+[AdminFieldNumber(isDecimal: true, decimalPlaces: 2, min: 0)]
+public decimal Price { get; set; }
+
+[EndContainer]</code></pre>
+
+            <h3>Tab Attribute</h3>
+            <p>Use <code>[Tab]</code> to organize fields into tabbed interface:</p>
+            <pre><code>[Tab("General")]
+[AdminFieldCommon("Name", required: true)]
+[AdminFieldText(maxLength: 100)]
+public string Name { get; set; }
+
+[AdminFieldCommon("Category")]
+[AdminFieldSelect(SelectSourceType.DbType, typeof(Category))]
+public int CategoryId { get; set; }
+[EndTab]
+
+[Tab("Media")]
+[AdminFieldCommon("Main Image")]
+[AdminFieldPicture]
+public string MainImagePath { get; set; }
+
+[AdminFieldCommon("Gallery")]
+[AdminFieldFile(multiple: true)]
+public FileContainerCollection GalleryImages { get; set; }
+[EndTab]
+
+[Tab("Settings")]
+[AdminFieldCommon("Is Active")]
+[AdminFieldCheckbox]
+public bool IsActive { get; set; }
+
+[AdminFieldCommon("Sort Order")]
+[AdminFieldNumber]
+public int SortOrder { get; set; }
+[EndTab]</code></pre>
+
+            <h3>Container Parameters</h3>
+            <table>
+                <tr>
+                    <th>Parameter</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                    <th>Example</th>
+                </tr>
+                <tr>
+                    <td><code>title</code></td>
+                    <td><code>string</code></td>
+                    <td>Title displayed for the container</td>
+                    <td><code>"Basic Information"</code></td>
+                </tr>
+                <tr>
+                    <td><code>subTitle</code></td>
+                    <td><code>string</code></td>
+                    <td>Subtitle or description</td>
+                    <td><code>"Core product details"</code></td>
+                </tr>
+                <tr>
+                    <td><code>width</code></td>
+                    <td><code>FieldWidth</code></td>
+                    <td>Width of the container</td>
+                    <td><code>FieldWidth.Half</code></td>
+                </tr>
+                <tr>
+                    <td><code>displayMode</code></td>
+                    <td><code>ContainerDisplayMode</code></td>
+                    <td>Container style (Standard or Collapsible)</td>
+                    <td><code>ContainerDisplayMode.Collapsible</code></td>
+                </tr>
+                <tr>
+                    <td><code>defaultCollapsed</code></td>
+                    <td><code>bool</code></td>
+                    <td>Default collapsed state (for collapsible containers)</td>
+                    <td><code>true</code></td>
+                </tr>
+                <tr>
+                    <td><code>containerId</code></td>
+                    <td><code>string</code></td>
+                    <td>Unique identifier for visibility conditions</td>
+                    <td><code>"advanced-settings"</code></td>
+                </tr>
+            </table>
+
+            <h3>Field Width Options</h3>
+            <table>
+                <tr>
+                    <th>FieldWidth</th>
+                    <th>Percentage</th>
+                    <th>Use Case</th>
+                </tr>
+                <tr>
+                    <td><code>FieldWidth.Auto</code></td>
+                    <td>Auto</td>
+                    <td>Automatic width based on content</td>
+                </tr>
+                <tr>
+                    <td><code>FieldWidth.Quarter</code></td>
+                    <td>25%</td>
+                    <td>Small fields like status or priority</td>
+                </tr>
+                <tr>
+                    <td><code>FieldWidth.Third</code></td>
+                    <td>33%</td>
+                    <td>Three fields per row</td>
+                </tr>
+                <tr>
+                    <td><code>FieldWidth.Half</code></td>
+                    <td>50%</td>
+                    <td>Two fields per row</td>
+                </tr>
+                <tr>
+                    <td><code>FieldWidth.TwoThirds</code></td>
+                    <td>66%</td>
+                    <td>Larger fields with smaller companion</td>
+                </tr>
+                <tr>
+                    <td><code>FieldWidth.ThreeQuarters</code></td>
+                    <td>75%</td>
+                    <td>Majority width field</td>
+                </tr>
+                <tr>
+                    <td><code>FieldWidth.Full</code></td>
+                    <td>100%</td>
+                    <td>Full width fields (default)</td>
+                </tr>
+            </table>
+
+            <h3>Container Display Modes</h3>
+            <table>
+                <tr>
+                    <th>ContainerDisplayMode</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td><code>ContainerDisplayMode.Standard</code></td>
+                    <td>Regular container with border and background</td>
+                </tr>
+                <tr>
+                    <td><code>ContainerDisplayMode.Collapsible</code></td>
+                    <td>Container that can be expanded/collapsed</td>
+                </tr>
+            </table>
+
+            <h3>Best Practices</h3>
+            <div class="info">
+                <strong>💡 Visual Organization Tips:</strong>
+                <ul>
+                    <li>Use <strong>containers</strong> to group related fields logically</li>
+                    <li>Use <strong>tabs</strong> when you have many fields that can be categorized</li>
+                    <li>Use <strong>collapsible containers</strong> for optional or advanced settings</li>
+                    <li>Use <strong>field widths</strong> to create balanced layouts</li>
+                    <li>Always pair opening attributes with their corresponding <code>[EndContainer]</code> or <code>[EndTab]</code></li>
+                    <li>Use <code>containerId</code> when you need to reference containers in visibility rules</li>
+                </ul>
+            </div>
+
+            <h3>Complete Example</h3>
+            <pre><code>public class AdminProductModel : BaseAdminModel
+{
+    [Tab("General")]
+        [Container("Basic Info", width: FieldWidth.Half)]
+            [AdminFieldCommon("Product Name", required: true)]
+            [AdminFieldText(maxLength: 100)]
+            public string Name { get; set; }
+
+            [AdminFieldCommon("SKU", required: true)]
+            [AdminFieldText(maxLength: 50)]
+            public string SKU { get; set; }
+        [EndContainer]
+
+        [Container("Categories", width: FieldWidth.Half)]
+            [AdminFieldCommon("Main Category")]
+            [AdminFieldSelect(SelectSourceType.DbType, typeof(Category))]
+            public int? CategoryId { get; set; }
+
+            [AdminFieldCommon("Tags")]
+            [AdminFieldMultiSelect(SelectSourceType.DbType, typeof(Tag))]
+            public List&lt;int&gt; TagIds { get; set; }
+        [EndContainer]
+    [EndTab]
+
+    [Tab("Pricing")]
+        [Container("Price Settings")]
+            [AdminFieldCommon("Base Price")]
+            [AdminFieldNumber(isDecimal: true, decimalPlaces: 2)]
+            public decimal BasePrice { get; set; }
+
+            [AdminFieldCommon("Discount %")]
+            [AdminFieldNumber(isDecimal: true, decimalPlaces: 1, max: 100)]
+            public decimal DiscountPercent { get; set; }
+        [EndContainer]
+    [EndTab]
+
+    [Tab("Advanced", displayMode: ContainerDisplayMode.Collapsible, defaultCollapsed: true)]
+        [AdminFieldCommon("Internal Notes")]
+        [AdminFieldTextArea(rows: 4)]
+        public string InternalNotes { get; set; }
+    [EndTab]
+}</code></pre>
+        </section>
+
+        <section id="conditional-visibility">
+            <h2>👁️ Conditional Visibility</h2>
+            <p>Located in: <code>Submodules/Dino.CoreMvc.Admin/Attributes/ConditionalVisibilityAttribute.cs</code></p>
+
+            <p>Conditional visibility attributes allow you to show or hide fields based on the values of other fields, creating dynamic forms that adapt to user input.</p>
+
+            <h3>ShowIf and HideIf Attributes</h3>
+            <p>Use <code>[ShowIf]</code> to display fields only when certain conditions are met, or <code>[HideIf]</code> to hide fields when conditions are met:</p>
+            <pre><code>public class AdminProductModel : BaseAdminModel
+{
+    [AdminFieldCommon("Product Type")]
+    [AdminFieldSelect(SelectSourceType.Enum, typeof(ProductType))]
+    public ProductType ProductType { get; set; }
+
+    [AdminFieldCommon("Physical Weight")]
+    [AdminFieldNumber(isDecimal: true, decimalPlaces: 2)]
+    [ShowIf("ProductType", ProductType.Physical)]  // Only show for physical products
+    public decimal Weight { get; set; }
+
+    [AdminFieldCommon("Download URL")]
+    [AdminFieldURL]
+    [ShowIf("ProductType", ProductType.Digital)]   // Only show for digital products
+    public string DownloadUrl { get; set; }
+
+    [AdminFieldCommon("Is Active")]
+    [AdminFieldCheckbox]
+    public bool IsActive { get; set; }
+
+    [AdminFieldCommon("Deactivation Reason")]
+    [AdminFieldTextArea(rows: 2)]
+    [ShowIf("IsActive", false)]  // Show when product is inactive
+    public string DeactivationReason { get; set; }
+
+    [AdminFieldCommon("Category")]
+    [AdminFieldSelect(SelectSourceType.DbType, typeof(Category))]
+    public int? CategoryId { get; set; }
+
+    [AdminFieldCommon("Subcategory")]
+    [AdminFieldSelect(SelectSourceType.DbType, typeof(Subcategory))]
+    [HideIf("CategoryId", null)]  // Hide when no category selected
+    public int? SubcategoryId { get; set; }
+}</code></pre>
+
+            <h3>Multiple Conditions</h3>
+            <p>You can specify multiple values for a single condition:</p>
+            <pre><code>[AdminFieldCommon("Shipping Method")]
+[AdminFieldSelect(SelectSourceType.Enum, typeof(ShippingMethod))]
+[ShowIf("ProductType", ProductType.Physical, ProductType.Bulk)]  // Multiple values
+public ShippingMethod ShippingMethod { get; set; }</code></pre>
+
+            <h3>Advanced Conditional Visibility</h3>
+            <p>For complex conditional logic, override the <code>GetVisibilityRules()</code> method in your controller:</p>
+            <pre><code>public class AdminProductsController : DinoAdminBaseEntityController&lt;AdminProductModel, Product, int&gt;
+{
+    protected override void GetVisibilityRules(ConditionalVisibilityRules&lt;AdminProductModel&gt; rules)
+    {
+        // Simple conditions
+        rules.AddGroup()
+            .When(x => x.ProductType == ProductType.Physical && x.Weight > 10)
+            .Show(x => x.FragileShipping);
+
+        // Complex multi-field conditions
+        rules.AddGroup()
+            .WhenProperty("ProductType", ProductType.Digital)
+            .AndProperty("IsActive", true)
+            .ShowProperties("DownloadUrl", "LicenseKey");
+
+        // Conditional based on collection count
+        rules.AddGroup()
+            .WhenProperty("Tags.Count", 0, ">")  // When Tags collection has items
+            .Show(x => x.TagPriority);
+
+        // Multiple conditions with OR logic
+        rules.AddGroup()
+            .When(x => x.CategoryId == 1 || x.CategoryId == 2)
+            .OrWhen(x => x.IsPremium)
+            .Show(x => x.PremiumFeatures);
+    }
+}</code></pre>
+
+            <h3>Visibility Rule Methods</h3>
+            <table>
+                <tr>
+                    <th>Method</th>
+                    <th>Description</th>
+                    <th>Example</th>
+                </tr>
+                <tr>
+                    <td><code>When(predicate)</code></td>
+                    <td>Condition using lambda expression</td>
+                    <td><code>.When(x => x.IsActive && x.Type == "Premium")</code></td>
+                </tr>
+                <tr>
+                    <td><code>WhenProperty(property, value)</code></td>
+                    <td>Simple property condition</td>
+                    <td><code>.WhenProperty("Status", "Active")</code></td>
+                </tr>
+                <tr>
+                    <td><code>WhenProperty(property, value, operator)</code></td>
+                    <td>Property condition with comparison</td>
+                    <td><code>.WhenProperty("Quantity", 5, ">")</code></td>
+                </tr>
+                <tr>
+                    <td><code>AndWhen(predicate)</code></td>
+                    <td>Additional AND condition</td>
+                    <td><code>.AndWhen(x => x.IsVerified)</code></td>
+                </tr>
+                <tr>
+                    <td><code>OrWhen(predicate)</code></td>
+                    <td>Additional OR condition</td>
+                    <td><code>.OrWhen(x => x.IsAdmin)</code></td>
+                </tr>
+                <tr>
+                    <td><code>Show(action)</code></td>
+                    <td>Show specified properties</td>
+                    <td><code>.Show(x => x.Discount)</code></td>
+                </tr>
+                <tr>
+                    <td><code>Hide(action)</code></td>
+                    <td>Hide specified properties</td>
+                    <td><code>.Hide(x => x.StandardShipping)</code></td>
+                </tr>
+                <tr>
+                    <td><code>ShowProperties(names)</code></td>
+                    <td>Show properties by name</td>
+                    <td><code>.ShowProperties("Field1", "Field2")</code></td>
+                </tr>
+                <tr>
+                    <td><code>HideProperties(names)</code></td>
+                    <td>Hide properties by name</td>
+                    <td><code>.HideProperties("Field1", "Field2")</code></td>
+                </tr>
+            </table>
+
+            <h3>Comparison Operators</h3>
+            <p>When using <code>WhenProperty(property, value, operator)</code>, you can use these operators:</p>
+            <ul>
+                <li><code>"=="</code> - Equal to (default)</li>
+                <li><code>"!="</code> - Not equal to</li>
+                <li><code>"<"</code> - Less than</li>
+                <li><code>"<="</code> - Less than or equal</li>
+                <li><code>">"</code> - Greater than</li>
+                <li><code>">="</code> - Greater than or equal</li>
+                <li><code>"contains"</code> - String contains</li>
+                <li><code>"starts"</code> - String starts with</li>
+                <li><code>"ends"</code> - String ends with</li>
+            </ul>
+
+            <h3>Best Practices</h3>
+            <div class="info">
+                <strong>💡 Conditional Visibility Tips:</strong>
+                <ul>
+                    <li>Use <strong>simple attributes</strong> (<code>[ShowIf]</code>, <code>[HideIf]</code>) for basic conditions</li>
+                    <li>Use <strong>controller rules</strong> for complex logic involving multiple fields</li>
+                    <li><strong>Combine both</strong> - use attributes for simple cases and rules for complex scenarios</li>
+                    <li><strong>Avoid circular dependencies</strong> - don't create conditions that depend on fields that are conditionally hidden</li>
+                    <li><strong>Test thoroughly</strong> - conditional visibility can create complex user flows</li>
+                    <li><strong>Use meaningful names</strong> for properties referenced in conditions</li>
+                </ul>
+            </div>
+
+            <div class="warning">
+                <strong>⚠️ Important Notes:</strong>
+                <ul>
+                    <li>Conditional visibility works on both create and edit forms</li>
+                    <li>Hidden fields are still validated if they have validation rules</li>
+                    <li>Complex rules in controllers are evaluated server-side</li>
+                    <li>Simple attribute conditions work client-side for better UX</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="other-attributes">
+            <h2>🔧 Other Important Attributes</h2>
+
+            <p>This section covers additional attributes that control mapping behavior, multi-language support, and other specialized functionality.</p>
+
+            <h3>SkipMapping Attribute</h3>
+            <p>Located in: <code>Submodules/Dino.CoreMvc.Admin/Attributes/SkipMappingAttribute.cs</code></p>
+            <p>Use <code>[SkipMapping]</code> to exclude properties from automatic model-to-database mapping:</p>
+            <pre><code>public class AdminProductModel : BaseAdminModel
+{
+    [AdminFieldCommon("Name")]
+    [AdminFieldText]
+    public string Name { get; set; }
+
+    [AdminFieldCommon("Display Price")]
+    [AdminFieldText]
+    [SkipMapping]  // Computed field, not stored in DB
+    public string DisplayPrice { get; set; }
+
+    [AdminFieldCommon("Internal Notes")]
+    [AdminFieldTextArea]
+    [SkipMapping(skipExport: true)]  // Don't export but allow in forms
+    public string InternalNotes { get; set; }
+
+    [AdminFieldCommon("Audit Log")]
+    [AdminFieldTextArea]
+    [SkipMapping(skipFromDb: true)]  // Only send to DB, don't read back
+    public string AuditLog { get; set; }
+}</code></pre>
+
+            <h3>SkipMapping Parameters</h3>
+            <table>
+                <tr>
+                    <th>Parameter</th>
+                    <th>Default</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td><code>skipFromDb</code></td>
+                    <td><code>false</code></td>
+                    <td>Skip mapping when reading from database to admin model</td>
+                </tr>
+                <tr>
+                    <td><code>skipToDb</code></td>
+                    <td><code>false</code></td>
+                    <td>Skip mapping when saving from admin model to database</td>
+                </tr>
+                <tr>
+                    <td><code>skipNullValues</code></td>
+                    <td><code>false</code></td>
+                    <td>Skip mapping null values to existing database properties</td>
+                </tr>
+                <tr>
+                    <td><code>skipImport</code></td>
+                    <td><code>false</code></td>
+                    <td>Skip this property during import operations</td>
+                </tr>
+                <tr>
+                    <td><code>skipExport</code></td>
+                    <td><code>false</code></td>
+                    <td>Skip this property during export operations</td>
+                </tr>
+            </table>
+
+            <h3>MultiLanguage Attribute</h3>
+            <p>Located in: <code>Submodules/Dino.CoreMvc.Admin/Attributes/MultiLanguageAttribute.cs</code></p>
+            <p>Use <code>[MultiLanguage]</code> to store content in multiple languages:</p>
+            <pre><code>public class AdminProductModel : BaseAdminModel
+{
+    [AdminFieldCommon("Product Name")]
+    [AdminFieldText]
+    [MultiLanguage]
+    public Dictionary&lt;string, string&gt; NameMultiLanguage { get; set; }
+
+    [AdminFieldCommon("Description")]
+    [AdminFieldRichText]
+    [MultiLanguage]
+    public Dictionary&lt;string, string&gt; DescriptionMultiLanguage { get; set; }
+
+    [AdminFieldCommon("Product Image")]
+    [AdminFieldPicture]
+    [MultiLanguage]
+    public Dictionary&lt;string, FileContainerCollection&gt; ImageMultiLanguage { get; set; }
+
+    [AdminFieldCommon("Documents")]
+    [AdminFieldFile(multiple: true)]
+    [MultiLanguage]
+    public Dictionary&lt;string, FileContainerCollection&gt; DocumentsMultiLanguage { get; set; }
+}</code></pre>
+
+            <div class="info">
+                <strong>💡 MultiLanguage Usage:</strong>
+                <ul>
+                    <li><strong>Dictionary Key:</strong> Language code (e.g., "en", "he", "fr", "de")</li>
+                    <li><strong>Dictionary Value:</strong> The field type (string, FileContainerCollection, etc.)</li>
+                    <li><strong>Supported Types:</strong> <code>string</code>, <code>FileContainerCollection</code>, and other serializable types</li>
+                    <li><strong>Independent:</strong> Works regardless of admin panel UI language settings</li>
+                </ul>
+            </div>
+
+            <h3>ListSettings Attribute</h3>
+            <p>Located in: <code>Submodules/Dino.CoreMvc.Admin/Attributes/General.cs</code></p>
+            <p>Control how properties appear in list/table views:</p>
+            <pre><code>public class AdminProductModel : BaseAdminModel
+{
+    [AdminFieldCommon("ID", readOnly: true)]
+    [AdminFieldNumber]
+    [VisibilitySettings(showOnCreate: false)]
+    [ListSettings]  // Basic list display
+    public int Id { get; set; }
+
+    [AdminFieldCommon("Name", required: true)]
+    [AdminFieldText(maxLength: 100)]
+    [ListSettings(allowSort: true, priority: 1)]  // High priority, sortable
+    public string Name { get; set; }
+
+    [AdminFieldCommon("Price")]
+    [AdminFieldNumber(isDecimal: true)]
+    [ListSettings(columnFilter: ColumnFilterType.Range)]  // Range filter
+    public decimal Price { get; set; }
+
+    [AdminFieldCommon("Status")]
+    [AdminFieldSelect(SelectSourceType.Enum, typeof(ProductStatus))]
+    [ListSettings(mainFilter: MainFilterType.Dropdown)]  // Main page filter
+    public ProductStatus Status { get; set; }
+
+    [AdminFieldCommon("Image")]
+    [AdminFieldPicture]
+    [ListSettings(hideInTable: true)]  // Hide from table but show in filters
+    public string ImagePath { get; set; }
+
+    [AdminFieldCommon("Is Active")]
+    [AdminFieldCheckbox]
+    [ListSettings(inlineEdit: true, fixedColumn: true)]  // Inline editing, fixed position
+    public bool IsActive { get; set; }
+}</code></pre>
+
+            <h3>ListSettings Parameters</h3>
+            <table>
+                <tr>
+                    <th>Parameter</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td><code>allowSort</code></td>
+                    <td><code>bool</code></td>
+                    <td>Allow sorting by this column</td>
+                </tr>
+                <tr>
+                    <td><code>columnFilter</code></td>
+                    <td><code>ColumnFilterType</code></td>
+                    <td>Type of column filter to show</td>
+                </tr>
+                <tr>
+                    <td><code>mainFilter</code></td>
+                    <td><code>MainFilterType</code></td>
+                    <td>Show filter outside the table</td>
+                </tr>
+                <tr>
+                    <td><code>hideInTable</code></td>
+                    <td><code>bool</code></td>
+                    <td>Hide column from table view</td>
+                </tr>
+                <tr>
+                    <td><code>fixedColumn</code></td>
+                    <td><code>bool</code></td>
+                    <td>Keep column fixed during horizontal scroll</td>
+                </tr>
+                <tr>
+                    <td><code>inlineEdit</code></td>
+                    <td><code>bool</code></td>
+                    <td>Allow inline editing (double-click to edit)</td>
+                </tr>
+                <tr>
+                    <td><code>priority</code></td>
+                    <td><code>int</code></td>
+                    <td>Display priority/order in table</td>
+                </tr>
+            </table>
+
+            <h3>VisibilitySettings Attribute</h3>
+            <p>Control when fields are visible during create vs edit operations:</p>
+            <pre><code>public class AdminUserModel : BaseAdminModel
+{
+    [AdminFieldCommon("ID", readOnly: true)]
+    [AdminFieldNumber]
+    [VisibilitySettings(showOnCreate: false)]  // Hide on create (auto-generated)
+    [ListSettings]
+    public int Id { get; set; }
+
+    [AdminFieldCommon("Username", required: true)]
+    [AdminFieldText]
+    [VisibilitySettings(showOnEdit: false)]   // Hide on edit (immutable)
+    public string Username { get; set; }
+
+    [AdminFieldCommon("Password", required: true)]
+    [AdminFieldPassword]
+    [VisibilitySettings(showOnEdit: false)]   // Only on create
+    public string Password { get; set; }
+
+    [AdminFieldCommon("Last Login", readOnly: true)]
+    [AdminFieldDateTime]
+    [VisibilitySettings(showOnCreate: false)] // Only on edit
+    public DateTime? LastLoginDate { get; set; }
+}</code></pre>
+
+            <h3>Filter Types</h3>
+            <table>
+                <tr>
+                    <th>ColumnFilterType</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td><code>Default</code></td>
+                    <td>Text search (contains)</td>
+                </tr>
+                <tr>
+                    <td><code>Contains</code></td>
+                    <td>Text contains filter</td>
+                </tr>
+                <tr>
+                    <td><code>StartsWith</code></td>
+                    <td>Text starts with filter</td>
+                </tr>
+                <tr>
+                    <td><code>EndsWith</code></td>
+                    <td>Text ends with filter</td>
+                </tr>
+                <tr>
+                    <td><code>Range</code></td>
+                    <td>Number/date range filter</td>
+                </tr>
+                <tr>
+                    <td><code>Checkboxes</code></td>
+                    <td>Multiple checkbox selection</td>
+                </tr>
+            </table>
+
+            <table>
+                <tr>
+                    <th>MainFilterType</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td><code>Default</code></td>
+                    <td>No special filter</td>
+                </tr>
+                <tr>
+                    <td><code>DateRange</code></td>
+                    <td>Date range picker</td>
+                </tr>
+                <tr>
+                    <td><code>TextSearch</code></td>
+                    <td>Global text search</td>
+                </tr>
+                <tr>
+                    <td><code>Dropdown</code></td>
+                    <td>Dropdown selection filter</td>
+                </tr>
+            </table>
+
+            <h3>IgnoreAttributeListingInResponse Attribute</h3>
+            <p>Use on properties that shouldn't be included in the admin form structure response:</p>
+            <pre><code>[IgnoreAttributeListingInResponse]
+public string InternalProperty { get; set; }</code></pre>
+
+            <div class="info">
+                <strong>💡 Attribute Usage Tips:</strong>
+                <ul>
+                    <li>Use <code>[SkipMapping]</code> for computed properties or temporary fields</li>
+                    <li>Use <code>[MultiLanguage]</code> for any content that needs translation</li>
+                    <li>Use <code>[ListSettings]</code> to customize list view behavior</li>
+                    <li>Use <code>[VisibilitySettings]</code> to control create/edit form differences</li>
+                    <li>Combine attributes as needed for complex behavior</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="permissions">
+            <h2>🔐 Permissions</h2>
+            
+            <h3>Permission Attribute</h3>
+            <pre><code>[AdminPermission(
+    MinimumRoleTypeRequired = (short)RoleType.DinoAdmin,  // Minimum role type
+    AllowedRoleIdentifiers = new[] { 1, 2 },            // Specific role IDs
+    FullAccess = true,                                    // Full access (overrides individual)
+    CanView = true,                                       // Can view
+    CanAdd = true,                                        // Can create
+    CanEdit = true,                                       // Can update
+    CanDelete = true,                                     // Can delete
+    CanArchive = true,                                    // Can archive
+    CanExport = true,                                     // Can export
+    CanImport = true                                      // Can import
+)]
+public class AdminItemsController : DinoAdminBaseEntityController&lt;AdminItemModel, Item, int&gt;
+{
+}</code></pre>
+
+            <h3>Role Types</h3>
+            <ul>
+                <li><code>RoleType.DinoAdmin</code> (0) - Master admin, highest privilege</li>
+                <li><code>RoleType.Admin</code> (1) - Regular admin</li>
+                <li>Custom role types (2+) - Custom roles</li>
+            </ul>
+
+            <h3>Usage Examples</h3>
+            <pre><code>// Only DinoAdmin can access
+[AdminPermission((short)RoleType.DinoAdmin)]
+
+// Specific role IDs
+[AdminPermission(
+    AllowedRoleIdentifiers = new[] { 1, 2 },
+    CanView = true,
+    CanEdit = true
+)]
+
+// Minimum role type (role type <= specified value)
+[AdminPermission(
+    MinimumRoleTypeRequired = (short)RoleType.Admin,
+    FullAccess = true
+)]</code></pre>
+
+            <div class="warning">
+                <strong>⚠️ DinoMasterSettings:</strong> Settings with <code>[AdminPermission(RoleType.DinoAdmin)]</code> are HIDDEN from regular admins. Use this to hide settings from developers/regular admins.
+            </div>
+        </section>
+
+        <section id="cache">
+            <h2>💾 Cache Management</h2>
+            
+            <h3>Cache Configuration</h3>
+            <p><strong>IMPORTANT:</strong> Redis is OPTIONAL. Usually not used.</p>
+            
+            <pre><code>// appsettings.json
+"BlConfig": {
+    "CacheConfig": {
+        "UseRedis": false,  // Usually false
+        "RedisHost": "localhost",
+        "RedisPort": 6379,
+        "RedisPassword": "",
+        "RedisDatabase": 0,
+        "DefaultExpiration": "00:30:00"
+    }
+}</code></pre>
+
+            <h3>Cache Model Attribute</h3>
+            <pre><code>[CacheModel(
+    DbModelType = typeof(Item),                    // Required: DB entity type
+    CacheTiming = CacheTiming.OnApplicationStart,   // OnFirstAccess or OnApplicationStart
+    Expiration = "00:30:00",                        // Custom expiration (TimeSpan)
+    UseSlidingExpiration = false,                   // Sliding vs absolute expiration
+    ManualMapping = false,                          // Skip auto-mapping if true
+    CacheOnCreate = true,                           // Cache when created
+    UpdateOnEdit = true,                            // Update cache on edit
+    RemoveOnDelete = true,                          // Remove from cache on delete
+    ReloadOnSort = true,                            // Reload cache on sort change
+    UseRedis = true                                 // Use Redis for this model
+)]
+public class ItemCacheModel
+{
+    public int Id { get; set; }
+    public string Name { get; set; }
+    // Only include frequently accessed, stable properties
+}</code></pre>
+
+            <h3>Cache Timing</h3>
+            <ul>
+                <li><code>CacheTiming.OnFirstAccess</code> - Load when first accessed (lazy loading)</li>
+                <li><code>CacheTiming.OnApplicationStart</code> - Load on application startup (eager loading)</li>
+            </ul>
+
+            <div class="info">
+                <strong>💡 Best Practice:</strong> Cache models should be simplified versions of entities (only frequently accessed properties). Use <code>CacheTiming.OnApplicationStart</code> for frequently accessed data.
+            </div>
+        </section>
+
+        <section id="hangfire">
+            <h2>⏰ Hangfire Integration</h2>
+            
+            <h3>Setup (Program.cs)</h3>
+            <pre><code>if (apiConfig.EnableHangfire)
+{
+    builder.Services.AddDinoHangfire(builder.Configuration, "Hangfire");
+    
+    // Register simple job
+    builder.Services.AddHangfireJob&lt;DemoEmailReminderJob&gt;();
+    
+    // Register complex job with dependencies
+    builder.Services.AddHangfireJob&lt;ExampleComplexJob&gt;(provider => new ExampleComplexJob(
+        provider.GetRequiredService&lt;ILogger&lt;ExampleComplexJob&gt;&gt;(),
+        provider.GetRequiredService&lt;BLFactory&lt;MainDbContext, BlConfig, DinoCacheManager&gt;&gt;(),
+        provider.GetRequiredService&lt;DinoCacheManager&gt;()
+    ));
+}
+
+// In app configuration:
+if (apiConfig.EnableHangfire)
+{
+    app.UseDinoHangfire();
+}</code></pre>
+
+            <h3>Configuration (appsettings.json)</h3>
+            <pre><code>"Hangfire": {
+    "ConnectionString": "...",
+    "DashboardAllowedIps": ["127.0.0.1", "::1"],
+    "EnableProcessing": true,
+    "EnableDashboard": true,
+    "DashboardPath": "/hangfire",
+    "Queues": ["critical", "emails", "default"],
+    "CompatibilityLevel": 180,
+    "CreateDatabaseTablesIfNotExist": true
+}</code></pre>
+
+            <h3>Simple Job Pattern</h3>
+            <pre><code>public class DemoEmailReminderJob : IRecurringJob
+{
+    public string JobId => "demo-email-reminder";
+    public string CronExpression => "0 9 * * *"; // Daily at 9 AM
+    public string Queue => "emails";
+    
+    // Job implementation
+    public async Task ExecuteAsync()
+    {
+        // Job logic
+    }
+}</code></pre>
+
+            <h3>Complex Job Pattern (with dependencies)</h3>
+            <pre><code>public class ExampleComplexJob : BaseHangfireJob
+{
+    private readonly BLFactory&lt;MainDbContext, BlConfig, DinoCacheManager&gt; _blFactory;
+    private readonly DinoCacheManager _dinoCacheManager;
+
+    public ExampleComplexJob(
+        ILogger&lt;ExampleComplexJob&gt; logger,
+        BLFactory&lt;MainDbContext, BlConfig, DinoCacheManager&gt; blFactory,
+        DinoCacheManager dinoCacheManager) 
+        : base(logger)
+    {
+        _blFactory = blFactory;
+        _dinoCacheManager = dinoCacheManager;
+    }
+
+    public override string JobName => "ComplexBusinessProcessJob";
+    public override string CronSchedule => "0 0 * * *"; // Daily at midnight
+    public override string Queue => "critical";
+
+    protected override async Task ExecuteJobAsync()
+    {
+        // Use _blFactory to get BL services
+        // Use _dinoCacheManager for cache operations
+        // Implement job logic
+    }
+}</code></pre>
+        </section>
+
+        <section id="multi-language">
+            <h2>🌐 Multi-Language Support</h2>
+            
+            <h3>Admin Panel UI Language (Layout)</h3>
+            <p>The <code>AllowHebrew</code> and <code>AllowEnglish</code> settings in <code>AdminConfig</code> control the admin panel's visual layout (RTL/LTR, UI language), <strong>NOT</strong> content translations:</p>
+            <pre><code>"AdminConfig": {
+    "AllowHebrew": true,   // Enable Hebrew UI layout (RTL)
+    "AllowEnglish": true   // Enable English UI layout (LTR)
+}</code></pre>
+            <p>These settings determine which UI languages are available for the admin panel interface itself (menus, buttons, labels).</p>
+
+            <h3>Content Multi-Language (Translations)</h3>
+            <p>For translating actual content (entity properties), use the <code>[MultiLanguage]</code> attribute:</p>
+            <pre><code>[AdminFieldCommon("Description")]
+[AdminFieldRichText]
+[MultiLanguage]
+public Dictionary&lt;string, string&gt; DescriptionMultiLanguage { get; set; }</code></pre>
+
+            <h3>Key Points</h3>
+            <ul>
+                <li>Use <code>[MultiLanguage]</code> attribute on properties for content translations</li>
+                <li>Property type MUST be <code>Dictionary&lt;string, T&gt;</code> where:
+                    <ul>
+                        <li><strong>Key:</strong> Language code (e.g., "en", "he", "fr", "de" - any language codes you need)</li>
+                        <li><strong>Value:</strong> The actual value type (string, FileContainerCollection, etc.)</li>
+                    </ul>
+                </li>
+                <li>Supported value types: <code>string</code>, <code>FileContainerCollection</code> (for file uploads), and other types</li>
+                <li>Content translations are <strong>independent</strong> of <code>AllowHebrew</code>/<code>AllowEnglish</code> settings</li>
+                <li>You can have content in any languages regardless of UI language settings</li>
+            </ul>
+
+            <h3>File Uploads with Multi-Language</h3>
+            <pre><code>[AdminFieldCommon("Document")]
+[AdminFieldFile(new[] { "pdf" })]
+[MultiLanguage]
+public Dictionary&lt;string, FileContainerCollection&gt; DocumentMultiLanguage { get; set; }</code></pre>
+
+            <div class="info">
+                <strong>💡 Dictionary Value Type:</strong> The second type parameter in the Dictionary is the actual value type. For file uploads, use <code>Dictionary&lt;string, FileContainerCollection&gt;</code>.
+            </div>
+
+            <div class="warning">
+                <strong>⚠️ Important Distinction:</strong>
+                <ul>
+                    <li><code>AllowHebrew</code>/<code>AllowEnglish</code> = Admin panel UI language (layout, RTL/LTR)</li>
+                    <li><code>[MultiLanguage]</code> attribute = Content translations (entity property values in multiple languages)</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="settings">
+            <h2>⚙️ Settings</h2>
+            
+            <h3>System Settings</h3>
+            <pre><code>public class SystemSettings : SystemSettingsBase
+{
+    [AdminFieldCommon("Site Name", required: true)]
+    [AdminFieldText(maxLength: 100)]
+    public string SiteName { get; set; }
+}</code></pre>
+
+            <h3>Dino Master Settings (Hidden from Regular Admins)</h3>
+            <pre><code>[AdminPermission((short)RoleType.DinoAdmin)]
+public class DinoMasterSettings : DinoMasterSettingsBase
+{
+    [AdminFieldCommon("Master Setting", required: true)]
+    [AdminFieldText(maxLength: 100)]
+    public string MasterSetting { get; set; }
+}</code></pre>
+
+            <div class="warning">
+                <strong>⚠️ Hidden Settings:</strong> Settings with <code>[AdminPermission(RoleType.DinoAdmin)]</code> are ONLY visible to DinoAdmin role. Use this to hide settings from developers/regular admins.
+            </div>
+
+            <h3>Settings Pattern</h3>
+            <ul>
+                <li>Inherit from <code>SystemSettingsBase</code> or <code>DinoMasterSettingsBase</code></li>
+                <li>Use <code>[AdminPermission(RoleType.DinoAdmin)]</code> for master settings</li>
+                <li>Properties use same admin field attributes as regular models</li>
+                <li>Settings are managed through <code>AdminSettingsController</code> (auto-generated)</li>
+            </ul>
+        </section>
+
+        <section id="configuration">
+            <h2>🔧 Configuration</h2>
+            
+            <h3>appsettings.json Structure</h3>
+            <pre><code>{
+    "ConnectionStrings": {
+        "MainDbContext": "..."  // Database connection
+    },
+    "Hangfire": {
+        // Hangfire configuration (if enabled)
+    },
+    "AdminConfig": {
+        "AllowHebrew": true,
+        "AllowEnglish": true,
+        "LoginSecurityConfig": {
+            "RequireOtpOnLogin": true,
+            "OtpExpiryMinutes": 15,
+            "OtpLength": 6
+        }
+    },
+    "ApiConfig": {
+        "ClientBaseUrl": "",
+        "ApiBaseUrl": "https://localhost:44330/",
+        "UploadsFolder": "uploads",
+        "AllowCorsOrigins": "https://localhost:4200;https://localhost:4201",
+        "DateTimeStringFormat": "yyyy-MM-dd HH:mm:ss",
+        "EnableHangfire": false
+    },
+    "BlConfig": {
+        "DebugMode": true,
+        "EmailsConfig": {
+            "SmtpServer": "...",
+            "SmtpPort": 587,
+            "SmtpUsername": "...",
+            "SmtpPassword": "...",
+            "FromEmail": "...",
+            "FromName": "..."
+        },
+        "StorageConfig": {
+            "UseAzureBlob": false,
+            "AzureBlobConnectionString": "",
+            "AzureBlobContainerName": "",
+            "AzureBlobBaseUrl": ""
+        },
+        "CacheConfig": {
+            "UseRedis": false,
+            "RedisHost": "localhost",
+            "RedisPort": 6379,
+            "RedisPassword": "",
+            "RedisDatabase": 0,
+            "DefaultExpiration": "00:30:00"
+        }
+    }
+}</code></pre>
+
+            <h3>Program.cs Setup</h3>
+            <p>Key setup steps:</p>
+            <ol>
+                <li>Register DbContext</li>
+                <li>Register Admin Services (<code>AddAdminServices</code>)</li>
+                <li>Register Cache Manager</li>
+                <li>Register AutoMapper profiles</li>
+                <li>Configure Hangfire (if enabled)</li>
+                <li>Configure CORS</li>
+                <li>Configure authentication/authorization</li>
+                <li>Initialize cache on startup</li>
+                <li>Initialize file uploads</li>
+                <li>Initialize settings</li>
+            </ol>
+        </section>
+
+        <section id="best-practices">
+            <h2>✅ Best Practices</h2>
+            
+            <ul>
+                <li><strong>Always use attributes</strong> - Don't try to manually configure UI</li>
+                <li><strong>Use ListSettings sparingly</strong> - Only mark important fields for list view</li>
+                <li><strong>Leverage conditional visibility</strong> - Use attributes or rules for dynamic UI</li>
+                <li><strong>Follow naming conventions</strong> - Makes code more maintainable</li>
+                <li><strong>Use ComplexType/Repeater</strong> - For nested objects, prefer attributes over manual handling</li>
+                <li><strong>Cache appropriately</strong> - Use <code>[CacheModel]</code> on frequently accessed entities</li>
+                <li><strong>Use BL layer</strong> - Don't put business logic in controllers</li>
+                <li><strong>Register after-save actions</strong> - Use <code>RegisterAfterSuccessfulSaveAction</code> for side effects</li>
+                <li><strong>Delete Demo folders</strong> - Remove demo content when starting new project</li>
+                <li><strong>Keep Basics folders</strong> - Required admin user/role models must stay</li>
+            </ul>
+        </section>
+
+        <section id="common-pitfalls">
+            <h2>⚠️ Common Pitfalls</h2>
+            
+            <ul>
+                <li><strong>Missing AdminFieldCommon</strong> - Every property needs this attribute</li>
+                <li><strong>Missing field type attribute</strong> - Every property needs a field type</li>
+                <li><strong>Incorrect attribute parameters</strong> - Check attribute constructors carefully</li>
+                <li><strong>Forgetting ListSettings</strong> - Properties won't appear in list without it</li>
+                <li><strong>Wrong inheritance</strong> - Models must inherit <code>BaseAdminModel</code></li>
+                <li><strong>Controller base class</strong> - Must inherit <code>DinoAdminBaseEntityController&lt;TModel, TEntity, TId&gt;</code></li>
+                <li><strong>Missing CreateAdminSegment</strong> - Menu won't appear without it</li>
+                <li><strong>Missing CreateListDef</strong> - List view won't work without it</li>
+                <li><strong>ID type mismatch</strong> - Admin Model and Entity ID types must match</li>
+                <li><strong>Naming mismatch</strong> - Entity, Model, Controller naming must follow conventions</li>
+                <li><strong>Forgetting to delete Demo folders</strong> - Demo content should be removed</li>
+                <li><strong>Modifying Submodules</strong> - Never modify code in Submodules folder</li>
+            </ul>
+        </section>
+
+        <footer style="text-align: center; padding: 40px 20px; color: #666; margin-top: 60px;">
+            <p>Dino Generic Admin Framework Documentation</p>
+            <p style="font-size: 0.9em; margin-top: 10px;">Generated for .NET Core 9+</p>
+        </footer>
+    </div>
+</body>
+</html>
+

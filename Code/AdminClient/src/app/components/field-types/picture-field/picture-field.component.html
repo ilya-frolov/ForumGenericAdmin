@@ -1,0 +1,213 @@
+<ng-template #editTemplate>
+  <div class="field mb-3">
+    <label [for]="id" class="form-label">
+      {{ label }}
+      <span *ngIf="metadata.required" class="text-danger">*</span>
+    </label>
+    
+    <!-- Platform selector -->
+    <div *ngIf="getSupportedPlatforms().length > 1" class="mb-3 mt-2">
+      <label class="form-label small">Platform:</label>
+      <div class="d-flex gap-2">
+        <button *ngFor="let platform of getSupportedPlatforms()"
+          pButton
+          pRipple
+          type="button"
+          [class.p-button-outlined]="selectedPlatform !== platform"
+          [label]="platformsEnum[platform]"
+          (click)="onPlatformChange(platform)">
+        </button>
+      </div>
+    </div>
+    
+    <!-- Image gallery by platform -->
+    <ng-container *ngFor="let platform of getSupportedPlatforms()">
+      <div *ngIf="getFilesForPlatform(platformsEnum[platform]).length > 0" 
+           class="mt-3 mb-3 border rounded p-3">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <h6 class="m-0">{{ platformsEnum[platform] }} Images</h6>
+        </div>
+        
+        <div class="image-gallery d-flex flex-wrap gap-3">
+          <div *ngFor="let fileInfo of getFilesForPlatform(platformsEnum[platform]); let i = index" 
+               class="position-relative">
+            <p-image [src]="fileInfo.path" 
+                    [alt]="fileInfo.name" 
+                    width="150" 
+                    [preview]="true">
+            </p-image>
+            
+            <button *ngIf="!metadata.readOnly"
+                    pButton 
+                    pRipple
+                    type="button" 
+                    icon="pi pi-trash" 
+                    class="p-button-rounded p-button-danger p-button-sm position-absolute"
+                    style="top: 5px; right: 5px;"
+                    (click)="removeFile(fileInfos.indexOf(fileInfo))"
+                    pTooltip="Remove Image">
+            </button>
+            
+            <div *ngIf="fileInfo.isNew" 
+                 class="badge bg-info position-absolute"
+                 style="bottom: 5px; left: 5px;">
+              New
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+    
+    <!-- Upload controls (if not read only) -->
+    <div *ngIf="!metadata.readOnly" class="mt-3">
+      <p-toast></p-toast>
+      
+      <!-- Advanced mode with drag & drop -->
+      <p-fileUpload 
+        *ngIf="metadata.dragDrop" 
+        [name]="id"
+        [multiple]="!!metadata.multiple"
+        [accept]="acceptedFileTypes"
+        [maxFileSize]="metadata.maxSize ? metadata.maxSize * 1024 * 1024 : 10000000"
+        [disabled]="metadata.readOnly || uploadInProgress"
+        [auto]="true"
+        [customUpload]="true"
+        (uploadHandler)="onFileSelect($event)">
+        
+        <ng-template pTemplate="content">
+          <div *ngIf="uploadInProgress" class="p-3 text-center">
+            <p-progressBar mode="indeterminate"></p-progressBar>
+          </div>
+          
+          <div *ngIf="!uploadInProgress" class="p-3 text-center">
+            <i class="pi pi-image" style="font-size: 2rem"></i>
+            <p class="mt-2">Drag and drop or click to upload</p>
+            <small class="text-muted d-block mt-1">
+              {{ metadata.maxSize ? 'Max size: ' + metadata.maxSize + ' MB' : '' }}
+              {{ metadata.allowedExtensions && metadata.allowedExtensions.length ? ' | Allowed types: ' + getAllowedExtensionsText() : '' }}
+            </small>
+            <small *ngIf="metadata.forceFormat" class="text-muted d-block mt-1">
+              Note: Image will be converted to {{ getForceFormatText() }}
+            </small>
+          </div>
+
+          <div *ngIf="errorMessage" class="text-danger mt-2">
+            {{ errorMessage }}
+          </div>
+        </ng-template>
+      </p-fileUpload>
+
+      <!-- Basic mode without drag & drop -->
+      <div *ngIf="!metadata.dragDrop" class="simple-upload-container">
+        <p-fileUpload
+          [id]="id"
+          mode="basic"
+          chooseLabel="Choose Image"
+          [accept]="acceptedFileTypes"
+          [multiple]="!!metadata.multiple"
+          [maxFileSize]="metadata.maxSize ? metadata.maxSize * 1024 * 1024 : 10000000"
+          [disabled]="metadata.readOnly || uploadInProgress"
+          [auto]="true"
+          [customUpload]="true"
+          (uploadHandler)="onFileSelect($event)">
+        </p-fileUpload>
+        
+        <div *ngIf="uploadInProgress" class="mt-2">
+          <p-progressBar mode="indeterminate" [style]="{'height': '6px'}"></p-progressBar>
+        </div>
+        
+        <div *ngIf="errorMessage" class="text-danger mt-2">
+          {{ errorMessage }}
+        </div>
+        
+        <div class="upload-help mt-2">
+          <small class="text-muted">
+            <div *ngIf="metadata.maxSize">Max size: {{ metadata.maxSize }} MB</div>
+            <div>Allowed formats: {{ getAllowedExtensionsText() }}</div>
+            <div *ngIf="metadata.forceFormat">Note: Image will be converted to {{ getForceFormatText() }}</div>
+          </small>
+        </div>
+      </div>
+      
+      <!-- Clear all button (only visible when we have images) -->
+      <div *ngIf="fileInfos.length > 0" class="mt-2">
+        <p-button 
+          severity="danger" 
+          [text]="true" 
+          (onClick)="onClear()"> 
+          Clear All Images
+        </p-button>
+      </div>
+    </div>
+    
+    <small *ngIf="metadata.tooltip" class="text-muted form-text mt-2">
+      {{ metadata.tooltip }}
+    </small>
+  </div>
+</ng-template>
+
+<ng-template #listTemplate>
+  <div class="field mb-3">
+    <!-- <label [for]="id" class="form-label">{{ label }}</label> -->
+    
+    <ng-container *ngIf="fileInfos.length > 0; else noImage">
+      <div *ngFor="let platform of getSupportedPlatforms()">
+        <ng-container *ngIf="getFilesForPlatform(platformsEnum[platform]).length > 0">
+          <div class="mt-2">
+            <div class="fw-medium text-muted small">{{ platformsEnum[platform] }}</div>
+            <div class="d-flex flex-wrap gap-2 mt-1">
+              <p-image *ngFor="let fileInfo of getFilesForPlatform(platformsEnum[platform])" 
+                      [src]="fileInfo.path" 
+                      [alt]="fileInfo.name" 
+                      width="100" 
+                      [preview]="true">
+              </p-image>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+    </ng-container>
+    
+    <ng-template #noImage>
+      <div class="text-muted mt-2">
+        No image
+      </div>
+    </ng-template>
+  </div>
+</ng-template>
+
+<ng-template #viewTemplate>
+  <div class="d-flex align-items-center">
+    <span class="me-2">{{ label }}:</span>
+    <div class="d-flex flex-column gap-2">
+      <ng-container *ngIf="filesByPlatform.length > 0; else noImages">
+        <div *ngFor="let group of filesByPlatform" class="d-flex flex-column gap-1">
+          <span class="badge bg-secondary align-self-start">{{ group.platform }}</span>
+          <div class="d-flex flex-wrap gap-2">
+            <div *ngFor="let file of group.files" class="d-flex flex-column align-items-start gap-1 image-clickable-wrapper">
+              <p-image
+                [src]="file.path"
+                [alt]="file.name"
+                width="80"
+                [preview]="true">
+              </p-image>
+              <a
+                [href]="file.path"
+                target="_blank"
+                rel="noopener"
+                class="small text-muted image-full-link"
+                (click)="openImageInNewTab(file.path, $event)">
+                Open full image
+              </a>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+      <ng-template #noImages>
+        <span class="text-muted">No images</span>
+      </ng-template>
+    </div>
+  </div>
+</ng-template>
+
+  

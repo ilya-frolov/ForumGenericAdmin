@@ -1,0 +1,44 @@
+<!-- Edit Template -->
+<ng-template #editTemplate>
+  <div class="d-flex flex-column gap-2">
+    <label [for]="id">
+      {{ label }}: {{ value }}{{ metadata?.['valueTemplate'] ? metadata?.['valueTemplate'].replace('{value}', value) : '' }}
+      <span *ngIf="metadata?.required" class="text-danger">*</span>
+    </label>
+    <p-slider 
+      [id]="id"
+      [(ngModel)]="value"
+      [min]="metadata?.min || 0"
+      [max]="metadata?.max || 100"
+      [step]="metadata?.step || 1"
+      [range]="metadata?.range || false"
+      [disabled]="metadata.readOnly || false"
+      (onChange)="onValueChange($event.value)"
+      styleClass="w-100">
+    </p-slider>
+    <div *ngIf="metadata?.tooltip" class="text-muted small">
+      {{ metadata.tooltip }}
+    </div>
+  </div>
+</ng-template>
+
+<!-- List Template -->
+<ng-template #listTemplate>
+  <div class="field-display">
+    <!-- <div class="fw-medium">{{ label }}</div> -->
+    <div>
+      {{ value }}{{ metadata?.['valueTemplate'] ? metadata?.['valueTemplate'].replace('{value}', value) : '' }}
+    </div>
+  </div>
+</ng-template> 
+
+<ng-template #viewTemplate>
+  <div class="d-flex align-items-center">
+    <span class="me-2">{{ label }}:</span>
+    <span class="field-display d-inline-flex align-items-center">
+      <span>{{ value || '-' }}</span>
+    </span>
+  </div>
+</ng-template>
+
+  

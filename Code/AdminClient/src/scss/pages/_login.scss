@@ -1,0 +1,40 @@
+.login-container {
+  overflow-x: hidden;
+}
+
+// Custom styling for the left panel
+.bg-primary {
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-700) 100%);
+}
+
+// Custom styling for the form
+:host ::ng-deep {
+  .p-inputtext {
+    padding-left: 2.5rem;
+  }
+  
+  .p-input-icon-left > i {
+    left: 0.75rem;
+  }
+  
+  .p-button {
+    height: 3rem;
+  }
+  
+  .p-checkbox .p-checkbox-box.p-highlight {
+    border-color: var(--primary-color);
+    background: var(--primary-color);
+  }
+  
+  .p-toast {
+    opacity: 1;
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 767.98px) {
+  .card {
+    border-radius: 0;
+    box-shadow: none !important;
+  }
+} 

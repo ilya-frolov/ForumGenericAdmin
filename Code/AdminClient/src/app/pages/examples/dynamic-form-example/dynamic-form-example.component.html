@@ -1,0 +1,51 @@
+<div class="container mx-auto p-4">
+  <p-card
+    header="Dynamic Form Example"
+    subheader="Click the button below to open a dialog with a dynamic form"
+  >
+    <div class="d-flex justify-content-center">
+      <button
+        pButton
+        label="Open Dynamic Form"
+        icon="pi pi-external-link"
+        (click)="openFormDialog()"
+      ></button>
+    </div>
+  </p-card>
+</div>
+
+<div *ngIf="displayFormDialog">
+  <p-dialog
+    [(visible)]="displayFormDialog"
+    [modal]="true"
+    [resizable]="true"
+    [draggable]="true"
+    [style]="{ width: '90vw', maxWidth: '1200px' }"
+    header="Dynamic Form Demo"
+  >
+    <div *ngIf="!loading">
+      <app-dynamic-form
+        [formMode]="formMode"
+        (formSubmit)="onFormSubmit($event)"
+        (formCancel)="onFormCancel()"
+      >
+      </app-dynamic-form>
+    </div>
+    <div
+      *ngIf="loading"
+      class="d-flex align-items-center justify-content-center"
+      style="height: 400px"
+    >
+      <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
+      <span class="ml-2">Loading...</span>
+    </div>
+    <div *ngIf="formResult" class="mt-4">
+      <h3>Form Result:</h3>
+      <pre
+        class="p-2 border-1 surface-border border-round bg-gray-50"
+        style="max-height: 200px; overflow: auto"
+        >{{ formResult | json }}</pre
+      >
+    </div>
+  </p-dialog>
+</div>

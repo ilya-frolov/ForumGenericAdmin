@@ -1,0 +1,41 @@
+<div *ngIf="visible">
+  <p-dialog
+    [(visible)]="visible"
+    [header]="dialogHeader"
+    [modal]="isBackgroundShouldBeBlockedWhenDialogIsDisplayed"
+    [resizable]="isResizable"
+    [draggable]="isDraggable"
+    [closeOnEscape]="isCloseOnEscape"
+    [dismissableMask]="isDismissableMask"
+    [style]="{ width: width, maxWidth: maxWidth }"
+    (onHide)="onDialogHide()"
+  >
+    <div *ngIf="!loading">
+      <app-dynamic-form
+        [formMode]="formMode"
+        [formStructure]="structure"
+        (formSubmit)="onFormSubmit($event)"
+        (formCancel)="onFormCancel()"
+      >
+      </app-dynamic-form>
+    </div>
+    <div
+      *ngIf="loading"
+      class="d-flex align-items-center justify-content-center"
+      style="height: 400px"
+    >
+      <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
+      <span class="ml-2">Loading...</span>
+    </div>
+
+    <!-- TODO: this div is for test and debug delete before production -->
+    <!-- <div *ngIf="formResult" class="mt-4">
+      <h3>Form Result:</h3>
+      <pre
+        class="p-2 border-1 surface-border border-round bg-gray-50"
+        style="max-height: 200px; overflow: auto"
+        >{{ formResult | json }}</pre
+      >
+    </div> -->
+  </p-dialog>
+</div>

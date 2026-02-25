@@ -1,0 +1,82 @@
+<div class="richtext-field-container">
+  <ng-template #editTemplate>
+    <div class="d-flex flex-column gap-2">
+      <label [for]="id">
+        {{ label }}
+        <span *ngIf="metadata?.required" class="text-danger">*</span>
+      </label>
+      
+      <!-- Multilingual Content -->
+      <div *ngIf="isMultilingual" class="multilingual-editor">
+        <p-tabView>
+          <p-tabPanel *ngFor="let lang of languages" [header]="lang.toUpperCase()">
+            <p-editor [(ngModel)]="multilingualValues[lang]" 
+                      [style]="{ height: '320px' }" 
+                      [disabled]="metadata.readOnly || false"
+                      (onTextChange)="onMultilingualValueChange(lang, $event.htmlValue)">
+            </p-editor>
+          </p-tabPanel>
+        </p-tabView>
+      </div>
+      
+      <!-- Standard Content -->
+      <div *ngIf="!isMultilingual">
+        <p-editor [(ngModel)]="value" 
+                  [style]="{ height: '320px' }" 
+                  [disabled]="metadata.readOnly || false"
+                  (onTextChange)="onValueChange($event.htmlValue)">
+        </p-editor>
+      </div>
+      
+      <div *ngIf="metadata?.tooltip" class="text-muted small">
+        {{ metadata.tooltip }}
+      </div>
+    </div>
+  </ng-template>
+
+  <ng-template #listTemplate>
+    <div class="field-display">
+      <!-- <div class="fw-medium">{{ label }}</div> -->
+      
+      <!-- Multilingual Display -->
+      <div *ngIf="isMultilingual; else singleLanguageDisplay">
+        <div [innerHTML]="getMultilingualDisplayValue() || '-'"></div>
+        
+        <!-- Optional: Display a badge showing this is multilingual content -->
+        <div class="mt-1 d-flex gap-1 flex-wrap">
+          <span *ngFor="let lang of languages" 
+                class="badge bg-secondary text-light rounded-pill small px-2 py-1">
+            {{ lang.toUpperCase() }}
+          </span>
+        </div>
+      </div>
+      
+      <!-- Single Language Display -->
+      <ng-template #singleLanguageDisplay>
+        <div [innerHTML]="value || '-'"></div>
+      </ng-template>
+    </div>
+  </ng-template>
+</div> 
+
+<ng-template #viewTemplate>
+  <div class="d-flex align-items-center">
+    <span class="me-2">{{ label }}:</span>
+    <span class="field-display">
+      <div *ngIf="isMultilingual; else singleLanguageView">
+        <!-- Only show the badges if it's multilingual -->
+        <div class="d-flex gap-1 flex-wrap">
+          <span *ngFor="let lang of languages" 
+                class="badge bg-secondary text-light rounded-pill small px-2 py-1">
+            {{ lang.toUpperCase() }}
+          </span>
+        </div>
+      </div>
+      <ng-template #singleLanguageView>
+        <div [innerHTML]="value || '-'"></div>
+      </ng-template>
+    </span>
+  </div>
+</ng-template>
+
+

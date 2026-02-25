@@ -1,0 +1,35 @@
+<div class="container my-4">
+  <p-card>
+    <ng-template pTemplate="header">
+      <div class="p-3">
+        <h4>Dynamic Form with Direct Structure Input</h4>
+      </div>
+    </ng-template>
+    
+    <div class="p-3">
+      <p>This example demonstrates using the DynamicFormComponent with direct structure input without server calls.</p>
+      
+      <div class="mb-4">
+        <p-button 
+          *ngFor="let mode of formModes" 
+          [label]="mode"
+          [outlined]="mode !== formMode"
+          styleClass="p-button-sm me-2" 
+          (onClick)="setFormMode(mode)">
+        </p-button>
+      </div>
+      
+      <app-dynamic-form
+        *ngIf="formStructure"
+        [formMode]="formMode"
+        (formSubmit)="onFormSubmit($event)"
+        (formCancel)="onFormCancel()">
+      </app-dynamic-form>
+      
+      <div *ngIf="formResult" class="mt-4">
+        <h5>Form Result:</h5>
+        <pre class="bg-light p-3 border rounded">{{ formResult | json }}</pre>
+      </div>
+    </div>
+  </p-card>
+</div> 

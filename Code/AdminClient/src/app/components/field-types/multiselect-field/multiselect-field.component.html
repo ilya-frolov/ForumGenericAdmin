@@ -1,0 +1,56 @@
+<div class="multiselect-field-container">
+  <ng-template #editTemplate>
+    <div class="d-flex flex-column gap-2">
+      <label [for]="id">
+        {{ label }}
+        <span *ngIf="metadata?.required" class="text-danger">*</span>
+      </label>
+      <p-multiSelect
+        [id]="id"
+        [(ngModel)]="value"
+        [options]="metadata?.options || []"
+        [filter]="metadata?.searchEnabled"
+        [placeholder]="metadata.placeholder || 'Select options'"
+        optionLabel="display"
+        optionValue="value"
+        [required]="metadata.required"
+        [disabled]="metadata.readOnly || false"
+        styleClass="w-100"
+        (onChange)="onValueChange($event.value)">
+      </p-multiSelect>
+      <div *ngIf="metadata?.tooltip" class="text-muted small">
+        {{ metadata.tooltip }}
+      </div>
+    </div>
+  </ng-template>
+
+  <ng-template #listTemplate>
+    <div class="field-display">
+      <!-- <div class="fw-medium">{{ label }}</div> -->
+      <div>
+        <ng-container *ngIf="getSelectedOptions()?.length > 0; else noValue">
+          <ul class="list-unstyled p-0 m-0">
+            <li *ngFor="let item of getSelectedOptions()">{{ item.display }}</li>
+          </ul>
+        </ng-container>
+        <ng-template #noValue>-</ng-template>
+      </div>
+    </div>
+  </ng-template>
+</div> 
+
+<ng-template #viewTemplate>
+  <div class="d-flex align-items-center">
+    <span class="me-2">{{ label }}:</span>
+    <span class="field-display d-inline-flex align-items-center">
+      <ng-container *ngIf="getSelectedOptions()?.length > 0; else noValue">
+        <span *ngFor="let item of getSelectedOptions(); let isLast = last">
+          {{ item.display }}{{ !isLast ? ', ' : '' }}
+        </span>
+      </ng-container>
+      <ng-template #noValue>-</ng-template>
+    </span>
+  </div>
+</ng-template>
+
+

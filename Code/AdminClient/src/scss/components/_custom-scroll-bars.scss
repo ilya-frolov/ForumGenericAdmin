@@ -1,0 +1,29 @@
+//////////////////////////////////////////
+// Global Native Scroll bars
+//////////////////////////////////////////
+/* Track */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  border-radius: 3px;
+  background: var(--p-highlight-background);
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: var(--p-primary-color);
+  border-radius: 3px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: var(--p-primary-color);
+}
+
+::-webkit-scrollbar-button {
+  display: none;
+}

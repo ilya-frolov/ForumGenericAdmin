@@ -1,0 +1,58 @@
+---
+description: "C# coding conventions, naming patterns, and attribute requirements for models and controllers"
+globs:
+  - "**/*.cs"
+---
+
+# C# Conventions & Patterns
+
+**Reference:** See `Readme/dino-admin.md` for complete framework documentation.
+
+## Coding Conventions
+
+- PascalCase for classes, methods, properties
+- camelCase for local variables and parameters
+- Use `async`/`await` for all async operations
+- Use `nameof()` for property references in attributes
+- Use nullable reference types where appropriate
+
+## Naming Conventions
+
+- Admin Models: `Admin{EntityName}Model`
+- Controllers: `Admin{EntityName}Controller` (plural)
+- BL Classes: `{EntityName}BL`
+- Cache Models: `{EntityName}CacheModel`
+
+## Base Classes
+
+- Admin Models: Inherit `BaseAdminModel`
+- Admin Controllers: Inherit `DinoAdminBaseEntityController<TModel, TEntity, TId>`
+- BL Classes: Inherit `BaseBL<MainDbContext, BlConfig, DinoCacheManager>`
+- App Controllers: Inherit `MainAppBaseController<T>`
+
+## Required Attributes Per Property
+
+- Every property MUST have `[AdminFieldCommon]` attribute
+- Every property MUST have a field type attribute (`[AdminFieldText]`, `[AdminFieldNumber]`, etc.)
+- Use `[ListSettings]` to include in list view
+- Use `[SkipMapping(skipImport: true, skipExport: true)]` for internal fields
+- Use `[SortIndex]`, `[SaveDate]`, `[LastUpdateDate]`, `[UpdatedBy]` for special properties
+
+## Domain Concepts
+
+### Roles
+- **DinoAdmin** (RoleType = 0) - Master admin, highest privilege, can access DinoMasterSettings
+- **Admin** (RoleType = 1) - Regular admin
+- Custom roles (RoleType = 2+) - Custom roles
+
+### Permissions
+- `PermissionType.View`, `Add`, `Edit`, `Delete`, `Archive`, `Export`, `Import`
+- Use `[AdminPermission]` attribute on controllers/settings
+- DinoMasterSettings are HIDDEN from regular admins
+
+### Special Properties
+- `IsDeleted` - Soft delete (BIT NOT NULL DEFAULT 0)
+- `Archived` - Archive (BIT NOT NULL DEFAULT 0) - different from deletion
+- `SortIndex` - Sorting (INT NOT NULL DEFAULT 0) - SUPER IMPORTANT
+- `CreateDate`, `UpdateDate`, `UpdateBy` - Audit fields
+

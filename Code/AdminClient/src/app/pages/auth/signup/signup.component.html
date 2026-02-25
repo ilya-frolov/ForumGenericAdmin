@@ -1,0 +1,142 @@
+<div class="container-fluid login-container">
+  <div class="row vh-100">
+    <!-- signup form -->
+    <div class="col-12 col-md-6 d-flex align-items-center justify-content-center">
+      <div class="card shadow-lg border-0" style="width: 90%; max-width: 450px;">
+        <div class="card-body p-4 p-md-5">
+          <div class="text-center mb-4">
+            <img src="assets/images/dino-logo-d-letter.svg" alt="Company Logo" class="mb-3" style="height: 60px;">
+            <h2 class="fw-bold">{{ 'SIGNUP_PAGE.PageTitle' | translate }}</h2>
+            <p class="text-muted">{{ 'SIGNUP_PAGE.PageDescription' | translate }}</p>
+          </div>
+          
+          <form [formGroup]="signupForm" (ngSubmit)="onSubmit()">
+            <div class="mb-3">
+              <p-floatlabel variant="in">
+                <p-iconfield>
+                  <p-inputicon styleClass="pi pi-user" />
+                  <input 
+                    id="fullName" 
+                    type="text" 
+                    pInputText 
+                    class="w-100" 
+                    formControlName="fullName" 
+                    [ngClass]="{ 'ng-invalid ng-dirty': submitted && f['fullName'].errors }"
+                    autocomplete="off">
+                </p-iconfield>
+                <label for="fullName">{{ 'SIGNUP_PAGE.FullName' | translate }}</label>
+              </p-floatlabel>
+              <p-message *ngIf="submitted && f['fullName'].errors" severity="error" variant="simple" size="small" class="mt-2 d-block">
+                <span *ngIf="f['fullName'].errors['required']">{{ 'SIGNUP_PAGE.FullNameRequired' | translate }}</span>
+              </p-message>
+            </div>
+            
+            <div class="mb-3">
+              <p-floatlabel variant="in">
+                <p-iconfield>
+                  <p-inputicon styleClass="pi pi-envelope" />
+                  <input 
+                    id="email" 
+                    type="email" 
+                    pInputText 
+                    class="w-100" 
+                    formControlName="email" 
+                    [ngClass]="{ 'ng-invalid ng-dirty': submitted && f['email'].errors }"
+                    autocomplete="off">
+                </p-iconfield>
+                <label for="email">{{ 'SIGNUP_PAGE.Email' | translate }}</label>
+              </p-floatlabel>
+              <p-message *ngIf="submitted && f['email'].errors" severity="error" variant="simple" size="small" class="mt-2 d-block">
+                <span *ngIf="f['email'].errors['required']">{{ 'SIGNUP_PAGE.EmailRequired' | translate }}</span>
+                <span *ngIf="f['email'].errors['email']">{{ 'SIGNUP_PAGE.InvalidEmail' | translate }}</span>
+              </p-message>
+            </div>
+            
+            <div class="mb-3">
+              <p-floatlabel variant="in">
+                <p-iconfield>
+                  <p-inputicon styleClass="pi pi-lock" />
+                  <input 
+                    id="password" 
+                    type="password" 
+                    pInputText 
+                    class="w-100" 
+                    formControlName="password" 
+                    [ngClass]="{ 'ng-invalid ng-dirty': submitted && f['password'].errors }"
+                    autocomplete="off">
+                </p-iconfield>
+                <label for="password">{{ 'SIGNUP_PAGE.Password' | translate }}</label>
+              </p-floatlabel>
+              <p-message *ngIf="submitted && f['password'].errors" severity="error" variant="simple" size="small" class="mt-2 d-block">
+                <span *ngIf="f['password'].errors['required']">{{ 'SIGNUP_PAGE.PasswordRequired' | translate }}</span>
+                <span *ngIf="f['password'].errors['minlength']">{{ 'SIGNUP_PAGE.PasswordMinLength' | translate }}</span>
+              </p-message>
+            </div>
+            
+            <div class="mb-3">
+              <p-floatlabel variant="in">
+                <p-iconfield>
+                  <p-inputicon styleClass="pi pi-lock" />
+                  <input 
+                    id="confirmPassword" 
+                    type="password" 
+                    pInputText 
+                    class="w-100" 
+                    formControlName="confirmPassword" 
+                    [ngClass]="{ 'ng-invalid ng-dirty': submitted && f['confirmPassword'].errors }"
+                    autocomplete="off">
+                </p-iconfield>
+                <label for="confirmPassword">{{ 'SIGNUP_PAGE.ConfirmPassword' | translate }}</label>
+              </p-floatlabel>
+              <p-message *ngIf="submitted && f['confirmPassword'].errors" severity="error" variant="simple" size="small" class="mt-2 d-block">
+                <span *ngIf="f['confirmPassword'].errors['required']">{{ 'SIGNUP_PAGE.ConfirmPasswordRequired' | translate }}</span>
+                <span *ngIf="f['confirmPassword'].errors['passwordMismatch']">{{ 'SIGNUP_PAGE.PasswordsDoNotMatch' | translate }}</span>
+              </p-message>
+            </div>
+            
+            <div class="mb-4">
+              <div class="d-flex align-items-start">
+                <p-checkbox 
+                  formControlName="agreeTerms" 
+                  [binary]="true" 
+                  inputId="agreeTerms">
+                </p-checkbox>
+                <label for="agreeTerms" class="ms-2">{{ 'SIGNUP_PAGE.AgreeToTerms' | translate }} <a href="javascript:void(0)" class="text-decoration-none">{{ 'SIGNUP_PAGE.TermsOfService' | translate }}</a> {{ 'SIGNUP_PAGE.And' | translate }} <a href="javascript:void(0)" class="text-decoration-none">{{ 'SIGNUP_PAGE.PrivacyPolicy' | translate }}</a></label>
+              </div>
+              <p-message *ngIf="submitted && f['agreeTerms'].errors" severity="error" variant="simple" size="small" class="mt-2 d-block">
+                <span *ngIf="f['agreeTerms'].errors['required']">{{ 'SIGNUP_PAGE.AgreeToTermsRequired' | translate }}</span>
+              </p-message>
+            </div>
+            
+            <p-button 
+              type="submit" 
+              [loading]="loading" 
+              class="w-100"
+              severity="primary"
+              raised="true"
+              size="large"
+              styleClass="w-100" 
+              label="{{ 'SIGNUP_PAGE.CreateAccountButton' | translate }}">
+            </p-button>
+            
+            <div class="text-center mt-4">
+              <p class="mb-0">{{ 'SIGNUP_PAGE.AlreadyHaveAccount' | translate }} <a href="javascript:void(0)" class="text-decoration-none fw-bold" [routerLink]="['/login']">{{ 'SIGNUP_PAGE.SignInLink' | translate }}</a></p>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    
+    <!-- background image or color - hidden on small screens -->
+    <div class="col-md-6 d-none d-md-flex bg-secondary align-items-center justify-content-center">
+      <div class="text-center text-white">
+        <img src="assets/images/dino-logo-d-letter.svg" alt="Signup Illustration" class="img-fluid mt-4" style="max-width: 80%;">
+        <h1 class="display-4 fw-bold">{{ 'SIGNUP_PAGE.JoinUsToday' | translate }}</h1>
+        <p class="lead">{{ 'SIGNUP_PAGE.PlatformGreeting' | translate }}</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Toast for notifications -->
+<p-toast></p-toast> 

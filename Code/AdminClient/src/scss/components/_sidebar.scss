@@ -1,0 +1,28 @@
+aside.sidebar {
+  box-shadow: 0 5px 10px 0 rgba(#000, 0.1);
+  border-radius: var(--p-menu-border-radius);
+  overflow: auto;
+
+  p-menu {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    .p-menu {
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+      border: 0;
+    }
+
+    .p-menu-list {
+      flex-grow: 1;
+
+      .p-menu-item-link {
+        text-decoration: none;
+        color: inherit;
+      }
+
+    }
+  }
+}
+

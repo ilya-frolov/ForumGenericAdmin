@@ -1,0 +1,15 @@
+header.site-header {
+  margin: 0.25rem;
+  position: relative;
+  z-index: 1;
+  
+  p-menubar {
+    .p-menubar {
+      border: 0;
+      box-shadow: 0 0 10px 0 rgba(#000, 0.1);
+      .p-menubar-item-link {
+        text-decoration: none;
+      }
+    }
+  }
+}

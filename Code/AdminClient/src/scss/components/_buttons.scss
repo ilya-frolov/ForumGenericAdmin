@@ -1,0 +1,25 @@
+
+// Split button rtl fix
+[dir="rtl"] {
+  .p-splitbutton-button.p-button.p-button-secondary {
+    border-right: 1px solid var(--p-button-secondary-border-color) #{"/*!rtl:ignore*/"}!important;
+    border-inline-end: 0 none;
+
+    &:not(:disabled):hover, 
+    &:not(:disabled):active {
+      border-right: 1px solid var(--p-button-secondary-border-color) #{"/*!rtl:ignore*/"}!important;
+      border-inline-end: 0 none;
+    }
+  }
+
+  .p-splitbutton-button.p-button.p-button-outlined.p-button-secondary {
+    border-right: 1px solid var(--p-button-outlined-secondary-border-color) #{"/*!rtl:ignore*/"}!important;
+    border-inline-end: 0 none;
+
+    &:not(:disabled):hover, 
+    &:not(:disabled):active {
+      border-right: 1px solid var(--p-button-outlined-secondary-border-color) #{"/*!rtl:ignore*/"}!important;
+      border-inline-end: 0 none;
+    }
+  }
+}

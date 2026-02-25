@@ -1,0 +1,337 @@
+<ng-container [ngSwitch]="node.nodeType">
+  <ng-template #renderChildren let-children="children">
+    <ng-container *ngIf="children && children.length > 0">
+      <ng-container *ngIf="hasTabs(children); else renderAllChildren">
+        <p-tabView [(activeIndex)]="activeTabIndex">
+          <p-tabPanel *ngFor="let tab of getTabs(children)" [header]="tab.name">
+            <!-- Tab content rendered below -->
+          </p-tabPanel>
+        </p-tabView>
+
+        <ng-container *ngFor="let tab of getTabs(children); let tabIndex = index">
+          <div [style.display]="tabIndex === activeTabIndex ? 'block' : 'none'">
+            <ng-container *ngFor="let child of tab.children">
+              <app-dynamic-node 
+                [node]="child" 
+                [path]="path"
+                [formGroup]="formGroup" 
+                [formMode]="formMode"
+                [inputOptions]="inputOptions"
+                (fieldInitialized)="onFieldInitialized($event)">
+              </app-dynamic-node>
+            </ng-container>
+          </div>
+        </ng-container>
+
+        <ng-container *ngFor="let child of getNonTabContent(children)">
+          <app-dynamic-node 
+            [node]="child" 
+            [path]="path"
+            [formGroup]="formGroup" 
+            [formMode]="formMode"
+            [inputOptions]="inputOptions"
+            (fieldInitialized)="onFieldInitialized($event)">
+          </app-dynamic-node>
+        </ng-container>
+      </ng-container>
+    </ng-container>
+
+    <ng-template #renderAllChildren>
+      <ng-container *ngFor="let child of children">
+        <app-dynamic-node 
+          [node]="child"
+          [path]="path"
+          [formGroup]="formGroup" 
+          [formMode]="formMode"
+          [inputOptions]="inputOptions"
+          (fieldInitialized)="onFieldInitialized($event)">
+        </app-dynamic-node>
+      </ng-container>
+    </ng-template>
+  </ng-template>
+
+  <!-- Root Node -->
+  <ng-container *ngSwitchCase="'Root'">
+    <div class="container-fluid px-0">
+      <div class="row g-3" @listAnimation>
+        <ng-container *ngTemplateOutlet="renderChildren; context: { children: node.children }"></ng-container>
+      </div>
+    </div>
+  </ng-container>
+
+  <!-- Tab Node -->
+  <ng-container *ngSwitchCase="'Tab'">
+    <div class="container-fluid px-0" [attr.data-tab-name]="node.name">
+      <div class="row g-3" @listAnimation>
+        <ng-container *ngTemplateOutlet="renderChildren; context: { children: node.children }"></ng-container>
+      </div>
+    </div>
+  </ng-container>
+
+  <!-- Container Node -->
+  <ng-container *ngSwitchCase="'Container'">
+    <div class="col-md-{{widthToBootstrapCol(node.attributes?.['width'])}}" [class.mb-3]="true" @containerAnimation>
+      <p-panel
+        [toggleable]="canCollapse" 
+        [collapsed]="isCollapsed">
+        <ng-template pTemplate="header" *ngIf="node.attributes?.['subTitle']">
+          <div class="d-flex flex-column">
+            <span>{{node.name}}</span>
+            <small class="text-muted">{{node.attributes['subTitle']}}</small>
+          </div>
+        </ng-template>
+        <div class="row g-3" @listAnimation>
+          <ng-container *ngTemplateOutlet="renderChildren; context: { children: node.children }"></ng-container>
+        </div>
+      </p-panel>
+    </div>
+  </ng-container>
+
+  <!-- Field Node -->
+  <ng-container *ngSwitchCase="'Field'">
+    <ng-container *ngIf="!isFieldNode(node) || (isFieldNode(node) && shouldHideField(node)); else fieldTemplate"></ng-container>
+    <ng-template #fieldTemplate>
+      <ng-container *ngIf="isFieldNode(node)">
+        <ng-container *ngIf="!isRepeaterField(node) && !isComplexType; else complexOrRepeaterTemplate">
+          <!-- Regular Field -->
+          <div class="col-md-{{widthToBootstrapCol(node.attributes?.['width'])}}" @fieldAnimation [@pulseAnimation]="'active'" 
+               class="form-field-wrapper">
+            <ng-container *ngIf="fieldData" appDynamicField 
+              [fieldData]="fieldData" 
+              [path]="path"
+              [mode]="formMode"
+              [formGroup]="formGroup"
+              [isHidden]="isFieldNode(node) && shouldHideField(node)"
+              (fieldInitialized)="onFieldInitialized($event)">
+            </ng-container>
+            
+            <!-- For null field types, show a placeholder instead -->
+            <!-- <div *ngIf="!node.fieldType && isFieldWithNullType(node) && !isComplexType" class="alert alert-info mt-2">
+              <span>{{ node.displayName }}</span>: 
+              <small>{{ formatComplexValue(getControlValue(node.name)) }}</small>
+            </div> -->
+          </div>
+        </ng-container>
+        
+        <ng-template #complexOrRepeaterTemplate>
+          <ng-container *ngIf="isComplexType; else repeaterTemplate">
+            <!-- Complex Type Field -->
+            <div class="col-md-{{widthToBootstrapCol(node.attributes?.['width'])}}" @containerAnimation>
+              <p-panel [header]="node.displayName" styleClass="mb-3" 
+                [toggleable]="false">
+                <div > 
+                  <div *ngIf="!complexTypeStructure" class="alert alert-warning">
+                    <i class="pi pi-exclamation-triangle me-2"></i>
+                    Complex type structure not found for type: {{complexTypeName || 'Unknown'}}
+                  </div>
+                  <div *ngIf="complexTypeStructure" class="row g-3" @listAnimation>
+                    <ng-container *ngTemplateOutlet="renderChildren; context: { children: complexTypeStructure.children }"></ng-container>
+                  </div>
+                </div>
+              </p-panel>
+            </div>
+          <!-- <ng-template #noComplexItems>
+            <div class="text-center p-3">
+              <p class="text-muted mb-3">No items yet in this complex type.</p>
+              <button 
+                *ngIf="canAddComplexTypeItem()"
+                pButton 
+                pRipple
+                type="button" 
+                icon="pi pi-plus"
+                class="p-button-rounded p-button-sm"
+                (click)="addRepeaterItem(node)"
+                label="Add Item">
+              </button>
+            </div>
+          </ng-template> -->
+          </ng-container>
+          
+          <ng-template #repeaterTemplate>
+            <!-- Repeater Field -->
+            <div class="col-md-{{widthToBootstrapCol(node.attributes?.['width'])}}" @containerAnimation>
+              <p-panel [header]="node.displayName" styleClass="mb-3">
+                <ng-template pTemplate="icons">
+                  <button 
+                    *ngIf="canAddRepeaterItem(node)" 
+                    pButton 
+                    pRipple
+                    type="button" 
+                    icon="pi pi-plus"
+                    class="p-button-rounded p-button-text p-button-sm"
+                    (click)="addRepeaterItem(node, true)"
+                    pTooltip="Add Item">
+                  </button>
+                </ng-template>
+                
+                <div class="repeater-items" *ngIf="formBuilderService.getNumOfControls(path) as numControls; else noRepeaterItems">
+                  <!-- Simple Type Repeaters (array of primitives) -->
+                  <ng-container *ngIf="isSimpleTypeRepeater">
+                    <div class="simple-repeater-items" @listAnimation>
+                      <ng-container *ngIf="isFieldNode(node)">
+                        <div class="mb-3 text-secondary">
+                          <small>{{ node.displayName }} - Type: {{ node.fieldType }}</small>
+                        </div>
+                      </ng-container>
+                      <div class="row g-2 mb-2" *ngFor="let i of [].constructor(formBuilderService.getNumOfControls(path) || 0); let idx = index" @repeaterAddAnimation>
+                        <div class="col">
+                          <ng-container>
+                            <div class="input-group" style="display: flex; align-items: center;">
+                              <div style="flex: 1;">
+                                <ng-container *ngIf="getSimpleRepeaterItemData(idx)" appDynamicField
+                                  [fieldData]="getSimpleRepeaterItemData(idx)" 
+                                  [path]="path + '.' + idx"
+                                  [mode]="formMode"
+                                  [formGroup]="formGroup"
+                                  [isHidden]="isFieldNode(node) && shouldHideField(node)"
+                                  (fieldInitialized)="onFieldInitialized(path + '.' + idx)">
+                                </ng-container>
+                              </div>
+                              
+                              <button 
+                                *ngIf="canRemoveRepeaterItem(node) && formMode !== 'edit'"
+                                pButton
+                                pRipple
+                                type="button"
+                                icon="pi pi-trash"
+                                class="p-button-rounded p-button-text p-button-sm p-button-danger"
+                                pTooltip="Remove Item"
+                                (click)="removeRepeaterItem(idx)">
+                              </button>
+                            </div>
+                          </ng-container>
+                        </div>
+                      </div>
+                      
+                      <div *ngIf="formBuilderService.getNumOfControls(path) === 0" class="text-center p-3 text-muted">
+                        No items yet. Click the "+" button to add an item.
+                      </div>
+                    </div>
+                  </ng-container>
+                  
+                  <!-- Complex Type Repeaters (array of objects) -->
+                  <ng-container *ngIf="!isSimpleTypeRepeater">
+                    <p-accordion @listAnimation>
+                      <p-accordionTab 
+                        *ngFor="let i of [].constructor(numControls); let idx = index" 
+                        [header]="getRepeaterItemHeader(node, $any(formGroup.get(path + '.' + idx)), idx)"
+                        [selected]="idx === lastAddedIndexToExpand" 
+                        @repeaterAddAnimation>
+                        <ng-template pTemplate="header">
+                          <div class="d-flex align-items-center">
+                            <span class="me-3">{{ getRepeaterItemHeader(node, $any(formGroup.get(path + '.' + idx)), idx) }}</span>
+                            <div class="d-flex gap-1">
+                              <button 
+                                *ngIf="canReorderRepeaterItems(node) && idx > 0" 
+                                pButton
+                                pRipple
+                                type="button"
+                                icon="pi pi-arrow-up"
+                                class="p-button-rounded p-button-text p-button-sm"
+                                (click)="moveRepeaterItem(idx, idx - 1); $event.stopPropagation()"
+                                pTooltip="Move Up">
+                              </button>
+                              <button 
+                                *ngIf="canReorderRepeaterItems(node) && idx < numControls - 1" 
+                                pButton
+                                pRipple
+                                type="button"
+                                icon="pi pi-arrow-down"
+                                class="p-button-rounded p-button-text p-button-sm"
+                                (click)="moveRepeaterItem(idx, idx + 1); $event.stopPropagation()"
+                                pTooltip="Move Down">
+                              </button>
+                              <button 
+                                *ngIf="canRemoveRepeaterItem(node)" 
+                                pButton
+                                pRipple
+                                type="button"
+                                icon="pi pi-trash"
+                                class="p-button-rounded p-button-text p-button-sm p-button-danger"
+                                (click)="removeRepeaterItem(idx); $event.stopPropagation()"
+                                pTooltip="Remove Item">
+                              </button>
+                            </div>
+                          </div>
+                        </ng-template>
+                        
+                        <div class="pt-2" [formGroup]="$any(formGroup)">
+                          <div class="row g-3">
+                            <ng-container *ngIf="node.complexTypeSettings?.typeName">
+                              <!-- Complex Type Repeater Item -->
+                              <ng-container *ngIf="formBuilderService.getForeignTypeStructure(node.complexTypeSettings.typeName) as foreignType; else missingForeignType">
+                                <!-- Loading state when no controls yet but has values -->
+                                <div *ngIf="!formGroup.get(path + '.' + idx)" class="col-12 text-center">
+                                  <i class="pi pi-spin pi-spinner mr-2"></i> Loading...
+                                </div>
+                                
+                                <!-- Show controls when available -->
+                                <ng-container *ngIf="formGroup.get(path + '.' + idx)">
+                                  <ng-container *ngFor="let child of foreignType.children">
+                                    <app-dynamic-node 
+                                      [node]="child" 
+                                      [path]="path + '.' + idx"
+                                      [formGroup]="formGroup" 
+                                      [formMode]="formMode"
+                                      [inputOptions]="inputOptions"
+                                      (fieldInitialized)="onFieldInitialized(path + '.' + idx)">
+                                    </app-dynamic-node>
+                                  </ng-container>
+                                </ng-container>
+                              </ng-container>
+                              
+                              <ng-template #missingForeignType>
+                                <div class="alert alert-warning">
+                                  <i class="pi pi-exclamation-triangle me-2"></i>
+                                  Foreign type structure not found for type: {{node.complexTypeSettings.typeName}}
+                                </div>
+                              </ng-template>
+                            </ng-container>
+                            
+                            <!-- Regular Repeater Item -->
+                            <ng-container *ngIf="!node.complexTypeSettings?.typeName && node.subTypeStructure && node.subTypeStructure.children">
+                              <ng-container *ngFor="let child of node.subTypeStructure.children">
+                                <app-dynamic-node 
+                                  [node]="child"
+                                  [path]="path + '.' + idx" 
+                                  [formGroup]="formGroup" 
+                                  [formMode]="formMode"
+                                  [inputOptions]="inputOptions"
+                                  (fieldInitialized)="onFieldInitialized(path + '.' + idx)">
+                                </app-dynamic-node>
+                              </ng-container>
+                            </ng-container>
+                          </div>
+                        </div>
+                      </p-accordionTab>
+                    </p-accordion>
+                    
+                    <div *ngIf="numControls === 0" class="text-center p-3 text-muted">
+                      No items yet. Click the "+" button to add an item.
+                    </div>
+                  </ng-container>
+                </div>
+                
+                <ng-template #noRepeaterItems>
+                  <div class="text-center p-3">
+                    <p class="text-muted mb-3">No items yet in this repeater.</p>
+                    <button 
+                      *ngIf="canAddRepeaterItem(node)"
+                      pButton 
+                      pRipple
+                      type="button" 
+                      icon="pi pi-plus"
+                      class="p-button-rounded p-button-sm"
+                      (click)="addRepeaterItem(node)"
+                      label="Add Item">
+                    </button>
+                  </div>
+                </ng-template>
+              </p-panel>
+            </div>
+          </ng-template>
+        </ng-template>
+      </ng-container>
+    </ng-template>
+  </ng-container>
+</ng-container> 

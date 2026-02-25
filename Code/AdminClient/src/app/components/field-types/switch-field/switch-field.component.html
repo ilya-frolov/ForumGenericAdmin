@@ -1,0 +1,43 @@
+<!-- Edit Template -->
+<ng-template #editTemplate>
+  <div class="d-flex flex-column gap-2">
+    <div class="field-checkbox d-flex align-items-center">
+      <label [for]="id" class="me-2">
+        {{ label }}
+        <span *ngIf="metadata?.required" class="text-danger">*</span>
+      </label>
+      <p-inputSwitch 
+        [id]="id"
+        [(ngModel)]="value"
+        [disabled]="metadata.readOnly || false"
+        (onChange)="onValueChange($event.checked)"
+        styleClass="position-relative">
+      </p-inputSwitch>
+    </div>
+    <div *ngIf="metadata?.tooltip" class="text-muted small mt-1">
+      {{ metadata.tooltip }}
+    </div>
+  </div>
+</ng-template>
+
+<!-- List Template -->
+<ng-template #listTemplate>
+  <div class="field-display">
+    <!-- <div class="fw-medium">{{ label }}</div> -->
+    <div>
+      <i class="pi" [ngClass]="value ? 'pi-check-circle text-success' : 'pi-times-circle text-muted'"></i>
+      {{ value ? 'Yes' : 'No' }}
+    </div>
+  </div>
+</ng-template> 
+
+<ng-template #viewTemplate>
+  <div class="d-flex align-items-center">
+    <span class="me-2">{{ label }}:</span>
+    <span class="field-display d-inline-flex align-items-center">
+      <span>{{ value ? 'Yes' : 'No' }}</span>
+    </span>
+  </div>
+</ng-template>
+
+  

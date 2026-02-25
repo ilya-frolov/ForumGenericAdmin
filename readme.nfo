@@ -1,0 +1,3 @@
+1. Delete the DEMO TABLES in MainDbContext (2 regions inside the file).
+2. Delete Api/Areas/Admin/Controllers/Demo
+3. Delete Api/Areas/Admin/Models/Demo

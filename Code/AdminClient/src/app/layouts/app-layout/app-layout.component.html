@@ -1,0 +1,197 @@
+<ng-container *ngIf="isLoading">
+  <app-loader></app-loader>
+</ng-container>
+
+<ng-container *ngIf="!isLoading">
+  <!-- Header -->
+  <header class="site-header">
+    <p-menubar>
+      <ng-template #start>
+        <img src="assets/images/dino-logo-d-letter.svg" width="33" height="35" alt="Logo">
+        <a routerLink="/home" class="p-menubar-item-link">
+          Adminosaurus
+        </a>
+      </ng-template>
+      <ng-template #end>
+        <div class="d-flex gap-2 align-items-center">
+          <p-iconfield>
+            <p-inputicon styleClass="pi pi-search" />
+            <input type="text" pInputText placeholder="Search" />
+          </p-iconfield>
+          <p-dropdown [options]="availableLanguages" [(ngModel)]="selectedLanguage" optionLabel="name"
+            (onChange)="selectLanguage($event.value)" [style]="{'min-width':'100px'}"
+            *ngIf="!isLanguageDropdownDisabled">
+            <p-inputicon styleClass="pi pi-globe" />
+            <ng-template pTemplate="selectedItem">
+              <p-inputicon styleClass="pi pi-globe position-static me-2" />
+              {{selectedLanguage?.name}}
+            </ng-template>
+            <ng-template pTemplate="item" let-language>
+              <div class="d-flex align-items-center gap-2">
+                <div>{{language.name}}</div>
+              </div>
+            </ng-template>
+          </p-dropdown>
+          <button 
+            pButton 
+            severity="secondary"
+            icon="pi pi-key" 
+            (click)="openChangePasswordDialog()"
+            pTooltip="Change Password" 
+            tooltipPosition="top">
+            Change Password
+          </button>
+          <button 
+            pButton
+            severity="secondary"
+            icon="pi pi-sign-out" 
+            (click)="logout()"
+            pTooltip="Logout" 
+            tooltipPosition="top">
+            Logout
+          </button>
+          <button pButton class="p-button-rounded p-button-text" (click)="toggleTheme()"
+            [attr.aria-label]="(isDarkMode ? 'Switch to light mode' : 'Switch to dark mode')">
+            <span class="material-symbols-outlined">{{ isDarkMode ? 'light_mode' : 'dark_mode' }}</span>
+          </button>
+          <p-avatar *ngIf="false" image="assets/images/dino.png" shape="circle" />
+        </div>
+      </ng-template>
+    </p-menubar>
+  </header>
+
+  <!-- Main content -->
+  <main>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <p-menu [model]="items" class="d-flex justify-content-center" styleClass="w-100 h-100">
+        <ng-template #start>
+          <div class="d-flex align-items-center justify-content-between w-100 p-2">
+            <span class="fw-semibold">תפריט ראשי</span>
+          </div>
+        </ng-template>
+        <ng-template #submenuheader let-item>
+          <span class="fw-bold">{{ item.label }}</span>
+        </ng-template>
+        <ng-template #item let-item>
+          <a pRipple class="d-flex align-items-center p-menu-item-link" [routerLink]="item.routerLink">
+            <app-icon [iconType]="item.iconType ?? IconType.PrimeIcons" [iconName]="item.icon"></app-icon>
+            <span class="ms-2">{{ item.label }}</span>
+            <p-badge *ngIf="item.badge" class="ms-auto" [value]="item.badge" />
+          </a>
+        </ng-template>
+        <ng-template #end>
+          <p-divider />
+          <button
+            class="position-relative overflow-hidden w-100 border-0 bg-transparent d-flex align-items-center px-3 pb-2 rounded-0 cursor-pointer">
+            <p-avatar image="assets/images/dino.png" class="me-2"
+              shape="circle" />
+            <div class="d-flex flex-column">
+              <span class="fw-bold">{{ connectedUser?.email }}</span>
+              <!-- <span class="small">{{ connectedUser?.role }}</span> -->
+            </div>
+          </button>
+        </ng-template>
+      </p-menu>
+    </aside>
+    <!-- Router outlet -->
+    <router-outlet />
+  </main>
+  
+  <!-- Change Password Dialog -->
+  <p-dialog
+    [(visible)]="showChangePasswordDialog"
+    [modal]="true"
+    [draggable]="false"
+    [resizable]="false"
+    [closeOnEscape]="true"
+    header="Change Password"
+    [style]="{width: '90%', maxWidth: '450px'}"
+    (onHide)="closeChangePasswordDialog()">
+    <div class="p-fluid">
+      <p-toast></p-toast>
+      <form [formGroup]="changePasswordForm" (ngSubmit)="onSubmitChangePassword()">
+        <!-- Current Password -->
+        <div class="mb-3">
+          <p-floatlabel variant="in">
+            <p-iconfield>
+              <p-inputicon styleClass="pi pi-lock" />
+              <input 
+                id="currentPassword" 
+                type="password" 
+                pInputText 
+                class="w-100" 
+                formControlName="currentPassword"
+                [ngClass]="{ 'ng-invalid ng-dirty': submitted && cpf['currentPassword'].errors }"
+                autocomplete="current-password">
+            </p-iconfield>
+            <label for="currentPassword">Current Password</label>
+          </p-floatlabel>
+          <p-message *ngIf="submitted && cpf['currentPassword'].errors" severity="error" variant="simple" size="small" class="mt-2 d-block">
+            <span *ngIf="cpf['currentPassword'].errors['required']">Current password is required</span>
+            <span *ngIf="cpf['currentPassword'].errors['minlength']">Current password must be at least 6 characters</span>
+          </p-message>
+        </div>
+
+        <!-- New Password -->
+        <div class="mb-3">
+          <p-floatlabel variant="in">
+            <p-iconfield>
+              <p-inputicon styleClass="pi pi-lock" />
+              <input 
+                id="newPassword" 
+                type="password" 
+                pInputText 
+                class="w-100" 
+                formControlName="newPassword"
+                [ngClass]="{ 'ng-invalid ng-dirty': submitted && cpf['newPassword'].errors }"
+                autocomplete="new-password">
+            </p-iconfield>
+            <label for="newPassword">New Password</label>
+          </p-floatlabel>
+          <p-message *ngIf="submitted && cpf['newPassword'].errors" severity="error" variant="simple" size="small" class="mt-2 d-block">
+            <span *ngIf="cpf['newPassword'].errors['required']">New password is required</span>
+            <span *ngIf="cpf['newPassword'].errors['minlength']">New password must be at least 6 characters</span>
+          </p-message>
+        </div>
+
+        <!-- Confirm Password -->
+        <div class="mb-3">
+          <p-floatlabel variant="in">
+            <p-iconfield>
+              <p-inputicon styleClass="pi pi-lock" />
+              <input 
+                id="confirmPassword" 
+                type="password" 
+                pInputText 
+                class="w-100" 
+                formControlName="confirmPassword"
+                [ngClass]="{ 'ng-invalid ng-dirty': submitted && cpf['confirmPassword'].errors }"
+                autocomplete="new-password">
+            </p-iconfield>
+            <label for="confirmPassword">Confirm New Password</label>
+          </p-floatlabel>
+          <p-message *ngIf="submitted && cpf['confirmPassword'].errors" severity="error" variant="simple" size="small" class="mt-2 d-block">
+            <span *ngIf="cpf['confirmPassword'].errors['required']">Confirm password is required</span>
+            <span *ngIf="cpf['confirmPassword'].errors['passwordMismatch']">Passwords do not match</span>
+          </p-message>
+        </div>
+
+        <div class="d-flex justify-content-end gap-2 mt-4">
+          <p-button 
+            type="button" 
+            styleClass="p-button-outlined p-button-secondary" 
+            label="Cancel"
+            [disabled]="loading"
+            (onClick)="closeChangePasswordDialog()">
+          </p-button>
+          <p-button 
+            type="submit" 
+            label="Change Password"
+            [loading]="loading">
+          </p-button>
+        </div>
+      </form>
+    </div>
+  </p-dialog>
+</ng-container>

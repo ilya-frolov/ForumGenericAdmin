@@ -1,0 +1,138 @@
+<div class="container mx-auto mt-4">
+  <div class="row">
+    <div class="col-12">
+      <admin-breadcrumb></admin-breadcrumb>
+      <h1 class="mb-3">Modal & Dialog Examples</h1>
+      <p class="text-muted mb-4">This page demonstrates various PrimeNG dialog and modal components.</p>
+    </div>
+  </div>
+
+  <!-- Basic Dialog -->
+  <p-panel header="Basic Dialog" styleClass="mb-4">
+    <div class="row g-3">
+      <div class="col-12">
+        <p>Click the button below to open a basic dialog.</p>
+        <button pButton pRipple type="button" label="Open Basic Dialog" icon="pi pi-external-link" (click)="displayBasicModal = true"></button>
+      </div>
+    </div>
+  </p-panel>
+
+  <!-- Confirmation Dialog -->
+  <p-panel header="Confirmation Dialog" styleClass="mb-4">
+    <div class="row g-3">
+      <div class="col-12">
+        <p>Click the button below to open a confirmation dialog.</p>
+        <button pButton pRipple type="button" label="Open Confirmation Dialog" icon="pi pi-check-circle" severity="warn" (click)="displayConfirmModal = true"></button>
+      </div>
+    </div>
+  </p-panel>
+
+  <!-- Form Dialog -->
+  <p-panel header="Form Dialog" styleClass="mb-4">
+    <div class="row g-3">
+      <div class="col-12">
+        <p>Click the button below to open a dialog with a form.</p>
+        <button pButton pRipple type="button" label="Open Form Dialog" icon="pi pi-pencil" severity="success" (click)="displayFormModal = true"></button>
+      </div>
+    </div>
+  </p-panel>
+
+  <!-- Positioned Dialogs -->
+  <p-panel header="Positioned Dialogs" styleClass="mb-4">
+    <div class="row g-3">
+      <div class="col-12">
+        <p>Click the buttons below to open dialogs in different positions.</p>
+        <div class="d-flex flex-wrap gap-2">
+          <button pButton pRipple type="button" label="Top" icon="pi pi-arrow-up" (click)="showPositionDialog('top')"></button>
+          <button pButton pRipple type="button" label="Bottom" icon="pi pi-arrow-down" (click)="showPositionDialog('bottom')"></button>
+          <button pButton pRipple type="button" label="Left" icon="pi pi-arrow-left" (click)="showPositionDialog('left')"></button>
+          <button pButton pRipple type="button" label="Right" icon="pi pi-arrow-right" (click)="showPositionDialog('right')"></button>
+          <button pButton pRipple type="button" label="Top Left" icon="pi pi-arrow-up-left" (click)="showPositionDialog('topleft')"></button>
+          <button pButton pRipple type="button" label="Top Right" icon="pi pi-arrow-up-right" (click)="showPositionDialog('topright')"></button>
+          <button pButton pRipple type="button" label="Bottom Left" icon="pi pi-arrow-down-left" (click)="showPositionDialog('bottomleft')"></button>
+          <button pButton pRipple type="button" label="Bottom Right" icon="pi pi-arrow-down-right" (click)="showPositionDialog('bottomright')"></button>
+          <button pButton pRipple type="button" label="Center" icon="pi pi-plus-circle" (click)="showPositionDialog('center')"></button>
+        </div>
+      </div>
+    </div>
+  </p-panel>
+
+  <!-- Sidebar -->
+  <p-panel header="Sidebar" styleClass="mb-4">
+    <div class="row g-3">
+      <div class="col-12">
+        <p>Click the button below to open a drawer.</p>
+        <button pButton pRipple type="button" label="Open Drawer" icon="pi pi-bars" severity="help" (click)="displaySidebar = true"></button>
+      </div>
+    </div>
+  </p-panel>
+
+  <!-- Dialog Components -->
+  <p-dialog header="Basic Dialog" [(visible)]="displayBasicModal" [style]="{width: '30vw'}" [modal]="true" [draggable]="false" [resizable]="false">
+    <p class="m-0">
+      This is a basic dialog with minimal configuration. It can be used to display simple messages or content.
+    </p>
+    <ng-template pTemplate="footer">
+      <button pButton pRipple label="Close" icon="pi pi-times" (click)="displayBasicModal = false" class="p-button-text"></button>
+    </ng-template>
+  </p-dialog>
+
+  <p-dialog header="Confirmation" [(visible)]="displayConfirmModal" [style]="{width: '30vw'}" [modal]="true" [draggable]="false" [resizable]="false">
+    <div class="d-flex align-items-center gap-3">
+      <i class="pi pi-exclamation-triangle text-warning" style="font-size: 2rem"></i>
+      <p class="m-0">Are you sure you want to proceed with this action?</p>
+    </div>
+    <ng-template pTemplate="footer">
+      <button pButton pRipple label="No" icon="pi pi-times" (click)="displayConfirmModal = false" class="p-button-text"></button>
+      <button pButton pRipple label="Yes" icon="pi pi-check" (click)="displayConfirmModal = false" class="p-button-text p-button-danger"></button>
+    </ng-template>
+  </p-dialog>
+
+  <p-dialog header="User Form" [(visible)]="displayFormModal" [style]="{width: '40vw'}" [modal]="true" [draggable]="false" [resizable]="false">
+    <div class="row g-3">
+      <div class="col-12 d-flex flex-column">
+        <label for="name" class="form-label">Name</label>
+        <input id="name" type="text" pInputText placeholder="Enter your name">
+      </div>
+      <div class="col-12 d-flex flex-column">
+        <label for="email" class="form-label">Email</label>
+        <input id="email" type="email" pInputText placeholder="Enter your email">
+      </div>
+      <div class="col-12 d-flex flex-column">
+        <label for="message" class="form-label">Message</label>
+        <textarea id="message" pInputTextarea rows="5" placeholder="Enter your message"></textarea>
+      </div>
+    </div>
+    <ng-template pTemplate="footer">
+      <button pButton pRipple label="Cancel" icon="pi pi-times" (click)="displayFormModal = false" class="p-button-text"></button>
+      <button pButton pRipple label="Submit" icon="pi pi-check" (click)="displayFormModal = false"></button>
+    </ng-template>
+  </p-dialog>
+
+  <p-dialog header="Positioned Dialog" [(visible)]="displayCustomModal" [position]="position" [style]="{width: '30vw'}" [modal]="true" [draggable]="false" [resizable]="false">
+    <p class="m-0">
+      This dialog is positioned at the <strong>{{position}}</strong> of the screen.
+    </p>
+    <ng-template pTemplate="footer">
+      <button pButton pRipple label="Close" icon="pi pi-times" (click)="displayCustomModal = false" class="p-button-text"></button>
+    </ng-template>
+  </p-dialog>
+
+  <!-- Changed from sidebar to drawer -->
+  <p-drawer [(visible)]="displaySidebar" [position]="'left'" [style]="{width:'30em'}" [baseZIndex]="10000">
+    <h3>Drawer Content</h3>
+    <p>This is a drawer that can be used for navigation, filters, or any other content that needs to slide in from the side of the screen.</p>
+    <div class="mt-4">
+      <h5>Quick Links</h5>
+      <ul class="list-unstyled">
+        <li class="mb-2"><a href="#" class="text-decoration-none">Dashboard</a></li>
+        <li class="mb-2"><a href="#" class="text-decoration-none">Profile</a></li>
+        <li class="mb-2"><a href="#" class="text-decoration-none">Settings</a></li>
+        <li class="mb-2"><a href="#" class="text-decoration-none">Help</a></li>
+      </ul>
+    </div>
+    <div class="mt-4">
+      <button pButton pRipple type="button" label="Close Drawer" icon="pi pi-times" (click)="displaySidebar = false" class="p-button-outlined"></button>
+    </div>
+  </p-drawer>
+</div> 

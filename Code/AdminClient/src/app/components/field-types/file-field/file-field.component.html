@@ -1,0 +1,190 @@
+<!-- Edit Template -->
+<ng-template #editTemplate>
+  <div class="file-field-container">
+    <p-toast position="top-right"></p-toast>
+    <label [for]="id">
+      {{ label }}
+      <span *ngIf="metadata?.required" class="text-danger">*</span>
+    </label>
+    <!-- Platform selector -->
+    <div
+      class="platform-selector mb-3"
+      *ngIf="isEditMode && showPlatformSelector"
+    >
+      <!-- <label for="platformSelector" class="block mb-1">Select Platform:</label> -->
+      <p-dropdown
+        id="platformSelector"
+        [options]="platformOptions"
+        [(ngModel)]="selectedPlatform"
+        optionLabel="label"
+        optionValue="value"
+        [style]="{ width: '100%' }"
+        styleClass="w-full"
+      >
+        <ng-template pTemplate="selectedItem">
+          <div class="d-flex align-items-center gap-2" *ngIf="selectedPlatform">
+            <i [class]="getPlatformIcon(selectedPlatform)"></i>
+            <div>{{ getPlatformName(selectedPlatform) }}</div>
+          </div>
+        </ng-template>
+        <ng-template let-option pTemplate="item">
+          <div class="d-flex align-items-center gap-2">
+            <i [class]="option.icon"></i>
+            <div>{{ option.label }}</div>
+          </div>
+        </ng-template>
+      </p-dropdown>
+    </div>
+
+    <!-- File uploader -->
+    <div class="file-uploader" *ngIf="isEditMode">
+      <p-fileUpload
+        #fileUpload
+        [name]="'files'"
+        [mode]="'basic'"
+        [multiple]="allowMultiple"
+        [accept]="acceptedFileTypes"
+        (onSelect)="onUpload($event)"
+        (onRemove)="removeFile($event)"
+        [maxFileSize]="maxFileSize * 1024 * 1024"
+        [customUpload]="true"
+        [showUploadButton]="false"
+        [showCancelButton]="false"
+        [auto]="true"
+      >
+        <ng-template pTemplate="content">
+          <div class="d-flex flex-column align-items-center">
+            <i class="pi pi-cloud-upload text-5xl mb-2"></i>
+            <p>Drag and drop files here or click to browse</p>
+            <div
+              class="platform-info mt-2"
+              *ngIf="supportedPlatforms.length > 0"
+            >
+              <span class="platform-label">Selected platform: </span>
+              <span class="platform-value">
+                <i [class]="getPlatformIcon(selectedPlatform)" class="mr-1"></i>
+                {{ getPlatformName(selectedPlatform) }}
+              </span>
+            </div>
+            <p class="upload-hint mt-2" *ngIf="maxFileSize">
+              Maximum file size: {{ maxFileSize }} MB
+            </p>
+            <p class="upload-hint" *ngIf="acceptedFileTypes">
+              Accepted file types: {{ acceptedFileTypes }}
+            </p>
+            <p class="upload-note">
+              <i class="pi pi-info-circle mr-1"></i> Files will be uploaded when
+              the form is submitted
+            </p>
+          </div>
+        </ng-template>
+      </p-fileUpload>
+    </div>
+
+    <!-- Error message -->
+    <div
+      class="error-message alert alert-danger d-flex align-items-center mt-2"
+      *ngIf="errorMessage"
+    >
+      <i class="pi pi-exclamation-triangle me-2"></i>
+      <span>{{ errorMessage }}</span>
+      <button
+        type="button"
+        class="btn-close ms-auto"
+        (click)="clearError()"
+      ></button>
+    </div>
+
+    <!-- Files list -->
+    <div class="files-list mt-3" *ngIf="allFiles.length > 0">
+      <h6 class="mb-2">Selected Files:</h6>
+      <div class="list-group">
+        <div
+          *ngFor="let file of allFiles"
+          class="list-group-item d-flex align-items-center"
+        >
+          <i [class]="getFileIcon(file?.name) + ' me-2'"></i>
+          <span class="file-name flex-grow-1">{{ file.name }}</span>
+          <span *ngIf="file?.size" class="file-size me-2">{{
+            formatFileSize(file.size)
+          }}</span>
+          <p-badge
+            value={{file.platform}}
+            severity="success"
+            class="me-2"
+          ></p-badge>
+          <p-badge
+            *ngIf="!isFileUploaded(file)"
+            value="new"
+            severity="success"
+            class="me-2"
+          ></p-badge>
+          <p-badge
+            *ngIf="isFileUploaded(file)"
+            value="uploaded"
+            severity="info"
+            class="me-2"
+          ></p-badge>
+          <a
+            *ngIf="!file.isNew"
+            [href]="file.path"
+            target="_blank"
+            class="btn btn-sm btn-outline-primary me-1"
+          >
+            <i class="pi pi-external-link"></i>
+          </a>
+          <!-- Remove/Restore buttons -->
+          <button
+            pButton
+            type="button"
+            icon="pi pi-trash"
+            class="p-button-danger p-button-sm p-button-outlined ms-2"
+            pTooltip="Mark for deletion"
+            (click)="removeFile(file)"
+          ></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- No files message -->
+    <div class="text-center py-3" *ngIf="allFiles.length === 0 && isEditMode">
+      <i class="pi pi-file text-3xl text-muted mb-2 d-block"></i>
+      <p class="text-muted">No files selected</p>
+    </div>
+  </div>
+</ng-template>
+
+<!-- List Template -->
+<ng-template #listTemplate>
+  <div class="file-list-display">
+    <div *ngIf="allFiles.length === 0" class="no-files">No files</div>
+    <ul *ngIf="allFiles.length > 0" class="list-unstyled">
+      <li *ngFor="let file of allFiles" class="d-flex align-items-center mb-1">
+        <i [class]="getFileIcon(file.name) + ' me-2'"></i>
+        <a *ngIf="!file.isNew" [href]="file.path" target="_blank" class="me-2">
+          {{ file.name }}
+        </a>
+        <p-badge *ngIf="file.platform" class="me-2" [value]="file.platform" severity="info"></p-badge>
+      </li>
+    </ul>
+  </div>
+</ng-template>
+
+<ng-template #viewTemplate>
+  <div class="d-flex align-items-center">
+    <span class="me-2">{{ label }}:</span>
+    <span class="field-display d-inline-flex align-items-center">
+      <span *ngIf="allFiles.length === 0" class="no-files">No files</span>
+      <ul *ngIf="allFiles.length > 0" class="list-unstyled">
+        <li *ngFor="let file of allFiles" class="d-flex align-items-center mb-1">
+          <i [class]="getFileIcon(file.name) + ' me-2'"></i>
+          <a *ngIf="!file.isNew" [href]="file.path" target="_blank" class="me-2">
+            {{ file.name }}
+          </a>
+          <p-badge *ngIf="file.platform" class="me-2" [value]="file.platform" severity="info"></p-badge>
+        </li>
+      </ul>
+    </span>
+  </div>
+</ng-template>
+

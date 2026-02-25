@@ -1,0 +1,8 @@
+<ng-container [ngSwitch]="iconType">
+  <ng-container *ngSwitchCase="IconType.PrimeIcons">
+    <i class="pi pi-{{iconName}}"></i>
+  </ng-container>
+  <ng-container *ngSwitchCase="IconType.FontAwesome">
+    <i class="fa-light fa-{{iconName}}"></i>
+  </ng-container>
+</ng-container>

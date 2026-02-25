@@ -1,0 +1,90 @@
+<!-- Edit Template -->
+<ng-template #editTemplate>
+  <div class="d-flex flex-column gap-2">
+    <label [for]="id">
+      {{ label }}
+      <span *ngIf="metadata?.required" class="text-danger">*</span>
+    </label>
+    <div class="input-group" style="direction: ltr; display: flex; width: fit-content; min-width: 100%;">
+      <!-- Base URL -->
+      <ng-container>
+        <!-- Static baseUrl from metadata -->
+        <input
+          pInputText
+          type="text"
+          [id]="id + '_base'"
+          [value]="value?.baseUrl"
+          [disabled]="true"
+          style="text-align: left; width: auto; min-width: fit-content;"
+          [style.width.ch]="baseUrlWidth"
+        />
+      </ng-container>
+      
+      <!-- Editable path part -->
+      <input
+        pInputText
+        [type]="type"
+        [id]="id"
+        [name]="id"
+        [(ngModel)]="value.urlName"
+        [placeholder]="metadata?.placeholder || '/path'"
+        [maxlength]="metadata?.maxLength"
+        [required]="metadata?.required"
+        [readonly]="metadata?.readOnly"
+        (input)="onUrlPathChange($event)"
+        style="text-align: left; width: auto; min-width: fit-content;"
+        [style.width.ch]="urlPathWidth"
+      />
+    </div>
+    
+    <div *ngIf="metadata?.maxLength" class="text-muted small">
+      {{ value?.urlName?.length || 0 }}/{{ metadata.maxLength }}
+    </div>
+    <div *ngIf="metadata?.tooltip" class="text-muted small">
+      {{ metadata.tooltip }}
+    </div>
+  </div>
+</ng-template>
+
+<!-- List Template -->
+<ng-template #listTemplate>
+  <div class="field-display d-flex justify-content-between align-items-center" style="position: relative; width: 100%;">
+    <span style="display: inline-block; text-align: right; overflow: hidden; text-overflow: ellipsis;">{{ value?.urlName || '-' }}</span>
+    
+    <div class="ms-3">
+      <!-- Actions dropdown -->
+      <button *ngIf="value" 
+        pButton pRipple type="button" 
+        icon="pi pi-ellipsis-v" 
+        class="p-button-rounded p-button-text p-button-sm"
+        #menuBtn
+        (click)="menu.toggle($event)">
+      </button>
+      
+      <p-menu #menu [popup]="true" [model]="menuItems" [appendTo]="'body'"></p-menu>
+    </div>
+  </div>
+</ng-template>
+
+<!-- View Template -->
+<ng-template #viewTemplate>
+  <div class="d-flex align-items-center" style="position: relative;">
+    <span class="me-2">{{ label }}:</span>
+    <div class="field-display d-flex justify-content-between align-items-center" style="flex-grow: 1;">
+      <a [href]="fullUrl" target='_blank' style="direction: ltr; display: inline-block; overflow: hidden; text-overflow: ellipsis;">{{ value?.urlName || '-' }}</a>
+      
+      <div class="ms-3">
+        <!-- Actions dropdown -->
+        <button *ngIf="value" 
+          pButton pRipple type="button" 
+          icon="pi pi-ellipsis-v" 
+          class="p-button-rounded p-button-text p-button-sm"
+          #menuBtn2
+          (click)="menu2.toggle($event)">
+        </button>
+        
+        <p-menu #menu2 [popup]="true" [model]="menuItems" [appendTo]="'body'"></p-menu>
+      </div>
+    </div>
+  </div>
+</ng-template> 

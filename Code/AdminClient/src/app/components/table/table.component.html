@@ -1,0 +1,593 @@
+<div class="container-fluid mx-auto">
+  <!-- Toast and Confirmation Dialog -->
+  <p-toast></p-toast>
+  <p-confirmDialog appendTo="body"></p-confirmDialog>
+  <div
+    *ngIf="loading || !listDef"
+    class="d-flex align-items-center justify-content-center"
+    style="height: 400px"
+  >
+    <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
+    <span class="ml-2">{{ "SHARED.Loading" | translate }}</span>
+  </div>
+
+  <!-- Dynamic Table -->
+  <div *ngIf="!loading && listDef">
+    <p-panel [header]="listDef?.title || 'Data Table'" styleClass="mb-4">
+      <ng-template pTemplate="icons">
+        <span class="p-relative">
+          <p-button
+            icon="pi pi-refresh"
+            severity="info"
+            rounded
+            text
+            pTooltip="{{ 'SHARED.Refresh' | translate }}"
+            tooltipPosition="top"
+            (click)="loadData()"
+          />
+          <p-button
+            icon="pi pi-cog"
+            severity="secondary"
+            rounded
+            text
+            pTooltip="{{ 'SHARED.Settings' | translate }}"
+            tooltipPosition="top"
+            (click)="settingsMenu.toggle($event)"
+          />
+          <p-tieredMenu
+            #settingsMenu
+            [model]="settingsItems"
+            appendTo="body"
+            [popup]="true"
+          ></p-tieredMenu>
+        </span>
+        <!-- <p-button
+          icon="pi pi-pencil"
+          severity="secondary"
+          rounded
+          text
+          pTooltip="Edit"
+          tooltipPosition="top"
+        /> -->
+      </ng-template>
+      <div class="row g-3">
+        <div class="col-12">
+          <p-table
+            #dt
+            [value]="tableData"
+            [paginator]="!isReordering"
+            [loading]="loading"
+            [globalFilterFields]="globalFilterFields"
+            [rows]="pageSize"
+            [totalRecords]="totalRowCount"
+            [rowsPerPageOptions]="[5, 10, 20, 50]"
+            [showCurrentPageReport]="true"
+            styleClass="p-datatable-sm"
+            [rowHover]="true"
+            [lazy]="true"
+            [first]="first"
+            (onLazyLoad)="onLazyLoad($event)"
+            (onRowReorder)="onRowReorder($event)"
+            [lazyLoadOnInit]="true"
+            currentPageReportTemplate="{{
+              'SHARED.Showing' | translate
+            }} {first} {{ 'SHARED.to' | translate }} {last} {{
+              'SHARED.of' | translate
+            }} {{ totalRecordsFetched }} {{ 'SHARED.entries' | translate }}"
+          >
+            <!-- Caption -->
+            <ng-template pTemplate="caption">
+              <div class="d-flex gap-2 align-items-center">
+                <!-- Search input -->
+                <p-iconfield class="me-auto" *ngIf="!listDef?.hideSearch">
+                  <p-inputicon styleClass="pi pi-search" />
+                  <input
+                    type="text"
+                    pInputText
+                    placeholder="{{ 'SHARED.Search' | translate }}"
+                    #globalFilter
+                    [(ngModel)]="searchValue"
+                    (keydown.enter)="onGlobalFilter(searchValue)"
+                  />
+                  <p-inputicon
+                    *ngIf="searchValue && searchValue.length > 0"
+                    styleClass="pi pi-times cursor-pointer"
+                    (click)="clearSearch()"
+                    style="right: 8px; right: auto; cursor: pointer"
+                  />
+                </p-iconfield>
+                <!-- Reordering buttons -->
+                <div *ngIf="listDef.allowReOrdering && !isReordering">
+                  <p-button
+                    icon="pi pi-sort"
+                    label="{{ 'SHARED.Reorder' | translate }}"
+                    severity="secondary"
+                    (onClick)="startReordering()"
+                  ></p-button>
+                </div>
+                <div *ngIf="isReordering" class="d-flex gap-2">
+                  <p-button
+                    icon="pi pi-check"
+                    label="{{ 'SHARED.Save' | translate }}"
+                    severity="success"
+                    (onClick)="saveReordering()"
+                  ></p-button>
+                  <p-button
+                    icon="pi pi-times"
+                    label="{{ 'SHARED.Cancel' | translate }}"
+                    severity="danger"
+                    (onClick)="cancelReordering()"
+                  >
+                  </p-button>
+                </div>
+
+                <!-- New button -->
+                <p-button
+                  *ngIf="!isNewItemDisabled"
+                  icon="pi pi-plus"
+                  label="{{ 'SHARED.New' | translate }}"
+                  severity="primary"
+                  (onClick)="newItem()"
+                ></p-button>
+
+                <!-- Delete All button -->
+                <p-button
+                  *ngIf="!isDeleteAllDisabled"
+                  icon="pi pi-trash"
+                  label="{{ 'SHARED.DeleteAll' | translate }}"
+                  severity="danger"
+                  (onClick)="confirmDeleteAll($event)"
+                ></p-button>
+
+                <ng-container *ngFor="let currAction of listDef.selfActions">
+                  <a
+                    *ngIf="currAction.type === ListActionType.OuterLink"
+                    [href]="getOuterLink(currAction, null, true)"
+                    [target]="currAction.redirect ? '_self' : '_blank'"
+                    rel="noopener noreferrer"
+                    class="p-button font-bold"
+                  >
+                    {{ currAction.text }}
+                    <app-icon
+                      *ngIf="currAction.icon"
+                      [iconType]="currAction.iconType"
+                      [iconName]="currAction.icon"
+                    ></app-icon>
+                  </a>
+                  <a
+                    *ngIf="
+                      currAction.type !== ListActionType.OuterLink &&
+                      currAction.redirect
+                    "
+                    [routerLink]="getRouterLink(currAction, null, true)"
+                    class="p-button font-bold"
+                  >
+                    {{ currAction.text }}
+                    <app-icon
+                      *ngIf="currAction.icon"
+                      [iconType]="currAction.iconType"
+                      [iconName]="currAction.icon"
+                    ></app-icon>
+                  </a>
+                  <p-button
+                    *ngIf="
+                      currAction.type !== ListActionType.OuterLink &&
+                      !currAction.redirect
+                    "
+                    severity="secondary"
+                    (click)="runCustomAction(currAction, null, true)"
+                    [disabled]="currAction.isSubmitting"
+                  >
+                    {{ currAction.text }}
+                    <app-icon
+                      *ngIf="currAction.icon"
+                      [iconType]="currAction.iconType"
+                      [iconName]="currAction.icon"
+                    ></app-icon>
+                  </p-button>
+                </ng-container>
+
+                <!-- Export button -->
+                <div *ngIf="!isExportDisabled">
+                  <p-button
+                    label="{{ 'SHARED.Export' | translate }}"
+                    icon="pi pi-download"
+                    severity="secondary"
+                    variant="outlined"
+                    (click)="menu.toggle($event)"
+                  />
+                  <p-tieredMenu
+                    #menu
+                    [model]="exportOptions"
+                    appendTo="body"
+                    [popup]="true"
+                  />
+                </div>
+
+                <!-- Import button -->
+                <div *ngIf="!isImportDisabled && !isImportTemplateDisabled">
+                  <p-button
+                    label="{{ 'SHARED.Import' | translate }}"
+                    icon="pi pi-upload"
+                    severity="secondary"
+                    variant="outlined"
+                    (click)="menu.toggle($event)"
+                  />
+                  <p-tieredMenu
+                    #menu
+                    [model]="importOptions"
+                    appendTo="body"
+                    [popup]="true"
+                  />
+                </div>
+
+                <!-- Clear button -->
+                <p-button
+                  label="{{ 'SHARED.Clear' | translate }}"
+                  [outlined]="true"
+                  icon="pi pi-filter-slash"
+                  (click)="clear(dt)"
+                />
+              </div>
+              <div
+                *ngIf="mainFilterColumns.length > 0"
+                class="d-flex flex-wrap gap-2 align-items-center mt-3"
+              >
+                <ng-container *ngFor="let col of mainFilterColumns">
+                  <ng-container [ngSwitch]="col.mainFilter">
+                    <span *ngSwitchCase="MainFilterType.TextSearch" class="p-input-icon-left">
+                      <input
+                        pInputText
+                        [(ngModel)]="mainFilterValues[col.propertyName]"
+                        (keydown.enter)="applyMainFilters()"
+                        [placeholder]="col.name"
+                      />
+                    </span>
+
+                    <p-dropdown
+                      *ngSwitchCase="MainFilterType.Dropdown"
+                      [options]="getMainFilterDropdownOptions(col)"
+                      [(ngModel)]="mainFilterValues[col.propertyName]"
+                      [optionLabel]="'display'"
+                      [optionValue]="'value'"
+                      [showClear]="true"
+                      [filter]="true"
+                      [placeholder]="col.name"
+                      appendTo="body"
+                    >
+                    </p-dropdown>
+
+                    <div *ngSwitchCase="MainFilterType.DateRange" class="d-flex gap-2 align-items-center">
+                      <span class="text-muted">{{ col.name }}</span>
+                      <p-datepicker
+                        [(ngModel)]="mainDateFromValues[col.propertyName]"
+                        [showIcon]="true"
+                        [placeholder]="'From'"
+                        styleClass="w-100"
+                        appendTo="body"
+                      ></p-datepicker>
+                      <p-datepicker
+                        [(ngModel)]="mainDateToValues[col.propertyName]"
+                        [showIcon]="true"
+                        [placeholder]="'To'"
+                        styleClass="w-100"
+                        appendTo="body"
+                      ></p-datepicker>
+                    </div>
+                  </ng-container>
+                </ng-container>
+
+                <p-button
+                  label="Apply Filters"
+                  icon="pi pi-filter"
+                  severity="secondary"
+                  (onClick)="applyMainFilters()"
+                ></p-button>
+                <p-button
+                  label="Clear Top Filters"
+                  [outlined]="true"
+                  icon="pi pi-times"
+                  (onClick)="clearMainFilters()"
+                ></p-button>
+              </div>
+            </ng-template>
+
+            <!-- Header -->
+            <ng-template pTemplate="header">
+              <tr>
+                <th *ngIf="isReordering" style="width: 3rem"></th>
+                <th
+                  *ngFor="let col of listDef?.columns"
+                  [pSortableColumn]="
+                    col.allowSort ? col.propertyName : undefined
+                  "
+                >
+                  {{ col.name }}
+                  <p-sortIcon
+                    *ngIf="col.allowSort && !isReordering"
+                    [field]="col.propertyName"
+                  ></p-sortIcon>
+                  <!-- filterable -->
+                  <p-columnFilter
+                    *ngIf="col.allowSort && !isReordering"
+                    [type]="
+                      col.type === 'Number' || col.type === 'Select'
+                        ? 'numeric'
+                        : col.type === 'DateTime'
+                        ? 'date'
+                        : col.type === 'Boolean' || col.type === 'Checkbox'
+                        ? 'boolean'
+                        : 'text'
+                    "
+                    [field]="col.propertyName"
+                    display="menu"
+                  />
+                </th>
+                <th style="width: 10rem" *ngIf="!isReordering">
+                  {{ "SHARED.Actions" | translate }}
+                </th>
+              </tr>
+            </ng-template>
+
+            <!-- Body -->
+            <ng-template pTemplate="body" let-item let-index="rowIndex">
+              <tr [pReorderableRow]="isReordering ? index : null">
+                <td *ngIf="isReordering">
+                  <i class="pi pi-bars" pReorderableRowHandle></i>
+                </td>
+                <td *ngFor="let col of listDef?.columns; let i = index">
+                  <ng-container
+                    appDynamicField
+                    [fieldData]="getCellFieldData(col, item, i)"
+                    [mode]="'list'"
+                    [formGroup]="formGroup"
+                    [path]="getCellFieldData(col, item, i).path"
+                    [isHidden]="false"
+                  >
+                  </ng-container>
+                </td>
+                <td *ngIf="!isReordering">
+                  <div class="d-flex gap-2">
+                    <p-button
+                      *ngIf="!isEditDisabled"
+                      icon="pi pi-pencil"
+                      pTooltip="{{ 'SHARED.Edit' | translate }}"
+                      severity="success"
+                      size="small"
+                      tooltipPosition="top"
+                      (onClick)="editItem(item)"
+                    ></p-button>
+                    <p-button
+                      *ngIf="!isDeleteDisabled"
+                      (onClick)="confirmDelete($event, item)"
+                      icon="pi pi-trash"
+                      pTooltip="{{ 'SHARED.Delete' | translate }}"
+                      severity="danger"
+                      size="small"
+                      tooltipPosition="top"
+                    ></p-button>
+                    <p-button
+                      icon="pi pi-eye"
+                      severity="info"
+                      size="small"
+                      pTooltip="{{ 'SHARED.View' | translate }}"
+                      tooltipPosition="top"
+                      (onClick)="rowView.emit(item)"
+                    ></p-button>
+
+                    <ng-container
+                      *ngFor="let currAction of listDef.inlineActions"
+                    >
+                      <ng-container *ngIf="canShowListAction(currAction, item)">
+                        <a
+                          *ngIf="
+                            currAction.type === ListActionType.OuterLink &&
+                            isLinkValidWithParameter(currAction, item)
+                          "
+                          [href]="getOuterLink(currAction, item)"
+                          [target]="currAction.redirect ? '_self' : '_blank'"
+                          rel="noopener noreferrer"
+                          class="p-button font-bold"
+                        >
+                          {{ currAction.text }}
+                          <app-icon
+                            *ngIf="currAction.icon"
+                            [iconType]="currAction.iconType"
+                            [iconName]="currAction.icon"
+                          ></app-icon>
+                        </a>
+                        <a
+                          *ngIf="
+                            currAction.type !== ListActionType.OuterLink &&
+                            currAction.redirect &&
+                            isLinkValidWithParameter(currAction, item)
+                          "
+                          [routerLink]="getRouterLink(currAction, item)"
+                          class="p-button font-bold"
+                        >
+                          {{ currAction.text }}
+                          <app-icon
+                            *ngIf="currAction.icon"
+                            [iconType]="currAction.iconType"
+                            [iconName]="currAction.icon"
+                          ></app-icon>
+                        </a>
+                        <p-button
+                          *ngIf="
+                            currAction.type !== ListActionType.OuterLink &&
+                            !currAction.redirect &&
+                            isLinkValidWithParameter(currAction, item, false)
+                          "
+                          severity="secondary"
+                          (click)="runCustomAction(currAction, item, false)"
+                          [disabled]="currAction.isSubmitting"
+                        >
+                          {{ currAction.text }}
+                          <app-icon
+                            *ngIf="currAction.icon"
+                            [iconType]="currAction.iconType"
+                            [iconName]="currAction.icon"
+                          ></app-icon>
+                        </p-button>
+                      </ng-container>
+                    </ng-container>
+
+                    <ng-container *ngIf="item.extraMenuItems.length > 0">
+                      <p-button
+                        icon="pi pi-ellipsis-v"
+                        severity="secondary"
+                        size="small"
+                        pTooltip="{{ 'SHARED.MoreActions' | translate }}"
+                        tooltipPosition="top"
+                        (click)="menu.toggle($event)"
+                      />
+                      <p-menu
+                        #menu
+                        [popup]="true"
+                        [model]="item.extraMenuItems"
+                        appendTo="body"
+                      ></p-menu>
+                    </ng-container>
+                  </div>
+                </td>
+              </tr>
+            </ng-template>
+
+            <!-- Empty message -->
+            <ng-template pTemplate="emptymessage">
+              <tr>
+                <td
+                  [attr.colspan]="(listDef?.columns?.length || 0) + 1"
+                  class="text-center py-4"
+                >
+                  <div class="py-5">
+                    <i
+                      class="pi pi-search"
+                      style="font-size: 3rem; opacity: 0.4"
+                    ></i>
+                    <p class="mt-3">
+                      {{ "SHARED.NoRecordsFound" | translate }}
+                    </p>
+                  </div>
+                </td>
+              </tr>
+            </ng-template>
+
+            <!-- Footer -->
+            <ng-template pTemplate="footer">
+              <div class="d-flex justify-content-between">
+                <div class="text-nowrap">
+                  {{ "SHARED.Showing" | translate }} {{ totalRecordsFetched }}
+                  {{ "SHARED.Records" | translate }}
+                  {{
+                    totalRecordsFetched !== totalRowCount
+                      ? "(" +
+                        totalRowCount +
+                        " " +
+                        ("SHARED.Total" | translate) +
+                        ")"
+                      : ""
+                  }}
+                </div>
+              </div>
+            </ng-template>
+          </p-table>
+        </div>
+      </div>
+    </p-panel>
+    <!-- Row Expansion Table
+  <p-panel header="Row Expansion Table" styleClass="mb-4">
+    <ng-template pTemplate="icons">
+      <p-button label="Expand All" icon="pi pi-plus" severity="secondary" (onClick)="expandAllRows()" class="me-2" outlined></p-button>
+      <p-button label="Collapse All" icon="pi pi-minus" severity="secondary" (onClick)="collapseAllRows()" outlined></p-button>
+    </ng-template>
+    <div class="row g-3">
+      <div class="col-12">
+        <p-table [value]="tableData" [paginator]="true" [rows]="3" styleClass="p-datatable-sm"
+          [rowHover]="true" dataKey="id" [expandedRowKeys]="expandedRows">
+          <ng-template pTemplate="header">
+            <tr>
+              <th style="width: 3rem"></th>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Category</th>
+              <th>Price</th>
+              <th>Status</th>
+              <th>Featured</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-product let-expanded="expanded">
+            <tr>
+              <td>
+                <button type="button" pButton pRipple [pRowToggler]="product"
+                  class="p-button-text p-button-rounded p-button-plain"
+                  [icon]="expanded ? 'pi pi-chevron-down' : (this.langService.getLanguage()?.isRtl ? 'pi pi-chevron-left' : 'pi pi-chevron-right')"></button>
+              </td>
+              <td>{{product.id}}</td>
+              <td>{{product.name}}</td>
+              <td>{{product.category}}</td>
+              <td>{{product.price | currency:'USD'}}</td>
+              <td>
+                <p-tag [value]="product.status" [severity]="getSeverity(product.status)"></p-tag>
+              </td>
+              <td class="text-center">
+                <p-inputSwitch [ngModel]="product.featured" (onChange)="onFeaturedChange($event, product)"></p-inputSwitch>
+              </td>
+            </tr>
+          </ng-template>
+          <ng-template #expandedrow pTemplate="expandedRows" let-product>
+            <tr>
+              <td colspan="7">
+                <div class="p-3">
+                  <div class="row">
+                    <div class="col-12">
+                      <h5>{{product.name}} Details</h5>
+                      <hr>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="mb-3">
+                        <h6>Description</h6>
+                        <p>{{product.details.description}}</p>
+                      </div>
+                      <div class="mb-3">
+                        <h6>Manufacturer</h6>
+                        <p>{{product.details.manufacturer}}</p>
+                      </div>
+                      <div class="mb-3">
+                        <h6>Year Released</h6>
+                        <p>{{product.details.yearReleased}}</p>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="mb-3">
+                        <h6>Specifications</h6>
+                        <ul class="list-group">
+                          <li class="list-group-item" *ngFor="let spec of product.details.specifications">
+                            {{spec}}
+                          </li>
+                        </ul>
+                      </div>
+                      <div class="mb-3">
+                        <h6>Reviews</h6>
+                        <div class="card mb-2" *ngFor="let review of product.details.reviews">
+                          <div class="card-body p-3">
+                            <div class="d-flex justify-content-between">
+                              <h6 class="mb-0">{{review.user}}</h6>
+                              <p-rating [ngModel]="review.rating" [readonly]="true" [stars]="5"></p-rating>
+                            </div>
+                            <p class="mb-0 mt-2">{{review.comment}}</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    </div>
+  </p-panel> -->
+  </div>
+</div>

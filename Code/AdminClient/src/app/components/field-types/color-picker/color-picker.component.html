@@ -1,0 +1,59 @@
+<ng-template #editTemplate>
+  <div class="d-flex flex-column gap-2">
+    <label [for]="id">
+      {{ label }}
+      <span *ngIf="metadata?.required" class="text-danger">*</span>
+    </label>
+    <div class="d-flex align-items-center gap-2">
+      <p-colorPicker
+        [id]="id"
+        [disabled]="metadata.readOnly || false"
+        [(ngModel)]="value"
+        (ngModelChange)="onValueChange($event)"
+        [format]="'hex'"
+        styleClass="me-2"
+      ></p-colorPicker>
+      <input 
+        pInputText
+        type="text"
+        [(ngModel)]="value"
+        [disabled]="metadata.readOnly || false"
+        (ngModelChange)="onValueChange($event)"
+        [placeholder]="metadata?.placeholder || 'Choose a color'"
+        [required]="metadata?.required"
+        class="flex-1 w-100"
+      />
+    </div>
+    <div *ngIf="metadata?.tooltip" class="text-muted small">
+      {{ metadata.tooltip }}
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #listTemplate>
+  <div class="field-display">
+    <!-- <div class="fw-medium">{{ label }}</div> -->
+    <div>
+      <span class="px-3 py-1 rounded" 
+        [style.background-color]="value"
+        [style.color]="getContrastingTextColor(value)">
+        {{ value || '-' }}
+      </span>
+    </div>
+  </div>
+</ng-template> 
+
+<ng-template #viewTemplate>
+  <div class="d-flex align-items-center">
+    <span class="me-2">{{ label }}:</span>
+    <span class="field-display d-inline-flex align-items-center">
+      <span class="px-3 py-1 rounded" 
+        [style.background-color]="value"
+        [style.color]="getContrastingTextColor(value)">
+        {{ value || '-' }}
+      </span>
+    </span>
+  </div>
+</ng-template>
+
+
