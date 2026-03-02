@@ -1,0 +1,17 @@
+<header class="topbar">
+  <a class="brand" routerLink="/forums">ForumSimple</a>
+  <nav>
+    <a routerLink="/forums">Forums</a>
+    <ng-container *ngIf="!authService.isAuthenticated(); else loggedInLinks">
+      <a routerLink="/login">Login</a>
+      <a routerLink="/register">Register</a>
+    </ng-container>
+    <ng-template #loggedInLinks>
+      <button type="button" (click)="logout()">Logout</button>
+    </ng-template>
+  </nav>
+</header>
+
+<main class="page-container">
+  <router-outlet></router-outlet>
+</main>

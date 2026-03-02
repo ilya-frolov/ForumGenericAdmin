@@ -1,0 +1,22 @@
+.actions {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.posts-list {
+  padding-left: 16px;
+}
+
+.posts-list li {
+  margin-bottom: 16px;
+}
+
+.meta {
+  color: #666;
+  font-size: 12px;
+}
+
+.error {
+  color: #b00020;
+}

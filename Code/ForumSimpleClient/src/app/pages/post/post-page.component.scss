@@ -1,0 +1,23 @@
+.meta {
+  color: #666;
+  font-size: 12px;
+}
+
+.comments-list {
+  padding-left: 16px;
+}
+
+.comments-list li {
+  margin-bottom: 10px;
+}
+
+.comment-box {
+  display: grid;
+  gap: 8px;
+  margin-top: 16px;
+  max-width: 520px;
+}
+
+.error {
+  color: #b00020;
+}

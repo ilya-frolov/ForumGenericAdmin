@@ -1,0 +1,15 @@
+<h1>Login</h1>
+
+<form class="auth-form" (ngSubmit)="submit()">
+  <label for="name">Name</label>
+  <input id="name" name="name" [(ngModel)]="name" required />
+
+  <label for="password">Password</label>
+  <input id="password" type="password" name="password" [(ngModel)]="password" required />
+
+  <button type="submit" [disabled]="isSubmitting || !name.trim() || !password">Login</button>
+</form>
+
+<p class="error" *ngIf="errorMessage">{{ errorMessage }}</p>
+
+<p>Need an account? <a routerLink="/register">Register</a></p>

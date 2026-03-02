@@ -1,0 +1,36 @@
+<ng-container *ngIf="post as currentPost">
+  <a [routerLink]="['/forum', currentPost.forumId]">Back to forum</a>
+  <h1>{{ currentPost.title }}</h1>
+  <p class="meta">By {{ currentPost.userName }}</p>
+  <p>{{ currentPost.content }}</p>
+
+  <h2>Comments</h2>
+  <p *ngIf="currentPost.comments.length === 0">No comments yet.</p>
+
+  <ul class="comments-list">
+    <li *ngFor="let comment of currentPost.comments; trackBy: trackByCommentId">
+      <div><strong>{{ comment.userName }}:</strong> {{ comment.content }}</div>
+      <button
+        type="button"
+        *ngIf="authService.currentUser()?.userId === currentPost.userId"
+        (click)="deleteComment(comment.commentId)">
+        Delete
+      </button>
+    </li>
+  </ul>
+
+  <ng-container *ngIf="authService.isAuthenticated(); else loginToComment">
+    <div class="comment-box">
+      <label for="comment">Add comment</label>
+      <textarea id="comment" rows="4" [(ngModel)]="commentText"></textarea>
+      <button type="button" [disabled]="isSubmitting || !commentText.trim()" (click)="addComment()">
+        Add comment
+      </button>
+    </div>
+  </ng-container>
+  <ng-template #loginToComment>
+    <p><a routerLink="/login">Login to comment</a></p>
+  </ng-template>
+</ng-container>
+
+<p class="error" *ngIf="errorMessage">{{ errorMessage }}</p>

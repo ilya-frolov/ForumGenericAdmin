@@ -1,0 +1,15 @@
+<h1>Forums</h1>
+
+<p class="warn" *ngIf="isSiteLocked">Site is currently locked for public actions.</p>
+
+<p class="error" *ngIf="errorMessage">{{ errorMessage }}</p>
+
+<ul class="forums-list">
+  <li *ngFor="let forum of forums; trackBy: trackByForumId">
+    <a [routerLink]="['/forum', forum.forumId]">{{ forum.forumName }}</a>
+    <span class="badge" *ngIf="forum.managersOnlyPosting">Managers only posting</span>
+  </li>
+  <li *ngIf="forums.length === 0 && !errorMessage">
+    No forums found.
+  </li>
+</ul>

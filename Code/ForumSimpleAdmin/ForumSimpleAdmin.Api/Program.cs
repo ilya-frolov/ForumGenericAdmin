@@ -7,6 +7,7 @@ using Dino.Core.AdminBL.Contracts;
 using Dino.Core.AdminBL.Data;
 using Dino.Core.AdminBL.Settings;
 using Dino.CoreMvc.Admin.Contracts;
+using Dino.CoreMvc.Admin.Controllers;
 using Dino.CoreMvc.Admin.Logic;
 using Dino.CoreMvc.Admin.Logic.Helpers;
 using Dino.CoreMvc.Common.Files;
@@ -31,7 +32,7 @@ var blConfigSection = builder.Configuration.GetSection("BlConfig");
 var apiConfig = apiConfigSection.Get<ApiConfig>() ?? new ApiConfig();
 
 builder.Services.AddControllers()
-    .AddApplicationPart(typeof(Dino.CoreMvc.Admin.Controllers.DinoAdminBaseHomeController).Assembly)
+    .AddApplicationPart(typeof(DinoAdminBaseHomeController).Assembly)
     .AddNewtonsoftJson(options =>
     {
         options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();

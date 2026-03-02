@@ -1,0 +1,24 @@
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 20px;
+  border-bottom: 1px solid #ddd;
+}
+
+.brand {
+  font-weight: 600;
+  text-decoration: none;
+}
+
+nav {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.page-container {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 20px;
+}

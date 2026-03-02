@@ -1,0 +1,16 @@
+<h1>Create post in forum #{{ forumId }}</h1>
+
+<form class="post-form" (ngSubmit)="submit()">
+  <label for="title">Title</label>
+  <input id="title" name="title" [(ngModel)]="title" required />
+
+  <label for="content">Content</label>
+  <textarea id="content" name="content" rows="8" [(ngModel)]="content" required></textarea>
+
+  <div class="actions">
+    <button type="submit" [disabled]="isSubmitting || !title.trim() || !content.trim()">Create post</button>
+    <a [routerLink]="['/forum', forumId]">Cancel</a>
+  </div>
+</form>
+
+<p class="error" *ngIf="errorMessage">{{ errorMessage }}</p>

@@ -1,0 +1,23 @@
+<h1>Register</h1>
+
+<form class="auth-form" (ngSubmit)="submit()">
+  <label for="name">Name</label>
+  <input id="name" name="name" [(ngModel)]="name" required />
+
+  <label for="password">Password</label>
+  <input id="password" type="password" name="password" [(ngModel)]="password" required />
+
+  <label>
+    <input type="checkbox" name="isManager" [(ngModel)]="isManager" />
+    Register as manager
+  </label>
+
+  <label for="picture">Profile picture (optional)</label>
+  <input id="picture" type="file" (change)="onFileSelected($event)" />
+
+  <button type="submit" [disabled]="isSubmitting || !name.trim() || !password">Register</button>
+</form>
+
+<p class="error" *ngIf="errorMessage">{{ errorMessage }}</p>
+
+<p>Already have an account? <a routerLink="/login">Login</a></p>
