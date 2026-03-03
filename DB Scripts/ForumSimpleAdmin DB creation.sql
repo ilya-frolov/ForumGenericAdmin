@@ -10,6 +10,106 @@ GO
 USE [ForumSimpleAdmin];
 GO
 
+IF OBJECT_ID(N'dbo.AdminRoles', N'U') IS NULL
+BEGIN
+    CREATE TABLE dbo.AdminRoles
+    (
+        Id              INT             IDENTITY(1,1) NOT NULL,
+        Name            NVARCHAR(100)   NOT NULL,
+        Description     NVARCHAR(255)   NULL,
+        RoleType        SMALLINT        NOT NULL,
+        IsVisible       BIT             NOT NULL DEFAULT 1,
+        IsSystemDefined BIT             NOT NULL DEFAULT 0,
+        CONSTRAINT PK_AdminRoles PRIMARY KEY (Id)
+    );
+END
+GO
+
+IF OBJECT_ID(N'dbo.AdminUsers', N'U') IS NULL
+BEGIN
+    CREATE TABLE dbo.AdminUsers
+    (
+        Id                      INT             IDENTITY(1,1) NOT NULL,
+        Email                   NVARCHAR(256)   NOT NULL,
+        FullName                NVARCHAR(100)   NOT NULL,
+        Phone                   VARCHAR(50)     NULL,
+        RoleId                  INT             NOT NULL,
+        PasswordHash            VARBINARY(32)   NOT NULL,
+        PasswordSalt            VARBINARY(32)   NOT NULL,
+        EmailVerificationCode   VARCHAR(100)    NULL,
+        VerificationCodeDate    DATETIME        NULL,
+        PictureUrl              VARCHAR(255)    NULL,
+        Active                  BIT             NOT NULL DEFAULT 1,
+        CreateDate              DATETIME        NOT NULL DEFAULT GETDATE(),
+        UpdateDate              DATETIME        NOT NULL DEFAULT GETDATE(),
+        UpdateBy                INT             NOT NULL DEFAULT 1,
+        LastLoginDate           DATETIME        NULL,
+        LastIpAddress           VARCHAR(50)     NULL,
+        Archived                BIT             NOT NULL DEFAULT 0,
+        CONSTRAINT PK_AdminUsers PRIMARY KEY (Id),
+        CONSTRAINT UQ_AdminUsers_Email UNIQUE (Email),
+        CONSTRAINT FK_AdminUsers_Role FOREIGN KEY (RoleId) REFERENCES dbo.AdminRoles(Id)
+    );
+END
+GO
+
+IF OBJECT_ID(N'dbo.Settings', N'U') IS NULL
+BEGIN
+    CREATE TABLE dbo.Settings
+    (
+        ClassName       VARCHAR(100)    NOT NULL,
+        Name            NVARCHAR(100)   NOT NULL,
+        Data            NVARCHAR(MAX)   NOT NULL,
+        CreateDate      DATETIME        NOT NULL DEFAULT GETDATE(),
+        UpdateDate      DATETIME        NOT NULL DEFAULT GETDATE(),
+        UpdateBy        INT             NOT NULL DEFAULT 1,
+        CONSTRAINT PK_Settings PRIMARY KEY (ClassName)
+    );
+END
+GO
+
+IF NOT EXISTS (SELECT 1 FROM dbo.AdminRoles WHERE Id = 0)
+BEGIN
+    SET IDENTITY_INSERT dbo.AdminRoles ON;
+    INSERT INTO dbo.AdminRoles (Id, Name, Description, RoleType, IsVisible, IsSystemDefined)
+    VALUES (0, N'Dino Admin', N'Master administrator with full system access', 0, 0, 1);
+    SET IDENTITY_INSERT dbo.AdminRoles OFF;
+END
+GO
+
+IF NOT EXISTS (SELECT 1 FROM dbo.AdminUsers WHERE Id = 0)
+BEGIN
+    SET IDENTITY_INSERT dbo.AdminUsers ON;
+    INSERT INTO dbo.AdminUsers
+    (Id, Email, FullName, Phone, RoleId, PasswordHash, PasswordSalt, EmailVerificationCode, VerificationCodeDate, PictureUrl, Active, LastLoginDate, LastIpAddress, Archived, CreateDate, UpdateDate, UpdateBy)
+    VALUES
+    (0, N'admin@devdino.com', N'Dino Admin', NULL, 0, 0x00, 0x00, NULL, NULL, NULL, 1, NULL, NULL, 0, GETDATE(), GETDATE(), 0);
+    SET IDENTITY_INSERT dbo.AdminUsers OFF;
+END
+GO
+
+IF NOT EXISTS (SELECT 1 FROM dbo.Settings WHERE ClassName = 'DinoMasterSettings')
+    INSERT INTO dbo.Settings (ClassName, Name, Data) VALUES ('DinoMasterSettings', N'Dino Master Settings', N'{}');
+
+IF NOT EXISTS (SELECT 1 FROM dbo.Settings WHERE ClassName = 'SystemSettings')
+    INSERT INTO dbo.Settings (ClassName, Name, Data) VALUES ('SystemSettings', N'System Settings', N'{}');
+GO
+
+DECLARE @UserId INT = 0;
+DECLARE @PlainPassword VARCHAR(50) = 'Aa1234567';
+DECLARE @Salt VARBINARY(32) = CRYPT_GEN_RANDOM(32);
+DECLARE @PasswordBytes VARBINARY(MAX) = CAST(@PlainPassword AS VARBINARY(MAX));
+DECLARE @CombinedBytes VARBINARY(MAX) = @PasswordBytes + @Salt;
+DECLARE @FinalHash VARBINARY(32) = HASHBYTES('SHA2_256', @CombinedBytes);
+
+UPDATE dbo.AdminUsers
+SET PasswordHash = @FinalHash,
+    PasswordSalt = @Salt,
+    UpdateDate = GETDATE(),
+    UpdateBy = 0
+WHERE Id = @UserId;
+GO
+
 IF OBJECT_ID(N'dbo.ForumUsers', N'U') IS NULL
 BEGIN
     CREATE TABLE dbo.ForumUsers

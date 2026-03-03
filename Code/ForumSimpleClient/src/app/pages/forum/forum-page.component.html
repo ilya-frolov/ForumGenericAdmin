@@ -2,7 +2,7 @@
 
 <div class="actions">
   <a routerLink="/forums">Back to forums</a>
-  <a *ngIf="authService.isAuthenticated()" [routerLink]="['/create-post', forumId]">Create post</a>
+  <a *ngIf="canCreatePost()" [routerLink]="['/create-post', forumId]">Create post</a>
 </div>
 
 <p class="error" *ngIf="errorMessage">{{ errorMessage }}</p>

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { ForumPostPreview } from '../../models/forum.models';
+import { ForumLookup, ForumPostPreview, ForumsData } from '../../models/forum.models';
 import { ForumService } from '../../services/forum.service';
 import { AuthService } from '../../services/auth.service';
 
@@ -14,6 +14,7 @@ import { AuthService } from '../../services/auth.service';
 export class ForumPageComponent implements OnInit {
   forumId = 0;
   posts: ForumPostPreview[] = [];
+  forum: ForumLookup | null = null;
   errorMessage = '';
 
   constructor(
@@ -31,6 +32,7 @@ export class ForumPageComponent implements OnInit {
     }
 
     this.loadPosts();
+    this.loadForumInfo();
   }
 
   private loadPosts(): void {
@@ -42,6 +44,29 @@ export class ForumPageComponent implements OnInit {
         this.errorMessage = error instanceof Error ? error.message : 'Failed to load posts.';
       }
     });
+  }
+
+  private loadForumInfo(): void {
+    this.forumService.getForums().subscribe({
+      next: (data: ForumsData) => {
+        this.forum = data.forums.find((forum) => forum.forumId === this.forumId) ?? null;
+      },
+      error: () => {
+        // Keep null forum metadata; posting button will stay conservative.
+        this.forum = null;
+      }
+    });
+  }
+
+  canCreatePost(): boolean {
+    let canCreatePost = false;
+    const currentUser = this.authService.currentUser();
+
+    if (currentUser && this.forum) {
+      canCreatePost = !this.forum.managersOnlyPosting || currentUser.isManager;
+    }
+
+    return canCreatePost;
   }
 
   trackByPostId(index: number, post: ForumPostPreview): number {

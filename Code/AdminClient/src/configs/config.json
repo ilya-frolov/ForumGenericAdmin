@@ -2,5 +2,5 @@
   "envName": "DEV",
   "isDebug": true,
   "defaultLanguage": "en",
-  "apiServer": "https://localhost:7240/DinoAdmin"
+  "apiServer": "https://localhost:7192/DinoAdmin"
 }
